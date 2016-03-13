@@ -7,3 +7,9 @@ It looks like all the api breaks are in the create_cache function. It shouldn't 
 
 * Test tiny strings with a single null terminated charachter followed by nonsense and see if it is consistent.
 * Test large strings with identical first bytes and see if they map to the same bucket
+
+
+### Changes to source code
+
+* MATH442_HW3:  changed 32 bit cache_space_used to 64 bit
+* 

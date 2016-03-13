@@ -13,7 +13,7 @@ uint32_t hash_default(key_type key){
 }
 
 //Initialize a hash_table_obj
-void hash_table_initialize(hash_table_t hash_table, hash_func hash_customized){
+void hash_table_initialize(hash_table_t hash_table, hash_func32 hash_customized){
     hash_table->buckets_num = HASH_INIT_BUCKET_NUM;
     hash_table->load_factor = LOAD_FACTOR;
     hash_table->scale_factor = SCALE_FACTOR;

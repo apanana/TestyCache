@@ -8,8 +8,9 @@ HIO2 = hash_it_out/c_code/
 HW3_442 = 442-HW-3/
 HW3_S = hw3/
 SOFT_C = Software-Cache/
+MATH442 = Math442_HW3/
 
-all: syshw3 HIO HIO2 HW3_442 HW3_S SOFT_C clean_obj
+all: syshw3 HIO HIO2 HW3_442 HW3_S SOFT_C MATH442 clean_obj
 
 mytest.o: #test.c create_cache_wrapper.c
 	$(CC) $(CFLAGS) -c test.c
@@ -48,8 +49,18 @@ HIO_wrapper.o: create_cache_wrapper.c
 	$(CC) $(CFLAGS) -o HIO_wrapper.o -D=HIO -c create_cache_wrapper.c
 
 
+MATH442: MATH442.o mytest.o MATH442_wrapper.o
+	$(CC) -o exe6 cache.o LRU.o hash_table.o test.o MATH442_wrapper.o
+
+MATH442.o: $(MATH442)cache.c $(MATH442)LRU.c $(MATH442)hash_table.c
+	$(CC) $(CFLAGS) -c $(MATH442)cache.c $(MATH442)LRU.c  $(MATH442)hash_table.c
+
+MATH442_wrapper.o: create_cache_wrapper.c
+	$(CC) $(CFLAGS) -o MATH442_wrapper.o -D=MATH442 -c create_cache_wrapper.c
+
+
 SOFT_C: SOFT_C.o mytest.o SOFT_C_wrapper.o
-	$(CC) -o exe4 cache.o lru.o test.o SOFT_C_wrapper.o
+	$(CC) -o exe5 cache.o lru.o test.o SOFT_C_wrapper.o
 
 SOFT_C.o: $(SOFT_C)cache.c $(SOFT_C)lru.c
 	$(CC) $(CFLAGS) -c $(SOFT_C)cache.c $(SOFT_C)lru.c

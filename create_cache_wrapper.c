@@ -10,7 +10,9 @@
 #elif defined  HW3_S
 #include "hw3/cache.h"
 #elif defined  SOFT_C
-#include "hw3/cache.h"
+#include "Software-Cache/cache.h"
+#elif defined  MATH442
+#include "MATH442_HW3/cache.h"
 #endif
 #include <stdio.h>
 cache_t create_cache_wrapper(uint64_t maxmem, hash_func hash){
@@ -31,6 +33,9 @@ cache_t create_cache_wrapper(uint64_t maxmem, hash_func hash){
     return create_cache(maxmem);
 #elif defined SOFT_C
     printf("SOFT_C\n");
-    return create_cache(maxmem);
+    return create_cache(maxmem,hash,NULL,NULL);
+#elif defined MATH442
+    printf("MATH442\n");
+    return create_cache(maxmem,hash,NULL);
 #endif
 }
