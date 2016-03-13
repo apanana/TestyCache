@@ -14,3 +14,4 @@ It looks like all the api breaks are in the create_cache function. It shouldn't 
 * MATH442_HW3:  changed 32 bit cache_space_used to 64 bit
 * Put in NULL for additional function arguments for Software-Cache and MATH442_HW3. I am pretty sure that this means use the default (LRU) eviction functions in both bits of code.
 * Several type name changes for key_type and hash_func.
+* Include stdint.h in 
