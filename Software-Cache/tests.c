@@ -19,7 +19,7 @@ cache_t checkInit()
 
 int checkSet(cache_t cache)
 {
-  key_t
+  key_type
     key0 = "hello",
     key1 = "thenumber3",
     key2 = "goodbye",
@@ -57,7 +57,7 @@ int checkSet(cache_t cache)
 
 int checkGetExistent(cache_t cache)
 {
-  key_t
+  key_type
     key0 = "hello",
     key1 = "thenumber3",
     key2 = "goodbye",
@@ -104,7 +104,7 @@ int checkGetExistent(cache_t cache)
 
 int checkGetModified(cache_t cache)
 {
-  key_t key = "hello";
+  key_type key = "hello";
   uint8_t val = 201;
   uint32_t *size = calloc(1,sizeof(uint32_t));
   cache_set(cache,key,&val,sizeof(uint8_t));
@@ -118,7 +118,7 @@ int checkGetModified(cache_t cache)
 
 int checkGetNonexistent(cache_t cache)
 {
-  key_t key = "sartre";
+  key_type key = "sartre";
   uint32_t *size = calloc(1,sizeof(uint32_t));
   assert(cache_get(cache,key,size) == NULL);
   assert(*size == 0);
@@ -129,7 +129,7 @@ int checkGetNonexistent(cache_t cache)
 
 int checkDelete(cache_t cache)
 {
-  key_t key = "goodbye";
+  key_type key = "goodbye";
   cache_delete(cache,key);
   uint32_t *size = calloc(1,sizeof(uint32_t));
   assert(cache_get(cache,key,size) == NULL);
@@ -158,7 +158,7 @@ int checkResize(cache_t cache)
     }
   assert(cache->capacity == oldsize * 2);
 
-  key_t
+  key_type
     key0 = "hello",
     key1 = "thenumber3",
     key2 = "hellohi",
@@ -216,7 +216,7 @@ int checkResize(cache_t cache)
 
 int checkStructSet(cache_t cache)
 {
-  key_t keystruct = "struct";
+  key_type keystruct = "struct";
   struct test_struct value4 = { .word = "it's a bag of words!", .num = 42, .stuff = NULL};
   uint32_t *size = calloc(1,sizeof(uint32_t));
 
@@ -252,7 +252,7 @@ cache_t checkInitTiny()
 
 int checkEviciton(cache_t cache)
 {
-  key_t
+  key_type
     key0 = "hello",
     key1 = "thenumber3",
     key2 = "goodbye",
