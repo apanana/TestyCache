@@ -9,7 +9,7 @@ HIO2 = hash_it_out/c_code/
 HW3_442 = 442-HW-3/
 HW3_S = hw3/
 SOFT_C = Software-Cache/
-MATH442 = Math442_HW3/
+MATH442 = MATH442_HW3/
 
 all: syshw3 HIO HIO2 HW3_442 HW3_S SOFT_C MATH442 clean_obj
 
@@ -50,7 +50,7 @@ HIO_wrapper.o: create_cache_wrapper.c
 	$(CC) $(CFLAGS) -o HIO_wrapper.o -D=HIO -c create_cache_wrapper.c
 
 
-MATH442: MATH442.o mytest.o MATH442_wrapper.o $(LINK_FLAGS)
+MATH442: MATH442.o mytest.o MATH442_wrapper.o
 	$(CC) -o exe6 cache.o LRU.o hash_table.o test.o MATH442_wrapper.o $(LINK_FLAGS)
 
 MATH442.o: $(MATH442)cache.c $(MATH442)LRU.c $(MATH442)hash_table.c
