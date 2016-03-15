@@ -1,0 +1,65 @@
+CC = gcc
+CFLAGS  =  -g -Wall
+
+# AKOSIK = source/akosik/
+# ALEDGER = source/aledger/
+# APAN = source/apan/
+# BBLACK = source/bblack/
+# JCOSEL = source/jcosel/
+# JHEPWORTH = source/jhepworth/
+# ZZHONG = source/zzhong/
+makeall:
+	make create_akosik
+	make create_aledger
+	make create_apan
+	make create_bblack
+	make create_jcosel
+	make create_jhepworth
+	make create_zzhong
+
+test_all:
+
+clean_all:
+	$(RM) *.o
+
+create_akosik:
+
+test_akosik:
+
+clean_akosik:
+
+create_aledger:
+
+test_aledger:
+
+clean_aledger:
+
+create_apan:
+
+test_apan:
+
+clean_apan:
+
+create_bblack:
+
+test_bblack:
+
+clean_bblack:
+
+create_jcosel:
+
+test_jcosel:
+
+clean_jcosel:
+
+create_jhepworth:
+
+test_jhepworth:
+
+clean_jhepworth:
+
+create_zzhong:
+
+test_zzhong:
+
+clean_zzhong:
