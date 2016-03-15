@@ -33,7 +33,7 @@ typedef const uint8_t * key_type;
 typedef const void * val_type;
 
 // For a given key string, return a pseudo-random integer:
-typedef uint32_t (*hash_func32)(key_type key);
+typedef uint64_t (*hash_func)(key_type key);
 // For a full cache, return the key of an element to evict
 typedef key_type (*evict_func)(struct cache_obj * cache);
 
@@ -63,7 +63,7 @@ struct hash_table_obj{
     double load_factor;
     uint32_t scale_factor;
     item_t * hash; // an array of pointers to buckets
-    hash_func32 hash_f;
+    hash_func hash_f;
 };
 struct linked_list_obj{
 	uint32_t current_size;
@@ -82,7 +82,7 @@ struct cache_obj{
 //2. Functions in cache.c
 
 // Create a new cache object with a given maximum memory capacity.
-cache_t create_cache(uint32_t maxmem,hash_func32 hash_customized, evict_func evict_customized);
+cache_t create_cache(uint32_t maxmem,hash_func hash_customized, evict_func evict_customized);
 // Add a <key, value> pair to the cache.
 // If key already exists, it will overwrite the old value.
 // If maxmem capacity is exceeded, sufficient values will be removed
@@ -113,11 +113,11 @@ void draw_cache(cache_t cache);
 //3.Functions in hash_table.c
 
 //Initialize a hash_table_obj
-void hash_table_initialize(hash_table_t hash_table, hash_func32 hash_customized);
+void hash_table_initialize(hash_table_t hash_table, hash_func hash_customized);
 //Add a new_node_ptr to current hash table
 item_t hash_table_set(hash_table_t hash_table, key_type key, val_type val, uint32_t val_size);
 //A simple default hash function
-uint32_t hash_default(key_type key);
+uint64_t hash_default(key_type key);
 
 //delete the key from the hash table
 void hash_table_delete(hash_table_t hash_table, item_t item_ptr);

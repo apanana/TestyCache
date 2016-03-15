@@ -9,9 +9,11 @@ It looks like all the api breaks are in the create_cache function. It shouldn't 
 * Test large strings with identical first bytes and see if they map to the same bucket
 
 
-### Substantial changes to other source code
+### Changes to cache source code to get compiles to work
 
-* MATH442_HW3:  changed 32 bit cache_space_used to 64 bit
+* MATH442_HW3: changed 32 bit cache_space_used to 64 bit
 * Put in NULL for additional function arguments for Software-Cache and MATH442_HW3. I am pretty sure that this means use the default (LRU) eviction functions in both bits of code.
-* Several type name changes for key_type and hash_func.
-* Include stdint.h in 
+* Changed key_t to key_type in one of the projects.
+* Included stdint.h in Hash-it-Out/lru.h, Software-Cache/lru.h
+* Changed function name from undefined function to "make_item_array" in sysHW3/lru_replacement.h (line 137)
+* Changed type of hash_default and hash_func to 64 bit integer functions instead of 32 bit in MATH442_HW3/cache.c, cache.h

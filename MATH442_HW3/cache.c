@@ -7,7 +7,7 @@
 
 
 // Create a new cache object with a given maximum memory capacity.
-cache_t create_cache(uint32_t maxmem, hash_func32 hash_customized, evict_func evict_customized){
+cache_t create_cache(uint32_t maxmem, hash_func hash_customized, evict_func evict_customized){
     cache_t cache = (cache_t) malloc( sizeof(struct cache_obj));
     assert(cache!=NULL&&"cache fails to allocate");
 
