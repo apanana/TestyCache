@@ -1,10 +1,10 @@
 //LRU Eviction Algorithm Implementation
-#include <stdint.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 
 //Key and Value Type
-typedef const uint8_t *key_type;
+typedef const uint8_t *key_t;
 typedef const void *val_t;
 
 //Eviction Struct for each key-value pair

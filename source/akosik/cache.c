@@ -6,7 +6,7 @@
 
 
 // Default hash known as djb2
-uint64_t defaultHash(key_type str)
+uint64_t defaultHash(key_t str)
 {
   uint64_t hash = 5381;
   uint8_t c;
@@ -104,7 +104,7 @@ cache_t create_cache(uint64_t maxmem, hash_func hash, add_func add, remove_func 
 // If key already exists, it will overwrite the old value.
 // If maxmem capacity is exceeded, sufficient values will be removed
 // from the cache to accomodate the new value.
-void cache_set(cache_t cache, key_type key, val_t val, uint32_t val_size)
+void cache_set(cache_t cache, key_t key, val_t val, uint32_t val_size)
 {
   pair *current;
 
@@ -157,7 +157,7 @@ void cache_set(cache_t cache, key_type key, val_t val, uint32_t val_size)
 }
 
 // Retrieve the value associated with key in the cache, or NULL if not found
-val_t cache_get(cache_t cache, key_type key, uint32_t *val_size)
+val_t cache_get(cache_t cache, key_t key, uint32_t *val_size)
 {
   //hash and check for a key match, else return NULL
   uint64_t n = 0;
@@ -181,7 +181,7 @@ val_t cache_get(cache_t cache, key_type key, uint32_t *val_size)
 }
 
 // Delete an object from the cache, if it's still there
-void cache_delete(cache_t cache, key_type key)
+void cache_delete(cache_t cache, key_t key)
 {
   uint64_t n = 0;
   pair *current;

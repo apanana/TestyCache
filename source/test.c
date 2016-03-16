@@ -23,6 +23,7 @@
 cache_t create_test();
 
 int main(){
+	printf("TESTING\n\n");
     create_test();
     // basic_test();
     return 0;

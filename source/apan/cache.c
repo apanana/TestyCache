@@ -4,7 +4,7 @@
 //
 // This is my implementation of the cache. I require that the user define
 // their own API for an eviction policy, but provide the LRU eviction policy
-// as a default.
+// as a default. 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,14 +19,14 @@ uint64_t defaulthash(key_type input){
 
 // Create a new cache object with a given maximum memory capacity
 // and a hash function. This requires that the user has defined
-// a struct for keyvals and a struct for lru.
+// a struct for keyvals and a struct for lru. 
 cache_t create_cache(uint64_t maxmem,hash_func hash){
 	cache_t cache = malloc(sizeof(struct cache_obj));
 	if (NULL == cache){
 		printf("malloc failed for create_cache");
 		exit(1);
 	}
-
+	
 	cache->maxmemory = maxmem;
 	cache->occupiedmemory = 0;
 	cache->buckets = maxmem;
@@ -42,7 +42,7 @@ cache_t create_cache(uint64_t maxmem,hash_func hash){
 	//Create an evict struct with a constructor from its API.
 	cache->lru = create_evict(NULL,NULL,NULL);
 
-	return cache;
+	return cache; 
 }
 
 // Add a <key, value> pair to the cache.
@@ -61,7 +61,7 @@ void cache_set(cache_t cache, key_type key, val_type val, uint32_t val_size)
 	double load = (double)(cache->occupiedbuckets+1.0)/(double)cache->buckets;
 	if(load>0.5){
 		cache->buckets = cache->buckets*2;
-		cache->keyvals =
+		cache->keyvals = 
 			realloc(cache->keyvals,sizeof(struct cache_keyval)*cache->buckets);
 	}
 
@@ -113,13 +113,13 @@ void cache_set(cache_t cache, key_type key, val_type val, uint32_t val_size)
 
 // Retrieve the value associated with key in the cache, or NULL if not found.
 // The size of the returned buffer will be assigned to *val_size.
-val_type cache_get(cache_t cache, key_type key,uint32_t *_val_size){
+val_type cache_get(cache_t cache, key_type key){
 	int max = 0;
 	int64_t index;
 	if (cache==NULL){
 		printf("Error: Cache is NULL");
 		return NULL;
-	}
+	} 
 	if (cache->occupiedbuckets==0) return NULL;
 	// Linear probing to find our key.
 	while (max < cache->buckets){
@@ -131,7 +131,7 @@ val_type cache_get(cache_t cache, key_type key,uint32_t *_val_size){
 		}
 		max++;
 	}
-	// Return if key isnt in our hash table.
+	// Return if key isnt in our hash table. 
 	return NULL;
 }
 
@@ -149,13 +149,13 @@ void cache_delete(cache_t cache, key_type key){
 				free(cache->keyvals[index].val);
 				cache->keyvals[index].key = NULL;
 				cache->keyvals[index].val = NULL;
-				cache->occupiedmemory =
+				cache->occupiedmemory = 
 					cache->occupiedmemory - cache->keyvals[index].val_size;
 				cache->keyvals[index].val_size = 0;
 				// Update our evict struct with its own function.
 				cache->lru->remove(cache->lru,cache->keyvals[index].lru_node);
 				cache->keyvals[index].lru_node = NULL;
-				cache->occupiedbuckets = cache->occupiedbuckets -1;
+				cache->occupiedbuckets = cache->occupiedbuckets -1;	
 				return;
 			}
 		}
