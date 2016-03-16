@@ -26,8 +26,8 @@ test_all: test_akosik test_aledger test_apan test_jcosel test_jhepworth test_zzh
 clean_all:
 	$(RM) *.o
 
-create_akosik: source/test.c
-	$(CC) source/test.c $(AKOSIK)cache.c $(AKOSIK)lru.c $(CFLAGS) -o create_akosik
+create_akosik: source/test.c source/cachewrapper.c
+	$(CC) source/test.c source/cachewrapper.c $(AKOSIK)cache.c $(AKOSIK)lru.c $(CFLAGS) -o create_akosik
 
 test_akosik: create_akosik
 	./create_akosik
@@ -36,7 +36,7 @@ clean_akosik:
 	rm create_akosik
 
 create_aledger: source/test.c
-	$(CC) source/test.c $(ALEDGER)cache.c $(ALEDGER)dbLL.c $(ALEDGER)evict.c $(ALEDGER)node.c $(CFLAGS) -o create_aledger
+	$(CC) source/test.c source/cachewrapper.c $(ALEDGER)cache.c $(ALEDGER)dbLL.c $(ALEDGER)evict.c $(ALEDGER)node.c $(CFLAGS) -o create_aledger
 
 test_aledger: create_aledger
 	./create_aledger
@@ -45,7 +45,7 @@ clean_aledger:
 	rm create_aledger
 
 create_apan: source/test.c
-	$(CC) source/test.c $(APAN)cache.c $(APAN)lru.c $(CFLAGS) -o create_apan
+	$(CC) source/test.c source/cachewrapper.c $(APAN)cache.c $(APAN)lru.c $(CFLAGS) -o create_apan
 
 test_apan: create_apan
 	./create_apan
@@ -54,7 +54,7 @@ clean_apan:
 	rm create_apan
 
 create_bblack: source/test.c
-	$(CC) source/test.c $(BBLACK)hash_cache.c $(BBLACK)helper.c $(BBLACK)lru_replacement.c $(CFLAGS) -o create_bblack
+	$(CC) source/test.c source/cachewrapper.c $(BBLACK)hash_cache.c $(BBLACK)helper.c $(BBLACK)lru_replacement.c $(CFLAGS) -o create_bblack
 
 test_bblack: create_bblack
 	./create_bblack
@@ -63,7 +63,7 @@ clean_bblack:
 	rm create_bblack
 
 create_jcosel: source/test.c
-	$(CC) source/test.c $(JCOSEL)cache.c $(CFLAGS) -o create_jcosel
+	$(CC) source/test.c source/cachewrapper.c $(JCOSEL)cache.c $(CFLAGS) -o create_jcosel
 
 test_jcosel: create_jcosel
 	./create_jcosel
@@ -72,7 +72,7 @@ clean_jcosel:
 	rm create_jcosel
 
 create_jhepworth: source/test.c
-	$(CC) source/test.c $(JHEPWORTH)cache.c $(JHEPWORTH)list.c $(JHEPWORTH)slabs.c $(JHEPWORTH)tools.c $(CFLAGS) -o create_jhepworth
+	$(CC) source/test.c source/cachewrapper.c $(JHEPWORTH)cache.c $(JHEPWORTH)list.c $(JHEPWORTH)slabs.c $(JHEPWORTH)tools.c $(CFLAGS) -o create_jhepworth
 
 test_jhepworth: create_jhepworth
 	./create_jhepworth
@@ -81,7 +81,7 @@ clean_jhepworth:
 	rm create_jhepworth
 
 create_zzhong: source/test.c
-	$(CC) source/test.c $(ZZHONG)cache.c $(ZZHONG)hash_table.c $(ZZHONG)LRU.c $(CFLAGS) -o create_zzhong
+	$(CC) source/test.c source/cachewrapper.c $(ZZHONG)cache.c $(ZZHONG)hash_table.c $(ZZHONG)LRU.c $(CFLAGS) -o create_zzhong
 
 test_zzhong: create_zzhong
 	./create_zzhong

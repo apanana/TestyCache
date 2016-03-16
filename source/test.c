@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "cache.h"
-// #include "cachewrapper.h"
+#include "cachewrapper.h"
 
 // void basic_test();
 
