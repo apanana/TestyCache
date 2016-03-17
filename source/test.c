@@ -22,12 +22,12 @@
 cache_t create_test();
 
 int main(int argn,char ** argv){
-	if(argn != 1){
-		printf("needs one argument");
+	if(argn != 2){
+		printf("needs one argument\n");
 		exit(1);
 	}
-	sprintf(str, "%d", aInt);
-	uint64_t test_num = strtoumax(argv[0]);
+	char * num_str = argv[1];
+	uint64_t test_num = strtoumax(num_str,NULL,10);
 
 	switch (test_num) {
 	case 0:

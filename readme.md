@@ -10,4 +10,3 @@
 * Put in NULL for additional function arguments for Software-Cache and MATH442_HW3. I am pretty sure that this means use the default (LRU) eviction functions in both bits of code.
 * Included stdint.h in apan/lru.h, akosik/lru.h
 * Changed function name from undefined function to "make_item_array" in sysHW3/lru_replacement.h (line 137)
-* Changed type of hash_default and hash_func to 64 bit integer functions instead of 32 bit in MATH442_HW3/cache.c, cache.h
