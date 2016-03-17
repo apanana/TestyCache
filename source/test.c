@@ -6,8 +6,9 @@
 #define RunTest(testname) {printf(#testname "\n");if(testname()) printf("passed\n"); else printf("failed\n");}
 
 bool create_test();
-bool get_test();
+bool get_size_test();
 bool space_test();
+bool get_size_after_reassign_test();
 
 int main(int argn,char ** argv){
 	if(argn != 2){
@@ -34,11 +35,12 @@ int main(int argn,char ** argv){
 		RunTest(delete_not_in);
 		break;
 	case 5:
-		RunTest(get_test);
+		RunTest(get_size_test);
 		break;
 	case 6:
 		break;
 	case 7:
+		RunTest(get_size_after_reassign_test);
 		break;
 	case 8:
 		break;
@@ -69,15 +71,31 @@ bool create_test(){
     return true;
 }
 
-bool get_test(){
+bool get_size_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
 	char * k = "key";
 	int v = 10;
 	int size;
 	cache_set(c,k,&v,(sizeof(int)));
 	void * out = cache_get_wrapper(c,k,&size);
-	if(*(int *)out != v || 
-		size != sizeof(int)){
+	if(size != sizeof(int)){
+		return false;
+	}
+	return true;
+}
+
+bool get_size_after_reassign_test(){
+	cache_t c = create_cache_wrapper(1000,NULL);
+	char * k = "key";
+	int v1 = 10;
+	int size1,size2;
+	cache_set(c,k,&v1,(sizeof(int)));
+	void * out = cache_get_wrapper(c,k,&size1);
+
+	char *v2 = "stringval";
+	cache_set(c,k,v2,strlen(v2)+1);
+	out = cache_get_wrapper(c,k,&size2);
+	if(size1 == size2){
 		return false;
 	}
 	return true;
