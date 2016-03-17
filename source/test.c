@@ -28,6 +28,7 @@ int main(int argn,char ** argv){
 		RunTest(get_with_null_term_strs_test);
 		break;
 	case 3:
+		RunTest(large_val_copied_correctly);
 		break;
 	case 4:
 		break;
