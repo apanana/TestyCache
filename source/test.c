@@ -36,6 +36,22 @@ int main(int argn,char ** argv){
 	case 5:
 		RunTest(get_test);
 		break;
+	case 6:
+		break;
+	case 7:
+		break;
+	case 8:
+		break;
+	case 9:
+		break;
+	case 10:
+		break;
+	case 11:
+		break;
+	case 12:
+		break;
+	case 13:
+		break;							
 	default:
 		printf("test not implemented\n");
 		break;
