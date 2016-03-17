@@ -36,7 +36,7 @@ int main(int argn,char ** argv){
 		break;
 
 	}
-
+	printf("\n");
     return 0;
 }
 cache_t create_test(){
@@ -50,16 +50,17 @@ bool set_test(){
 	int v;
 	int size;
 	k = "hi";
+	char ks[1000];
 	v = 12345;
 	for(int i=0;i<100;++i){
-		k = strcat(k,k);
-		cache_set(c,k,v,sizeof(int));
+		strcat(ks,"hi");
+		cache_set(c,ks,&v,sizeof(int));
 		size = cache_space_used(c);
 		if (size!=((i+1)*sizeof(int))){
 			printf("error on size!\n");
+			return false;
 		}
 	}
-
-	printf("set_test\n");
+	return true;
 
 }
