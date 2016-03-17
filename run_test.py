@@ -17,10 +17,16 @@ execnames = [
 ]
 num_of_tests = 5
 
+class sumary:
+    def __init__()
 def run_one(exec_name,num):
     retval = subprocess.call([exec_name,str(num)])
-    if(retval != 0):
-        print("test crashed")
+    if(retval == 0):
+        print("passed")
+    elif(retval == 0x5929192):
+        print("failed")
+    elif(retval == 0x5929192):
+        print("crashed")
 
 def run_all(execname):
     print(execname + " tests running:\n")

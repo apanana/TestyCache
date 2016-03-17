@@ -2,8 +2,8 @@
 #include <stdio.h>
 //#include "cachewrapper.h"
 #include "helper.c"
-
-#define RunTest(testname) {printf(#testname "\n");if(testname()) printf("passed\n"); else printf("failed\n");}
+#define failed_code 0x5929192
+#define RunTest(testname) {printf(#testname "\n");if(testname()) exit(0); else exit(failed_code);}
 
 bool create_test();
 bool get_size_test();
@@ -53,7 +53,7 @@ int main(int argn,char ** argv){
 	case 12:
 		break;
 	case 13:
-		break;							
+		break;
 	default:
 		printf("test not implemented\n");
 		break;
