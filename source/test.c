@@ -46,6 +46,7 @@ int main(int argn,char ** argv){
 		break;
 	default:
 		printf("test not implemented\n");
+		return -1;
 		break;
 
 	}

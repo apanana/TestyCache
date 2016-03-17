@@ -1,11 +1,22 @@
 '''
 command line syntax
 run_test.py all                         run all tests on all executables
+run_test.py                             Identical to run_test.py all
 run_test.py all <testint>               run specific test on all executables
 run_test.py <execname> <testint>        run specific test on specific executabl
+run_test.py <execname>                  run all tests on specific executable
+
+Additional options:
+-v          output stderr after crashes
+-vv         output stdout and stderr always
 '''
 import subprocess
 import sys
+
+num_of_tests = 13
+
+verbose_level = 0
+
 execnames = [
 "./tests/create_akosik",
 "./tests/create_aledger",
@@ -15,13 +26,13 @@ execnames = [
 "./tests/create_jhepworth",
 "./tests/create_zzhong"
 ]
-num_of_tests = 5
+
 class TestRes:
     def __init__(self,exec_name,testnum):
         pobj = subprocess.Popen([exec_name,str(testnum)],stdout=subprocess.PIPE)
         output, err = pobj.communicate()
         retval = pobj.returncode
-        self.testname = output
+        self.testname = output.split("\n")[0]
         self.retval = retval
 
 class Sumary:
@@ -58,8 +69,7 @@ class Sumary:
 def run_one(execname,testnum):
     sumar = Sumary(execname)
     sumar += TestRes(execname,testnum)
-    print("arg")
-    print(sumar.__str__())
+    print(sumar)
 
 def run_all(execname):
     sumar = Sumary(execname)
@@ -75,8 +85,16 @@ def run_all_execs():
     for en in execnames:
         run_all(en)
 
+if "-vv" in sys.argv:
+    verbose_level = 2
+    sys.argv.remove("-vv")
+elif "-v" in sys.argv:
+    verbose_level = 1
+    sys.argv.remove("-v")
 
-if len(sys.argv) == 2:
+if len(sys.argv) == 1:
+    run_all_execs()
+elif len(sys.argv) == 2:
     arg = sys.argv[1]
     if arg == "all":
         run_all_execs()
