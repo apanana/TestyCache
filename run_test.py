@@ -16,22 +16,56 @@ execnames = [
 "./tests/create_zzhong"
 ]
 num_of_tests = 5
+class TestRes:
+    def __init__(self,exec_name,testnum):
+        pobj = subprocess.Popen([exec_name,str(testnum)],stdout=subprocess.PIPE)
+        output, err = pobj.communicate()
+        retval = pobj.returncode
+        self.testname = output
+        self.retval = retval
 
-class sumary:
-    def __init__()
-def run_one(exec_name,num):
-    retval = subprocess.call([exec_name,str(num)])
-    if(retval == 0):
-        print("passed")
-    elif(retval == 0x5929192):
-        print("failed")
-    elif(retval == 0x5929192):
-        print("crashed")
+class Sumary:
+    def __init__(self,exec_name):
+        self.exec_name = exec_name
+        self.tests = []
+
+    def __iadd__(self,testres):
+        self.tests.append(testres)
+        return self
+
+    def __str__(self):
+        passed = 0
+        failed = 0
+        crashed = 0
+        resstr = self.exec_name + " :\n"
+        for t in self.tests:
+            resstr += t.testname + "\n"
+            if(t.retval == 0):
+                passed += 1
+                resstr += "passed\n"
+            elif (t.retval == 0x5929192):
+                failed += 1
+                resstr += "failed\n"
+            else:
+                crashed += 1
+                resstr += "crashed\n"
+        resstr += "passed: " + str(passed) + "\n"
+        resstr += "failed: " + str(failed) + "\n"
+        resstr += "crashed: " + str(crashed) + "\n"
+        return resstr
+    __repr__ = __str__
+
+def run_one(execname,testnum):
+    sumar = Sumary(execname)
+    sumar += TestRes(execname,testnum)
+    print("arg")
+    print(sumar.__str__())
 
 def run_all(execname):
-    print(execname + " tests running:\n")
+    sumar = Sumary(execname)
     for tn in range(num_of_tests):
-        run_one(execname,tn)
+        sumar += TestRes(execname,tn)
+    print(sumar)
 
 def run_on_all(testnum):
     for en in execnames:
@@ -52,5 +86,6 @@ elif len(sys.argv) == 3:
     arg1 = sys.argv[1]
     if arg1 == "all":
         testnum = int(sys.argv[2])
+        run_on_all(testnum)
     else:
         run_one(sys.argv[1],int(sys.argv[2]))
