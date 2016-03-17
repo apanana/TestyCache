@@ -18,10 +18,12 @@ makeall:
 	make tests/create_jhepworth
 	make tests/create_zzhong
 
-test_all: test_akosik test_aledger test_apan test_bblack test_jcosel test_jhepworth test_zzhong
+test_all: test_akosik test_aledger test_apan test_bblack test_jcosel test_jhepworth test_zzhong run_all
 	# test_akosik test_aledger test_apan test_bblack test_jcosel test_jhepworth test_zzhong
 	# test_akosik test_aledger test_apan test_jcosel test_jhepworth test_zzhong
 
+run_all:
+	python run_test.py
 
 clean_all:
 	rm -rf tests/*
