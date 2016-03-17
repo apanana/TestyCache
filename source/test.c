@@ -5,9 +5,9 @@
 
 #define RunTest(testname) {printf(#testname "\n");if(testname()) printf("passed\n"); else printf("failed\n");}
 
-cache_t create_test();
-
-bool set_test();
+bool create_test();
+bool get_test();
+bool space_test();
 
 int main(int argn,char ** argv){
 	if(argn != 2){
@@ -22,7 +22,7 @@ int main(int argn,char ** argv){
 		RunTest(create_test);
 		break;
 	case 1:
-		RunTest(set_test);
+		RunTest(space_test);
 		break;
 	case 2:
 		RunTest(get_with_null_term_strs_test);
@@ -33,6 +33,9 @@ int main(int argn,char ** argv){
 	case 4:
 		RunTest(delete_not_in);
 		break;
+	case 5:
+		RunTest(get_test);
+		break;
 	default:
 		printf("test not implemented\n");
 		break;
@@ -41,12 +44,30 @@ int main(int argn,char ** argv){
 	printf("\n");
     return 0;
 }
-cache_t create_test(){
+
+bool create_test(){
     cache_t c = create_cache_wrapper(1000,NULL);
-    return c;
+    if (c==NULL){
+    	return false;
+    }
+    return true;
 }
 
-bool set_test(){
+bool get_test(){
+	cache_t c = create_cache_wrapper(1000,NULL);
+	char * k = "key";
+	int v = 10;
+	int size;
+	cache_set(c,k,&v,(sizeof(int)));
+	void * out = cache_get_wrapper(c,k,&size);
+	if(*(int *)out != v || 
+		size != sizeof(int)){
+		return false;
+	}
+	return true;
+}
+
+bool space_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
 	char * k;
 	int v;
@@ -59,7 +80,6 @@ bool set_test(){
 		cache_set(c,ks,&v,sizeof(int));
 		size = cache_space_used(c);
 		if (size!=((i+1)*sizeof(int))){
-			printf("error on size!\n");
 			return false;
 		}
 	}
