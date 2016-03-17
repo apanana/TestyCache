@@ -27,7 +27,7 @@ clean_all:
 	rm -rf tests/*
 
 tests/create_akosik: source/test.c source/cachewrapper.c
-	$(CC) -D AKOSIK -D key_t=key_type source/test.c source/cachewrapper.c $(AKOSIK)cache.c $(AKOSIK)lru.c $(CFLAGS) -o tests/create_akosik
+	$(CC) -D AKOSIK source/test.c source/cachewrapper.c $(AKOSIK)cache.c $(AKOSIK)lru.c $(CFLAGS) -o tests/create_akosik
 
 test_akosik: tests/create_akosik
 	./tests/create_akosik
