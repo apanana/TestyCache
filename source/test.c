@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "cachewrapper.h"
+#include "helper.c"
 
-#define RunTest(testname) {printf(#testname "\n");testname();}
+#define RunTest(testname) {printf(#testname "\n");testname();printf("passed\n");}
 
 cache_t create_test();
+
 
 int main(int argn,char ** argv){
 	if(argn != 2){
