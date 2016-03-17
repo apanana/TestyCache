@@ -1,6 +1,11 @@
+'''
+command line syntax
+run_test.py all                         run all tests on all executables
+run_test.py all <testint>               run specific test on all executables
+run_test.py <execname> <testint>        run specific test on specific executabl
+'''
 import subprocess
 import sys
-num_of_tests = 5
 execnames = [
 "./tests/create_akosik",
 "./tests/create_aledger",
@@ -10,17 +15,36 @@ execnames = [
 "./tests/create_jhepworth",
 "./tests/create_zzhong"
 ]
-def run_exec(execname):
-    print(execname + " test running:\n")
-    for tn in range(num_of_tests):
-        retval = subprocess.call([execname,str(tn)])
-        if(retval != 0):
-            print("test crashed")
+num_of_tests = 5
 
+def run_one(exec_name,num):
+    retval = subprocess.call([exec_name,str(num)])
+    if(retval != 0):
+        print("test crashed")
+
+def run_all(execname):
+    print(execname + " tests running:\n")
+    for tn in range(num_of_tests):
+        run_one(execname,tn)
+
+def run_on_all(testnum):
+    for en in execnames:
+        run_one(en,testnum)
+
+def run_all_execs():
+    for en in execnames:
+        run_all(en)
 
 
 if len(sys.argv) == 2:
-    run_exec(sys.argv[1])
-else:
-    for en in execnames:
-        run_exec(en)
+    arg = sys.argv[1]
+    if arg == "all":
+        run_all_execs()
+    else:
+        run_all(sys.argv[1])
+elif len(sys.argv) == 3:
+    arg1 = sys.argv[1]
+    if arg1 == "all":
+        testnum = int(sys.argv[2])
+    else:
+        run_one(sys.argv[1],int(sys.argv[2]))

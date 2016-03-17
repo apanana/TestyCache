@@ -15,14 +15,15 @@ bool get_with_null_term_strs_test(){
     cache_set(cache,key2,&val2,sizeof(val2));
     uint32_t size = -1;
     val_type outval = cache_get_wrapper(cache,key1,&size);
+    bool worked = (*(uint64_t * )(outval) == val2);
     destroy_cache(cache);
-    return (*(uint64_t * )(outval) == val2);
+    return worked;
 }
 bool large_val_copied_correctly(){
-    cache_t cache = create_cache_wrapper(100,NULL);
+    cache_t cache = create_cache_wrapper(1000,NULL);
     key_type key = "normal key";
     uint64_t val[] = {0xff00ff00ff00ffff,0xcc00cc00fe00ddcc};
-    cache_set(cache,key,&val,sizeof(val));
+    cache_set(cache,key,&val,sizeof(uint64_t)*2);
     uint32_t size = -1;
     val_type outval = cache_get_wrapper(cache,key,&size);
     if(outval == NULL){
