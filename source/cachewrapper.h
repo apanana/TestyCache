@@ -1,13 +1,12 @@
 
 #ifdef AKOSIK
-#define key_t key_type
 #include "akosik/cache.h"
 #elif defined  ALEDGER
 #include "aledger/cache.h"
 #elif defined  APAN
 #include "apan/cache.h"
 #elif defined  BBLACK
-#include "bblack/hash_cache.h"
+#include "bblack/cache.h"
 #elif defined  JCOSEL
 #include "jcosel/cache.h"
 #elif defined  JHEPWORTH

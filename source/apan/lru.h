@@ -8,7 +8,7 @@
 // created a struct called evict that holds all the necessary pointers
 // to functions and structs it will need. These can be redefined
 // or modified by the user.
-##include "stdint.h"
+#include <stdint.h>
 struct node{
 	int htable_index;
 	struct node *prev;

@@ -28,7 +28,7 @@ int main(){
     return 0;
 }
 cache_t create_test(){
-    cache_t c = create_cache(1000,NULL,NULL);
+    cache_t c = create_cache_wrapper(1000,NULL);
     return c;
 }
 // void basic_test(){
