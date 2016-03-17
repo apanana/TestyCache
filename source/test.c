@@ -1,13 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "cachewrapper.h"
+//#include "cachewrapper.h"
 #include "helper.c"
 
-#define RunTest(testname) {printf(#testname "\n");testname();printf("passed\n");}
+#define RunTest(testname) {printf(#testname "\n");if(testname()) printf("passed\n"); else printf("failed\n");}
 
 cache_t create_test();
 
-void set_test();
+bool set_test();
 
 int main(int argn,char ** argv){
 	if(argn != 2){
@@ -44,7 +44,7 @@ cache_t create_test(){
     return c;
 }
 
-void set_test(){
+bool set_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
 	char * k;
 	int v;

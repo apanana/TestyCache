@@ -41,7 +41,7 @@ void destroy_cache_obj(cache_real_obj *cache)
 }
 
 //This might be a useful hash function later
-uint64_t hash(_key_t key)
+uint64_t hash(key_type key)
 {
   uint64_t ret = 1;
   uint8_t counter = 0;
@@ -55,7 +55,7 @@ uint64_t hash(_key_t key)
 }
 
 //Does a linear search of the keyspace and returns a metadata struct or NULL
-meta_t get_key_loc(cache_t cache, _key_t key)
+meta_t get_key_loc(cache_t cache, key_type key)
 {
   cache_real_obj *c = cache->cache;
   uint32_t bucket = hash(key) % c->num_buckets;
@@ -105,7 +105,7 @@ void defrag(cache_t cache, uint8_t expand)
   free(new_cache);
 }
 
-meta_t create_meta(cache_t cache, _key_t key, uint32_t val_size)
+meta_t create_meta(cache_t cache, key_type key, uint32_t val_size)
 {
   meta_t next_meta = malloc(sizeof(meta_obj));
   strcopy(key, next_meta->key);
@@ -176,7 +176,7 @@ void cache_evict(cache_t cache,uint32_t slab_class){
 //Add a <key,value> pair to the cache
 //If key already exists, overwrite the old value
 //If maxmem capacity is exceeded, values will be removed
-void cache_set(cache_t cache, _key_t key, val_t val, uint32_t val_size)
+void cache_set(cache_t cache, key_type key, val_type val, uint32_t val_size)
 {
   cache_real_obj *c = cache->cache;
 
@@ -216,7 +216,7 @@ void cache_set(cache_t cache, _key_t key, val_t val, uint32_t val_size)
 }
 
 //Retrieve the value associated with key, or NULL if not found
-val_t cache_get(cache_t cache, _key_t key, uint32_t *val_size)
+val_type cache_get(cache_t cache, key_type key, uint32_t *val_size)
 {
   bucket_timer_up(cache);
   meta_t key_loc = get_key_loc(cache,key);
@@ -235,7 +235,7 @@ val_t cache_get(cache_t cache, _key_t key, uint32_t *val_size)
 
 
 //Delete an object from the cache if it's still there
-void cache_delete(cache_t cache, _key_t key)
+void cache_delete(cache_t cache, key_type key)
 {
   cache_real_obj* c = cache->cache;
   meta_t key_loc = get_key_loc(cache,key);

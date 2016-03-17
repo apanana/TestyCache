@@ -1,5 +1,7 @@
+#include <stdbool.h>
+
 #ifdef AKOSIK
-#include "akosik/cache.h
+#include "akosik/cache.h"
 #elif defined  ALEDGER
 #include "aledger/cache.h"
 #elif defined  APAN
