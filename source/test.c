@@ -21,8 +21,33 @@
 
 cache_t create_test();
 
-int main(){
-	printf("TESTING\n\n");
+int main(int argn,char ** argv){
+	if(argn != 1){
+		printf("needs one argument");
+		exit(1);
+	}
+	sprintf(str, "%d", aInt);
+	uint64_t test_num = strtoumax(argv[0]);
+
+	switch (test_num) {
+	case 0:
+		create_test();
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	default:
+		printf("test not implemented\n");
+		break;
+
+	}
+
+
     create_test();
     // basic_test();
     return 0;

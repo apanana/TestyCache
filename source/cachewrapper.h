@@ -17,4 +17,4 @@
 
 cache_t create_cache_wrapper(uint64_t maxmem, hash_func hash);
 
-cache_t create_get(uint64_t maxmem, hash_func hash);
+cache_t create_get_wrapper(uint64_t maxmem, hash_func hash);
