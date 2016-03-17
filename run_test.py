@@ -13,7 +13,9 @@ execnames = [
 def run_exec(execname):
     print(execname + " test running:\n")
     for tn in range(num_of_tests):
-        subprocess.call([execname,str(tn)])
+        retval = subprocess.call([execname,str(tn)])
+        if(retval != 0):
+            print("test crashed")
 
 
 
