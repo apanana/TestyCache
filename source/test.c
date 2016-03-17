@@ -10,6 +10,42 @@ bool get_size_test();
 bool space_test();
 bool get_size_after_reassign_test();
 
+//Undefined tests? May or may not be testable
+bool add_test();
+bool add_int_test();
+bool add_str_test();
+bool add_bool_test();
+bool add_array_test();
+bool add_existing_key_test();
+bool add_resize_test();
+bool add_evict_test();
+bool add_mem_overload_test();
+
+bool get_val_int_test();
+bool get_val_str_test();
+bool get_val_bool_test();
+bool get_val_array_test();
+bool get_size_x_test();
+bool get_rewritten_val_test();
+bool get_nonelement_val_test();
+bool get_nonelement_size_test();
+
+bool delete_int_test();
+bool delete_str_test();
+bool delete_bool_test();
+bool delete_array_test();
+bool delete_nonelement_test();
+bool delete_empty_reuse_test(); //can the cache be reused after being emptied?
+
+bool space_newentry_test(); //for int/str/bool/array
+bool space_evict_test();
+bool space_resize_test();
+bool space_delete_test();
+bool space_clear_test();
+
+bool delete_test(); //naive delete test? idk how we would do this
+
+
 int main(int argn,char ** argv){
 	if(argn != 2){
 		printf("needs one argument\n");
