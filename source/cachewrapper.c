@@ -1,22 +1,8 @@
-#include "cachewrapper.h"
-
-#ifdef AKOSIK
-#include "akosik/cache.h"
-#elif defined  ALEDGER
-#include "aledger/cache.h"
-#elif defined  APAN
-#include "apan/cache.h"
-#elif defined  BBLACK
-#include "bblack/hash_cache.h"
-#elif defined  JCOSEL
-#include "jcosel/cache.h"
-#elif defined  JHEPWORTH
-#include "jhepworth/cache.h"
-#elif defined  ZZHONG
-#include "zzhong/cache.h"
-#endif
 
 #include <stdio.h>
+#include "cachewrapper.h"
+
+
 cache_t create_cache_wrapper(uint64_t maxmem, hash_func hash){
 #ifdef AKOSIK
     printf("AKOSIK\n");
@@ -39,5 +25,13 @@ cache_t create_cache_wrapper(uint64_t maxmem, hash_func hash){
 #elif defined ZZHONG
     printf("ZZHONG\n");
     return create_cache(maxmem,hash,NULL);
+#endif
+}
+
+void *cache_get_wrapper(cache_t cache, uint8_t *key, uint32_t *val_size){
+#ifdef APAN
+    return cache_get(cache,key);
+#else
+    return cache_get(cache,key,val_size);
 #endif
 }
