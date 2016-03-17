@@ -1,6 +1,6 @@
 import subprocess
 import sys
-num_of_tests = 3
+num_of_tests = 5
 execnames = [
 "./tests/create_akosik",
 "./tests/create_aledger",

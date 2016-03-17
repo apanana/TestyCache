@@ -31,6 +31,7 @@ int main(int argn,char ** argv){
 		RunTest(large_val_copied_correctly);
 		break;
 	case 4:
+		RunTest(delete_not_in);
 		break;
 	default:
 		printf("test not implemented\n");
