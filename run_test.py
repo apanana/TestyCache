@@ -1,4 +1,5 @@
 import subprocess
+import sys
 num_of_tests = 3
 execnames = [
 "./tests/create_akosik",
@@ -9,7 +10,15 @@ execnames = [
 "./tests/create_jhepworth",
 "./tests/create_zzhong"
 ]
-for en in execnames:
-    print(en + " test running:\n")
+def run_exec(execname):
+    print(execname + " test running:\n")
     for tn in range(num_of_tests):
-        subprocess.call([en,str(tn)])
+        subprocess.call([execname,str(tn)])
+
+
+
+if len(sys.argv) == 2:
+    run_exec(sys.argv[1])
+else:
+    for en in execnames:
+        run_exec(en)
