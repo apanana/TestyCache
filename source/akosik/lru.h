@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
 //Key and Value Type
 typedef const uint8_t *key_t;
