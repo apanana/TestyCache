@@ -6,6 +6,8 @@
 
 cache_t create_test();
 
+void set_test();
+
 int main(int argn,char ** argv){
 	if(argn != 2){
 		printf("needs one argument\n");
@@ -19,6 +21,7 @@ int main(int argn,char ** argv){
 		RunTest(create_test);
 		break;
 	case 1:
+		RunTest(set_test);
 		break;
 	case 2:
 		break;
@@ -37,4 +40,24 @@ int main(int argn,char ** argv){
 cache_t create_test(){
     cache_t c = create_cache_wrapper(1000,NULL);
     return c;
+}
+
+void set_test(){
+	cache_t c = create_cache_wrapper(1000,NULL);
+	char * k;
+	int v;
+	int size;
+	k = "hi";
+	v = 12345;
+	for(int i=0;i<100;++i){
+		k = strcat(k,k);
+		cache_set(c,k,v,sizeof(int));
+		size = cache_space_used(c);
+		if (size!=((i+1)*sizeof(int))){
+			printf("error on size!\n");
+		}
+	}
+
+	printf("set_test\n");
+
 }
