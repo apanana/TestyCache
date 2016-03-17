@@ -7,7 +7,7 @@
 
 cache_t create_test();
 
-void set_test()
+void set_test();
 
 int main(int argn,char ** argv){
 	if(argn != 2){
@@ -25,6 +25,7 @@ int main(int argn,char ** argv){
 		RunTest(set_test);
 		break;
 	case 2:
+		RunTest(get_with_null_term_strs_test);
 		break;
 	case 3:
 		break;

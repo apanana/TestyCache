@@ -4,8 +4,8 @@
 #include <stdio.h>
 
 //Key and Value Type
-typedef const uint8_t *key_t;
-typedef const void *val_t;
+typedef const uint8_t *key_type;
+typedef const void *val_type;
 
 //Eviction Struct for each key-value pair
 //The user needs to redefine this if they want to
