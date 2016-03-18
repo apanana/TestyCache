@@ -1,6 +1,6 @@
 #include "test.h"
 #include "helper.c"
-#include "space_tests.c"
+#include "test_helper.c"
 
 int main(int argn,char ** argv){
 	if(argn != 2){
