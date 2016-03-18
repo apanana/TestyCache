@@ -1,4 +1,6 @@
 #include "test.h"
+#include "helper.c"
+#include "space_tests.c"
 
 int main(int argn,char ** argv){
 	if(argn != 2){
@@ -74,26 +76,8 @@ bool get_size_test(){
 	}
 	return true;
 }
-
-bool get_size_after_reassign_test(){
-	cache_t c = create_cache_wrapper(1000,NULL);
-	char * k = "key";
-	int v1 = 10;
-	int size1,size2;
-	cache_set(c,k,&v1,(sizeof(int)));
-	void * out = cache_get_wrapper(c,k,&size1);
-
-	char *v2 = "stringval";
-	cache_set(c,k,v2,strlen(v2)+1);
-	out = cache_get_wrapper(c,k,&size2);
-	if(size1 == size2){
-		return false;
-	}
-	return true;
-}
-
 bool space_test(){
-	cache_t c = create_cache_wrapper(1000,NULL);
+	cache_t c = create_cache_wrapper(10000,NULL);
 	char * k;
 	int v;
 	int size;
@@ -109,5 +93,20 @@ bool space_test(){
 		}
 	}
 	return true;
+}
+bool get_size_after_reassign_test(){
+	cache_t c = create_cache_wrapper(1000,NULL);
+	char * k = "key";
+	int v1 = 10;
+	int size1,size2;
+	cache_set(c,k,&v1,(sizeof(int)));
+	void * out = cache_get_wrapper(c,k,&size1);
 
+	char *v2 = "stringval";
+	cache_set(c,k,v2,strlen(v2)+1);
+	out = cache_get_wrapper(c,k,&size2);
+	if(size1 == size2){
+		return false;
+	}
+	return true;
 }

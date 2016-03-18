@@ -18,7 +18,7 @@ bool add_val_int_test(){
     destroy_cache(cache);
 }
 bool add_val_str_test(){
-
+    
 }
 bool add_val_array_test(){
 

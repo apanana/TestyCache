@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-//#include "cachewrapper.h"
-#include "helper.c"
+#include <stdbool.h>
 #define failed_code 0x5929192
 #define RunTest(testname) {printf(#testname "\n");if(testname()) exit(0); else exit(failed_code);}
 
@@ -52,7 +51,7 @@ bool delete_empty_reuse_test(); //can the cache be reused after being emptied?
 bool space_test(); //naive - already done
 bool space_str_test(); //(others are actually redundant here) //for int/str/bool/array
 bool space_evict_test();
-bool space_resize_test();
+//bool space_resize_test(); impossible
 bool space_delete_test();
 bool space_clear_test();//what is this?
 
