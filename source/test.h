@@ -25,6 +25,8 @@ bool add_evict_test();///what is this?
 
 bool add_mem_overload_test();
 
+bool add_single_item_over_memmax();
+
 // ? smth for different key types
 bool get_size_test(); // naive - already done
 bool get_size_after_reassign_test(); // naive - already done
@@ -38,10 +40,10 @@ bool get_nonelement_val_test();
 //bool get_nonelement_size_test();// not defined in API
 
 // ? deleting on different key types
-bool delete_int_test();
+//bool delete_int_test(); redundant
 bool delete_str_test();
 //bool delete_bool_test(); redundant
-bool delete_array_test();
+//bool delete_array_test(); redundant
 bool delete_nonelement_test();
 //bool delete_post_resize_test(); impossible?
 bool delete_empty_reuse_test(); //can the cache be reused after being emptied?
@@ -53,3 +55,17 @@ bool space_evict_test();
 bool space_resize_test();
 bool space_delete_test();
 bool space_clear_test();//what is this?
+
+
+bool custom_hash_is_called();//needs a global variable to work
+
+
+//more advanced tests to get crashes out of the more secure caches
+
+bool random_set_get_delete();//my own test
+
+//time dependent tests (need a timing framework)
+
+bool reasonable_access_time_few_items();
+bool reasonable_access_time_many_items();
+bool long_str_collision_test();

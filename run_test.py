@@ -32,7 +32,8 @@ class TestRes:
         pobj = subprocess.Popen([exec_name,str(testnum)],stdout=subprocess.PIPE)
         output, err = pobj.communicate()
         retval = pobj.returncode
-        self.testname = output.split("\n")[0]
+        output = output.decode("utf-8") 
+        self.testname = "????????????" if "\n" not in output else output[:output.index("\n")]
         self.retval = retval
 
 class Sumary:
