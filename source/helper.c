@@ -23,11 +23,14 @@ bool large_val_copied_correctly(){
     cache_set(cache,key,&val,sizeof(uint64_t)*2);
     uint32_t size = -1;
     val_type outval = cache_get_wrapper(cache,key,&size);
-    if(outval == NULL){
-        return false;
+    bool worked;
+    if(outval != NULL){
+        uint64_t * out_arr = (uint64_t *)(outval);
+        worked = out_arr[0] == val[0] && out_arr[1] == val[1];
     }
-    uint64_t * out_arr = (uint64_t *)(outval);
-    bool worked = out_arr[0] == val[0] && out_arr[1] == val[1];
+    else{
+        worked = false;
+    }
     destroy_cache(cache);
     return worked;
 }
