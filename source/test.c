@@ -119,7 +119,7 @@ bool get_size_after_reassign_test(){
 }
 
 bool hash_called = false;
-uint64_t custom_hash(key_t key){
+uint64_t custom_hash(key_type key){
 	hash_called = true;
 	return 0;
 }
