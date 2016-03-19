@@ -13,7 +13,7 @@ char rand_char(){
 }
 char * gen_rand_str(){
 	size_t str_size = rand() % max_str_len + 1;
-	char * newstr = malloc(str_size * sizeof(char));
+	char * newstr = calloc(str_size,sizeof(char));
 	for(size_t cn = 0; cn < str_size-1; ++cn){
 		newstr[cn] = rand_char();
 	}
@@ -47,7 +47,7 @@ void * val_ptr(size_t loc, val_entry_type ent_ty){
 	return ent_ty == INT ? &ivals[loc] : (ent_ty == STR ? svals[loc] : NULL);
 }
 uint32_t val_size(size_t loc, val_entry_type ent_ty){
-	return ent_ty == INT ? sizeof(*ivals) : (ent_ty == STR ? strlen(svals[loc]) : 0);
+	return ent_ty == INT ? sizeof(int_ty) : (ent_ty == STR ? strlen(svals[loc]) : 0);
 }
 uint64_t to_key_int(uint64_t num){
 	return num & 0x00ffffffffffffff;
@@ -65,7 +65,7 @@ cache_t create_no_overflow(uint64_t maxelmt){
 }
 void add_element(cache_t cache,uint64_t elnum,val_entry_type ent_ty){
 	uint64_t curkey = to_key_int(elnum);
-	cache_set(cache,&curkey,val_ptr(elnum,ent_ty),val_ptr(elnum,ent_ty));
+	cache_set(cache,&curkey,val_ptr(elnum,ent_ty),val_size(elnum,ent_ty));
 }
 void add_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,val_entry_type ent_ty){
 	for(size_t i = start_elmt; i < end_elmt; ++i){
