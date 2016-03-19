@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-const size_t num_ivals = 10000000;
-const size_t num_svals = 2000000;
+const size_t num_ivals = 1000000;
+const size_t num_svals = 200000;
 const size_t max_str_len = 100;
 typedef int16_t int_ty;
 int_ty * ivals;
@@ -27,7 +27,7 @@ void gen_cvals(){
 	}
 }
 void gen_ivals(){
-	ivals = malloc(num_ivals*sizeof(*ivals));
+	ivals = malloc(num_ivals*sizeof(int_ty));
 	for(size_t i = 0; i < num_ivals; i++){
 		ivals[i] = rand();
 	}
@@ -90,7 +90,7 @@ void delete_element(cache_t cache,uint64_t elmt){
 	cache_delete(cache,&curkey);
 }
 void delete_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt){
-	for(size_t i = start_elmt; i < end_elmt; ++i){
+	for(uint64_t i = start_elmt; i < end_elmt; ++i){
 		delete_element(cache,i);
 	}
 }
@@ -115,7 +115,7 @@ bool element_exists(cache_t cache,uint64_t elmt){
 }
 bool elements_exist(cache_t cache,uint64_t start_elmt,uint64_t end_elmt){
 	bool res = true;
-	for(size_t i = start_elmt; i < end_elmt; ++i){
+	for(uint64_t i = start_elmt; i < end_elmt; ++i){
 		res = res && element_exists(cache,i);
 	}
 	return res;

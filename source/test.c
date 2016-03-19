@@ -11,6 +11,8 @@ int main(int argn,char ** argv){
 	char * num_str = argv[1];
 	uint64_t test_num = strtoumax(num_str,NULL,10);
 
+	gen_vals();
+
 	switch (test_num) {
 	case 0:
 		RunTest(create_test);
@@ -31,6 +33,7 @@ int main(int argn,char ** argv){
 		RunTest(get_size_test);
 		break;
 	case 6:
+		RunTest(custom_hash_is_called);
 		break;
 	case 7:
 		RunTest(get_size_after_reassign_test);
@@ -59,6 +62,9 @@ int main(int argn,char ** argv){
 		break;
 
 	}
+
+	free_vals();
+
 	printf("\n");
     return 0;
 }
@@ -119,7 +125,7 @@ bool get_size_after_reassign_test(){
 }
 
 bool hash_called = false;
-uint64_t custom_hash(key_t key){
+uint64_t custom_hash(key_type key){
 	hash_called = true;
 	return 0;
 }
@@ -144,5 +150,6 @@ bool custom_hash_is_called(){
 	bool delete_hash = hash_called;
 	hash_called = false;
 
+	destroy_cache(cache);
 	return add_hash && get_hash && update_hash && delete_hash;
 }

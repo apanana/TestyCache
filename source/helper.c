@@ -1,9 +1,4 @@
 #include "cachewrapper.h"
-cache_t build_basic_cache(){
-    return create_cache_wrapper(100,NULL);
-}
-
-
 bool get_with_null_term_strs_test(){
     //depends on basics only
     cache_t cache = create_cache_wrapper(100,NULL);
