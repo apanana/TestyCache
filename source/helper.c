@@ -20,7 +20,9 @@ bool get_with_null_term_strs_test(){
     return worked;
 }
 bool large_val_copied_correctly(){
-    cache_t cache = create_cache_wrapper(1000,NULL);
+    size_t num_elmts = 1000;
+    cache_t cache = create_cache_wrapper(1000*num_elmts,NULL);
+
     key_type key = "normal key";
     uint64_t val[] = {0xff00ff00ff00ffff,0xcc00cc00fe00ddcc};
     cache_set(cache,key,&val,sizeof(uint64_t)*2);

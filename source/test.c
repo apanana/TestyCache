@@ -1,6 +1,7 @@
 #include "test.h"
 #include "helper.c"
 #include "test_helper.c"
+#include "lrutests.c"
 
 int main(int argn,char ** argv){
 	if(argn != 2){
@@ -35,16 +36,22 @@ int main(int argn,char ** argv){
 		RunTest(get_size_after_reassign_test);
 		break;
 	case 8:
+		RunTest(evictions_occur);
 		break;
 	case 9:
+		RunTest(maxmem_not_excceeded);
 		break;
 	case 10:
+		RunTest(elements_not_evicted_early);
 		break;
 	case 11:
+		RunTest(var_len_evictions);
 		break;
 	case 12:
+		RunTest(basic_lru_test);
 		break;
 	case 13:
+		RunTest(lru_delete_test);
 		break;
 	default:
 		printf("test not implemented\n");
@@ -109,4 +116,33 @@ bool get_size_after_reassign_test(){
 		return false;
 	}
 	return true;
+}
+
+bool hash_called = false;
+uint64_t custom_hash(key_t key){
+	hash_called = true;
+	return 0;
+}
+bool custom_hash_is_called(){
+	const uint64_t item = 5;
+	hash_called = false;
+	cache_t cache =  create_cache_wrapper(1000,custom_hash);
+
+	add_element(cache,item,INT);
+	bool add_hash = hash_called;
+	hash_called = false;
+
+	element_exists(cache,item);
+	bool get_hash = hash_called;
+	hash_called = false;
+
+	add_element(cache,item,STR);
+	bool update_hash = hash_called;
+	hash_called = false;
+
+	delete_element(cache,item);
+	bool delete_hash = hash_called;
+	hash_called = false;
+
+	return add_hash && get_hash && update_hash && delete_hash;
 }

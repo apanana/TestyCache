@@ -4,7 +4,8 @@
 const size_t num_ivals = 10000000;
 const size_t num_svals = 2000000;
 const size_t max_str_len = 100;
-int16_t * ivals;
+typedef int16_t int_ty;
+int_ty * ivals;
 char ** svals;
 typedef enum {INT,STR} val_entry_type;
 char rand_char(){
@@ -54,10 +55,13 @@ uint64_t to_key_int(uint64_t num){
 bool check_val(val_type val,size_t loc,val_entry_type ent_ty){
 	return (val != NULL) &&
 		   ((ent_ty == INT) ?
-				*(int16_t *)(val) == ivals[loc] :
+				*(int_ty *)(val) == ivals[loc] :
 				(ent_ty == STR ?
 					strcmp(svals[loc],val) == 0 :
 					false));
+}
+cache_t create_no_overflow(uint64_t maxelmt){
+	return create_cache_wrapper(maxelmt*max_str_len,NULL);
 }
 void add_element(cache_t cache,uint64_t elnum,val_entry_type ent_ty){
 	uint64_t curkey = to_key_int(elnum);
@@ -94,7 +98,7 @@ uint32_t space_of_element(cache_t cache,uint64_t elmt,val_entry_type ent_ty){
 	uint64_t curkey = to_key_int(elmt);
 	uint32_t out_size = 0;
 	val_type null_val = cache_get_wrapper(cache,&curkey,&out_size);
-	return out_size;
+	return null_val == NULL ? 0 : out_size;
 }
 uint64_t space_of_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,val_entry_type ent_ty){
 	uint64_t sum = 0;
@@ -102,4 +106,17 @@ uint64_t space_of_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,v
 		sum += space_of_element(cache,i,ent_ty);
 	}
 	return sum;
+}
+bool element_exists(cache_t cache,uint64_t elmt){
+	uint64_t curkey = to_key_int(elmt);
+	uint32_t null_size = 0;
+	val_type val = cache_get_wrapper(cache,&curkey,&null_size);
+	return val != NULL;
+}
+bool elements_exist(cache_t cache,uint64_t start_elmt,uint64_t end_elmt){
+	bool res = true;
+	for(size_t i = start_elmt; i < end_elmt; ++i){
+		res = res && element_exists(cache,i);
+	}
+	return res;
 }
