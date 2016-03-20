@@ -61,6 +61,7 @@ uint64_t custom_hash(key_type key){
 	return 0;
 }
 bool custom_hash_is_called(){
+	//checks if the custom hash function specified is called on add, get, update, and delete
 	const uint64_t item = 5;
 	hash_called = false;
 	cache_t cache =  create_cache_wrapper(1000,custom_hash);

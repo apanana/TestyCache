@@ -39,16 +39,16 @@ bool elements_not_evicted_early(){
 }
 bool var_len_evictions(){
     //basic lru_test for variable length strings
-    const uint64_t max_emts = 100;
-    const uint64_t max_add_emts = max_emts-1;//due to ambiguity about whether the cache can store maxmem or up to, but not including maxmem
-    cache_t cache = create_cache_wrapper(max_emts*sizeof(int_ty),NULL);
-
-    add_elements(cache,0,max_add_emts/2,INT);
-    delete_elements(cache,0,max_add_emts/4);
-    add_elements(cache,max_add_emts/4, max_add_emts/4 + max_add_emts,INT);
-    bool passed = elements_exist(cache,0,max_add_emts);
+    const size_t max_mem = val_size(0,STR)+val_size(1,STR)+val_size(2,STR)-1;
+    cache_t cache = create_cache_wrapper(max_mem,NULL);
+    add_element(cache,0,STR);
+    add_element(cache,1,STR);
+    //gets the element
+    element_exists(cache,0);
+    add_element(cache,2,STR);
+    bool worked = !element_exists(cache,1);
     destroy_cache(cache);
-    return passed;
+    return worked;
 }
 bool basic_lru_test(){
     //adds A then B then gets A then adds C and expects B to be evicted
