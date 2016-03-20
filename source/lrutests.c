@@ -16,9 +16,9 @@ bool maxmem_not_excceeded(){
 
     add_elements(cache,0,max_emts+1,INT);
     bool exceeded = space_of_elements(cache,0,max_emts+1,INT) > max_mem;
-    delete_elements(cache,0,max_emts);
+    delete_elements(cache,0,max_emts+1);
     add_elements(cache,max_emts*2,max_emts*3,INT);
-    exceeded = exceeded || space_of_elements(cache,0,max_emts*3,INT) > max_mem;
+    exceeded = exceeded || space_of_elements(cache,max_emts*2,max_emts*3,INT) > max_mem;
 
     destroy_cache(cache);
     return !exceeded;
