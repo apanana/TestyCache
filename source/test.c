@@ -10,14 +10,20 @@ bool create_test(){
     }
     return true;
 }
+bool destroy_test(){
+	cache_t c = create_cache_wrapper(10000,NULL);
+	destroy_cache(c);
+	return true;
+}
 
 // Naive cache_get test
 bool add_test(){
     //Adds many items of differnet sizes (some of which with identical keys), all of which below maxmem. Returns true if it does not crash
     const uint64_t num_adds = 20;
-    cache_t cache = create_cache_wrapper(num_adds*max_str_len,NULL);
-    add_elements(cache,0,num_adds,INT);
-    add_elements(cache,0,num_adds/2,STR);
+    cache_t c = create_cache_wrapper(num_adds*max_str_len,NULL);
+    add_elements(c,0,num_adds,INT);
+    add_elements(c,0,num_adds/2,STR);
+    destroy_cache(c);
     return true;
 }
 
@@ -34,6 +40,18 @@ bool get_size_test(){
     return worked;
 }
 
+bool get_val_test(){
+	cache_t c = create_cache_wrapper(1000,NULL);
+	key_type k= "key";
+	int v = 12345;
+	cache_set(c,k,&v,(sizeof(int)));
+	int size;
+	void * out = cache_get_wrapper(c,k,&size);
+    bool worked = v == *(int*)out;
+    destroy_cache(c);
+    return worked;
+}
+
 // Naive cache_delete test - makes sure we don't crash
 // when trying to delete.
 bool delete_test(){
@@ -42,6 +60,7 @@ bool delete_test(){
 	int v = 12345;
 	cache_set(c,k,&v,(sizeof(int)));
 	cache_delete(c,k);
+	destroy_cache(c);
 	return true;
 }
 
@@ -56,14 +75,10 @@ bool space_test(){
 		cache_set(c,k,&v,sizeof(int));
 		size = cache_space_used(c);
 		if (size!=((i+1)*sizeof(int))){
+			destroy_cache(c);
 			return false;
 		}
 	}
-	return true;
-}
-
-bool destroy_test(){
-	cache_t c = create_cache_wrapper(10000,NULL);
 	destroy_cache(c);
 	return true;
 }
