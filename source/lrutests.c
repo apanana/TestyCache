@@ -32,7 +32,7 @@ bool elements_not_evicted_early(){
     add_elements(cache,0,max_add_emts/2,INT);
     delete_elements(cache,0,max_add_emts/4);
     add_elements(cache,max_add_emts/4, max_add_emts/4 + max_add_emts,INT);
-    bool passed = elements_exist(cache,0,max_add_emts);
+    bool passed = elements_exist(cache,max_add_emts/4,max_add_emts/4 + max_add_emts);
     destroy_cache(cache);
     return passed;
 }
