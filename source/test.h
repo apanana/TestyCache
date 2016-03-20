@@ -76,3 +76,9 @@ bool random_set_get_delete();//my own test
 bool reasonable_access_time_few_items();
 bool reasonable_access_time_many_items();
 bool long_str_collision_test();
+
+
+
+bool get_with_null_term_strs_test();
+bool large_val_copied_correctly();
+bool delete_not_in();
