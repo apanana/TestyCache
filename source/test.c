@@ -1,5 +1,6 @@
 #include "test.h"
 
+// Naive create_cache test
 bool create_test(){
     cache_t c = create_cache_wrapper(1000,NULL);
     if (c==NULL){
@@ -8,6 +9,7 @@ bool create_test(){
     return true;
 }
 
+// Naive cache_get test
 bool get_size_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
 	char * k = "key";
@@ -20,6 +22,26 @@ bool get_size_test(){
 	}
 	return true;
 }
+
+// Tests if space used is what we expect after reassigning a val
+bool get_size_after_reassign_test(){
+	cache_t c = create_cache_wrapper(1000,NULL);
+	char * k = "key";
+	int v1 = 10;
+	int size1,size2;
+	cache_set(c,k,&v1,(sizeof(int)));
+	void * out = cache_get_wrapper(c,k,&size1);
+
+	char *v2 = "stringval";
+	cache_set(c,k,v2,strlen(v2)+1);
+	out = cache_get_wrapper(c,k,&size2);
+	if(size1 == size2){
+		return false;
+	}
+	return true;
+}
+
+// Naive cache_space_used test
 bool space_test(){
 	cache_t c = create_cache_wrapper(10000,NULL);
 	char * k;
@@ -35,22 +57,6 @@ bool space_test(){
 		if (size!=((i+1)*sizeof(int))){
 			return false;
 		}
-	}
-	return true;
-}
-bool get_size_after_reassign_test(){
-	cache_t c = create_cache_wrapper(1000,NULL);
-	char * k = "key";
-	int v1 = 10;
-	int size1,size2;
-	cache_set(c,k,&v1,(sizeof(int)));
-	void * out = cache_get_wrapper(c,k,&size1);
-
-	char *v2 = "stringval";
-	cache_set(c,k,v2,strlen(v2)+1);
-	out = cache_get_wrapper(c,k,&size2);
-	if(size1 == size2){
-		return false;
 	}
 	return true;
 }
