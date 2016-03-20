@@ -1,6 +1,9 @@
 #include "cachewrapper.h"
+
+// Tests keys cache_set on two different keys that contain a null termination in
+// the middle: "a\0b" and "a\0c". We expect cache_set to overwrite the first val
+// with the second val because both keys 'look the same' (ie "a\0").
 bool get_with_null_term_strs_test(){
-    //depends on basics only
     cache_t cache = create_cache_wrapper(100,NULL);
     key_type key1 = "a\0b";
     key_type key2 = "a\0c";
@@ -14,6 +17,8 @@ bool get_with_null_term_strs_test(){
     destroy_cache(cache);
     return worked;
 }
+
+//
 bool large_val_copied_correctly(){
     size_t num_elmts = 1000;
     cache_t cache = create_cache_wrapper(1000*num_elmts,NULL);
