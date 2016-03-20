@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#define failed_code 0x5929192
-#define RunTest(testname) {printf(#testname "\n");if(testname()) exit(0); else exit(failed_code);}
+#define failed_code 0x92
+typedef bool (*test_fn_ty)();
 
 bool create_test();
 

@@ -3,6 +3,16 @@
 #include "test_helper.c"
 #include "lrutests.c"
 
+#define RunTest(testname) {\
+    printf(#testname "\n");\
+    bool worked = testname();\
+    free_vals();\
+    if(worked)\
+        exit(0);\
+    else\
+        exit(failed_code);\
+}
+
 int main(int argn,char ** argv){
 	if(argn != 2){
 		printf("needs one argument\n");
@@ -62,8 +72,6 @@ int main(int argn,char ** argv){
 		break;
 
 	}
-
-	free_vals();
 
 	printf("\n");
     return 0;
@@ -173,7 +181,7 @@ bool get_with_null_term_strs_test(){
 }
 
 // Tests cache_set on an array containing two large values. If vals
-// were treated as strings, this would fail. 
+// were treated as strings, this would fail.
 bool large_val_copied_correctly(){
     size_t num_elmts = 1000;
     cache_t cache = create_cache_wrapper(1000*num_elmts,NULL);
@@ -208,4 +216,3 @@ bool delete_not_in(){
     destroy_cache(cache);
     return outval == NULL;
 }
-

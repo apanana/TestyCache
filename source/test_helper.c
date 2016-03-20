@@ -47,7 +47,7 @@ void * val_ptr(size_t loc, val_entry_type ent_ty){
 	return ent_ty == INT ? &ivals[loc] : (ent_ty == STR ? svals[loc] : NULL);
 }
 uint32_t val_size(size_t loc, val_entry_type ent_ty){
-	return ent_ty == INT ? sizeof(int_ty) : (ent_ty == STR ? strlen(svals[loc]) : 0);
+	return ent_ty == INT ? sizeof(int_ty) : (ent_ty == STR ? strlen(svals[loc])+1 : 0);
 }
 uint64_t to_key_int(uint64_t num){
 	return num & 0x00ffffffffffffff;
