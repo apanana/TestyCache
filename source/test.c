@@ -5,6 +5,7 @@
 
 #define RunTest(testname) {\
     printf(#testname "\n");\
+    fflush(stdout);\
     bool worked = testname();\
     free_vals();\
     if(worked)\

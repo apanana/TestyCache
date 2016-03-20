@@ -56,7 +56,7 @@ class Sumary:
             if(t.retval == 0):
                 passed += 1
                 resstr += "passed\n"
-            elif (t.retval == 0x92):
+            elif t.retval == 0x92:
                 failed += 1
                 resstr += "failed\n"
             else:
