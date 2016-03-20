@@ -155,8 +155,6 @@ bool add_single_item_over_memmax(){
     return cache_big_val == NULL;
 }
 
-// there might be some kind of bug here because tests that i expect to pass
-// are not passing...
 bool add_over_memmax_eviction(){
     // adds small items to cache and then adds an item larger than maxmem
     // and sees if items have been evicted. (expect them to not be).
@@ -168,7 +166,7 @@ bool add_over_memmax_eviction(){
     add_elements(c,0,3,INT);
     cache_set(c,rand_key,big_val,strlen(big_val)+1);
 
-    if (elements_exist(c,0,3)){
+    if (elements_dont_exist(c,0,3)){
         return false;
     }
     destroy_cache(c);
