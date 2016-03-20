@@ -12,6 +12,47 @@ bool evictions_occur(){
     return evicted && not_evicted;
 }
 
+bool update_reordering(){
+    // tests whether updating elements properly reorders the LRU
+        // need to make this val big enough so we don't run into problems
+        // with ambiguity regarding whether we evict >maxmem or ≥ maxmem.
+    cache_t c = create_cache_wrapper(4*sizeof(int),NULL);
+    key_type k1 = "key1";
+    int v1 = 1;
+    key_type k2 = "key2";
+    int v2 = 2;
+    cache_set(c,k1,&v1,sizeof(int));
+    cache_set(c,k2,&v2,sizeof(int));
+    int v3 = 3;
+    // this should update the val stored under k1 and now
+    // we expect (k2,v2) to be the LRU element.
+    printf("updating val\n");
+    fflush(stdout);
+    cache_set(c,k1,&v3,sizeof(int));
+
+    key_type k3 = "key3";
+    val_type v4 = "largeval";
+    printf("largeval\n");
+    fflush(stdout);
+    //we expect this to evict (k2,v2)
+    cache_set(c,k3,v4,strlen(v4)+1);
+
+    int size1,size2;
+    printf("hihihihihihihi\n");
+    fflush(stdout);
+    val_type out1 = cache_get_wrapper(c,k1,&size1);
+    if (out1 == NULL ) return false;
+    val_type out2 = cache_get_wrapper(c,k2,&size2);
+    if (out2 != NULL) return false;
+        // need to place ifs on sepearate lines there is an issue 
+        // with all cache_gets sharing the same pointer
+    printf("hihihihihihihi2222222222\n");
+    fflush(stdout);
+    destroy_cache(c);
+    return true;
+
+}
+
 bool evict_on_reset_old_val(){
     // tests whether or not updating an existing value would cause evictions
     // if adding something of the same size would overload the cache

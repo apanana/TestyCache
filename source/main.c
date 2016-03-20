@@ -108,12 +108,14 @@ int main(int argn,char ** argv){
    		// RunTest(get_null_empty) //exposes no bugs
    		break;
    	case 24:
-   		RunTest(get_reordering);
+   		RunTest(get_reordering);  // an LRU test
    		break;
    	case 25:
-   		RunTest(evict_on_reset_old_val);
+   		RunTest(evict_on_reset_old_val);  // an LRU test
    		break;
    	case 26:
+   		// RunTest(get_nonexist);
+   		RunTest(update_reordering); // an LRU test
    		break;
 	default:
 		printf("test not implemented\n");
