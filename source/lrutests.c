@@ -22,7 +22,7 @@ bool maxmem_not_excceeded(){
     exceeded = exceeded || space_of_elements(cache,max_emts*2,max_emts*3,INT) > max_mem;
 
     destroy_cache(cache);
-    return exceeded;
+    return !exceeded;
 }
 bool elements_not_evicted_early(){
     //adds some elements, deletes some, and replaces some, and then checks if all the elements are still in the cache
