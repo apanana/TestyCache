@@ -10,7 +10,8 @@ bool create_test(){
     }
     return true;
 }
-<<<<<<< Updated upstream
+
+// Naive cache_get test
 bool add_test(){
     //Adds many items of differnet sizes (some of which with identical keys), all of which below maxmem. Returns true if it does not crash
     const uint64_t num_adds = 20;
@@ -19,21 +20,8 @@ bool add_test(){
     add_elements(cache,0,num_adds/2,STR);
     return true;
 }
-// Naive cache_get test
-=======
-
-// Naive cache_set test - makes sure we don't crash
-// when trying to set a new element.
-bool add_test(){
-	cache_t c = create_cache_wrapper(1000,NULL);
-	key_type k= "key";
-	int v = 12345; 
-	cache_set(c,k,&v,sizeof(int));
-	return true;
-}
 
 // Naive cache_get test.
->>>>>>> Stashed changes
 bool get_size_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
 	key_type k= "key";

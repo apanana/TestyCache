@@ -14,11 +14,6 @@ bool destroy_test();
 
 
 //Undefined tests? May or may not be testable
-<<<<<<< Updated upstream
-bool add_test();
-=======
-
->>>>>>> Stashed changes
 //bool add_key_int_test(); redundant
 // bool add_key_str_test();
 // bool add_val_int_test();
