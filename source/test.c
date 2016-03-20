@@ -8,7 +8,14 @@ bool create_test(){
     }
     return true;
 }
-
+bool add_test(){
+    //Adds many items of differnet sizes (some of which with identical keys), all of which below maxmem. Returns true if it does not crash
+    const uint64_t num_adds = 20;
+    cache_t cache = create_cache_wrapper(num_adds*max_str_len,NULL);
+    add_elements(cache,0,num_adds,INT);
+    add_elements(cache,0,num_adds/2,STR);
+    return true;
+}
 // Naive cache_get test
 bool get_size_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
@@ -17,10 +24,9 @@ bool get_size_test(){
 	int size;
 	cache_set(c,k,&v,(sizeof(int)));
 	void * out = cache_get_wrapper(c,k,&size);
-	if(size != sizeof(int)){
-		return false;
-	}
-	return true;
+    bool worked = size == sizeof(int);
+    destroy_cache(c);
+    return worked;
 }
 
 // Tests if space used is what we expect after reassigning a val
@@ -113,8 +119,7 @@ bool get_with_null_term_strs_test(){
 // Tests cache_set on an array containing two large values. If vals
 // were treated as strings, this would fail.
 bool large_val_copied_correctly(){
-    size_t num_elmts = 1000;
-    cache_t cache = create_cache_wrapper(1000*num_elmts,NULL);
+    cache_t cache = create_cache_wrapper(1000,NULL);
 
     key_type key = "normal key";
     uint64_t val[] = {0xff00ff00ff00ffff,0xcc00cc00fe00ddcc};
@@ -136,13 +141,29 @@ bool large_val_copied_correctly(){
 // Tests to see if something that is set and then deleted returns NULL
 // when cache_get is called.
 bool delete_not_in(){
-    cache_t cache = create_cache_wrapper(100,NULL);
-    key_type key = "a\0b";
-    uint64_t val = 10;
-    cache_set(cache,key,&val,sizeof(val));
-    cache_delete(cache,key);
-    uint32_t size = -1;
-    val_type outval = cache_get_wrapper(cache,key,&size);
+    cache_t cache = create_cache_wrapper(max_str_len+1,NULL);
+    const uint64_t item = 10;
+    add_element(cache,item,STR);
+    delete_element(cache,item);
+    bool worked = !element_exists(cache,item);
+
     destroy_cache(cache);
-    return outval == NULL;
+    return worked;
+}
+bool add_single_item_over_memmax(){
+    //adds a small item and then a single item over maxmem and sees if it is not in the cache.
+    uint64_t max_mem = 10;
+    char rand_key[] = "random_key";
+    char big_val[] = "string of length > max_mem";
+
+    cache_t cache = create_cache_wrapper(max_mem,NULL);
+
+    add_element(cache,1,INT);
+    cache_set(cache,rand_key,big_val,max_mem+1);
+
+    uint32_t null_size = 0;
+    val_type cache_big_val = cache_get_wrapper(cache,rand_key,&null_size);
+
+    destroy_cache(cache);
+    return cache_big_val == NULL;
 }

@@ -68,6 +68,12 @@ int main(int argn,char ** argv){
 	case 13:
 		RunTest(lru_delete_test);
 		break;
+    case 14:
+        RunTest(add_test);
+        break;
+    case 15:
+        RunTest(add_single_item_over_memmax);
+        break;
 	default:
 		printf("test not implemented\n");
 		return -1;

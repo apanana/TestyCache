@@ -7,7 +7,7 @@ typedef bool (*test_fn_ty)();
 bool create_test();
 
 //Undefined tests? May or may not be testable
-// bool add_test();
+bool add_test();
 //bool add_key_int_test(); redundant
 // bool add_key_str_test();
 // bool add_val_int_test();
@@ -24,7 +24,7 @@ bool create_test();
 
 // bool add_mem_overload_test();
 
-// bool add_single_item_over_memmax();
+bool add_single_item_over_memmax();
 
 // ? smth for different key types
 bool get_size_test(); // naive - already done
