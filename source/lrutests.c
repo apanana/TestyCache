@@ -11,6 +11,76 @@ bool evictions_occur(){
     destroy_cache(cache);
     return evicted && not_evicted;
 }
+
+bool evict_on_reset_old_val(){
+    // tests whether or not updating an existing value would cause evictions
+    // if adding something of the same size would overload the cache
+    // so here, adding in v3 would overload the cache if it was under a 
+    // different key, but since it actually overwrites v1 we would like
+    // the cache to not evict v2 since we aim to minimize the amount of 
+    // data we lose from our cache.
+    cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
+    key_type k1 = "key1";
+    int v1 = 1;
+    key_type k2 = "key2";
+    int v2 = 2;
+    cache_set(c,k1,&v1,sizeof(int));
+    cache_set(c,k2,&v2,sizeof(int));
+
+    // This should reassign the value under k2, but if the
+    // LRU doesn't check the size of what an element would be
+    // after reassigning then we would also end up evicting k1
+    val_type v3 = "five";
+    cache_set(c,k2,v3,strlen(v3)+1);
+
+    // This should be null
+    int size;
+    val_type out = cache_get_wrapper(c,k1,&size);
+
+    if(out==NULL){
+        destroy_cache(c);
+        return false;
+    }
+    destroy_cache(c);
+    return true;
+}
+
+bool get_reordering(){
+    // tests whether or not cache_get properly reorders the LRU line
+    // (we expect that it brings the accessed element to the front)
+    // here we add two elements, get the oldest one, then add a third
+    // element that will cause one of the first two to be evicted.
+    // we expect the second element to be evicted since calling 
+    // cache_get should make the first element the most recently accessed
+    cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
+    key_type k1 = "key1";
+    int v1 = 1;
+    key_type k2 = "key2";
+    int v2 = 2;
+    cache_set(c,k1,&v1,sizeof(int));
+    cache_set(c,k2,&v2,sizeof(int));
+
+    // This should bump k1 to the front of the LRU line
+    // ie. now the LRU element should be k2
+    int size;
+    val_type out1 = cache_get_wrapper(c,k1,&size);
+
+    // This should cause us to evict k2
+    key_type k3 = "val_too_big";
+    val_type v3 = "five";
+    cache_set(c,k3,v3,strlen(v3)+1);
+
+    // This should be null
+    val_type out2 = cache_get_wrapper(c,k2,&size);
+
+    if(out2==NULL){
+        destroy_cache(c);
+        return false;
+    }
+    destroy_cache(c);
+    return true;
+}
+
 bool maxmem_not_excceeded(){
     //adds too many elements, checks if the size of values with non-null keys is > maxmem, deletes some, adds more, overwrites some, checks again
     const uint64_t max_emts = 100;
