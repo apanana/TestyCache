@@ -1,22 +1,11 @@
 bool evictions_occur(){
     //adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
-    fprintf(stdout,"hihihi~~~~~~\n");
-    fflush(stdout);
-    printf("HIHIHIHIHIHIHIIHI99999999\n");
-    cache_t cache = create_cache_wrapper(100*sizeof(int_ty),NULL);
-    printf("HIHIHIHIHIHIHIIHI00000000\n");
-    fflush(stdout);
+    cache_t cache = create_cache_wrapper(10*sizeof(int_ty),NULL);
     const uint64_t num_elmts_add = 100000;
     add_elements(cache,0,num_elmts_add,INT);
-    printf("HIHIHIHIHIHIHIIHI111111\n");
-    fflush(stdout);
     bool evicted = elements_dont_exist(cache,0,num_elmts_add-10);
     bool not_evicted = elements_exist(cache,num_elmts_add-10,num_elmts_add);
-    printf("HIHIHIHIHIHIHIIHI2222222222\n");
-    fflush(stdout);
     destroy_cache(cache);
-    printf("HIHIHIHIHIHIHIIHI33333333333333\n");
-    fflush(stdout);
     return evicted && not_evicted;
 }
 bool maxmem_not_excceeded(){
