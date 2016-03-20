@@ -66,13 +66,11 @@ cache_t create_no_overflow(uint64_t maxelmt){
 void add_element(cache_t cache,uint64_t elnum,val_entry_type ent_ty){
 	uint64_t curkey = to_key_int(elnum);
 	cache_set(cache,&curkey,val_ptr(elnum,ent_ty),val_size(elnum,ent_ty));
-	// printf("AN ELEMENT HAS BEEN ADDED\n");
 }
 void add_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,val_entry_type ent_ty){
 	for(size_t i = start_elmt; i < end_elmt; ++i){
 		add_element(cache,i,ent_ty);
 	}
-	printf("ADDED\n");
 }
 bool check_element(cache_t cache,uint64_t elmt,val_entry_type ent_ty){
 	uint64_t curkey = to_key_int(elmt);
@@ -114,8 +112,6 @@ bool element_exists(cache_t cache,uint64_t elmt){
 	uint32_t null_size = 0;
 	val_type val = cache_get_wrapper(cache,&curkey,&null_size);
 	bool exists = val != NULL;
-	// printf("%s\n", exists ? "true" : "false");
-
 	return val != NULL;
 }
 bool elements_exist(cache_t cache,uint64_t start_elmt,uint64_t end_elmt){
