@@ -14,9 +14,13 @@ bool get_val_test();
 bool delete_test();
 bool space_test();
 
+bool custom_hash_is_called();//needs a global variable to work
+
 
 
 //Undefined tests? May or may not be testable
+bool large_val_copied_correctly();
+bool add_single_item_over_memmax();
 //bool add_key_int_test(); redundant
 // bool add_key_str_test();
 // bool add_val_int_test();
@@ -33,11 +37,14 @@ bool space_test();
 
 // bool add_mem_overload_test();
 
-bool add_single_item_over_memmax();
+
 
 // ? smth for different key types
 
 bool get_size_after_reassign_test(); // naive - already done
+bool get_val_after_reassign_test(); // raises some interesting errors
+bool get_with_null_term_strs_test();
+
 // bool get_val_int_test();
 // bool get_val_str_test();
 //bool get_val_bool_test(); redundant
@@ -48,11 +55,11 @@ bool get_size_after_reassign_test(); // naive - already done
 //bool get_nonelement_size_test();// not defined in API
 
 // ? deleting on different key types
-
 //bool delete_int_test(); redundant
 // bool delete_str_test();
 //bool delete_bool_test(); redundant
 //bool delete_array_test(); redundant
+bool delete_not_in();
 // bool delete_nonelement_test();
 //bool delete_post_resize_test(); impossible?
 // bool delete_empty_reuse_test(); //can the cache be reused after being emptied?
@@ -66,8 +73,6 @@ bool get_size_after_reassign_test(); // naive - already done
 // bool space_clear_test();//what is this?
 
 
-bool custom_hash_is_called();//needs a global variable to work
-
 
 //more advanced tests to get crashes out of the more secure caches
 
@@ -78,9 +83,3 @@ bool custom_hash_is_called();//needs a global variable to work
 // bool reasonable_access_time_few_items();
 // bool reasonable_access_time_many_items();
 // bool long_str_collision_test();
-
-
-
-bool get_with_null_term_strs_test();
-bool large_val_copied_correctly();
-bool delete_not_in();

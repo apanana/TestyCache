@@ -54,6 +54,7 @@ int main(int argn,char ** argv){
 	case 7:
 		RunTest(custom_hash_is_called);
 		break;
+	// 8 - 13: LRU tests
 	case 8:
 		RunTest(evictions_occur);
 		break;
@@ -72,23 +73,33 @@ int main(int argn,char ** argv){
 	case 13:
 		RunTest(lru_delete_test);
 		break;
+	// 14 - 15: cache_set tests
 	case 14:
-		RunTest(get_with_null_term_strs_test);
-		break;
-	case 15:
 		RunTest(large_val_copied_correctly);
 		break;
+	case 15:
+		RunTest(add_single_item_over_memmax);
+		break;
+	// 16 - 17: cache_get tests:
 	case 16:
-		RunTest(get_size_test);
+		RunTest(get_with_null_term_strs_test);
 		break;
 	case 17:
-		RunTest(add_single_item_over_memmax);
+		RunTest(get_size_after_reassign_test);
         break;
+    // 18: cache_delete test:
     case 18:
     	RunTest(delete_not_in);
     	break;
+    // yet to be placed...
     case 19:
-    	RunTest(get_size_after_reassign_test);
+    	RunTest(get_val_after_reassign_test);
+    	break;
+    case 20:
+    	break;
+    case 21:
+    	break;
+    case 22:
     	break;
 	default:
 		printf("test not implemented\n");

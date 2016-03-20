@@ -83,72 +83,35 @@ bool space_test(){
 	return true;
 }
 
-// Tests if space used is what we expect after reassigning a val
-bool get_size_after_reassign_test(){
-	cache_t c = create_cache_wrapper(1000,NULL);
-	char * k = "key";
-	int v1 = 10;
-	int size1,size2;
-	cache_set(c,k,&v1,(sizeof(int)));
-	void * out = cache_get_wrapper(c,k,&size1);
-
-	char *v2 = "stringval";
-	cache_set(c,k,v2,strlen(v2)+1);
-	out = cache_get_wrapper(c,k,&size2);
-	if(size1 == size2){
-		return false;
-	}
-	return true;
-}
-
-
 bool hash_called = false;
 uint64_t custom_hash(key_type key){
-	hash_called = true;
-	return 0;
+    hash_called = true;
+    return 0;
 }
 bool custom_hash_is_called(){
-	//checks if the custom hash function specified is called on add, get, update, and delete
-	const uint64_t item = 5;
-	hash_called = false;
-	cache_t cache =  create_cache_wrapper(1000,custom_hash);
+    //checks if the custom hash function specified is called on add, get, update, and delete
+    const uint64_t item = 5;
+    hash_called = false;
+    cache_t cache =  create_cache_wrapper(1000,custom_hash);
 
-	add_element(cache,item,INT);
-	bool add_hash = hash_called;
-	hash_called = false;
+    add_element(cache,item,INT);
+    bool add_hash = hash_called;
+    hash_called = false;
 
-	element_exists(cache,item);
-	bool get_hash = hash_called;
-	hash_called = false;
+    element_exists(cache,item);
+    bool get_hash = hash_called;
+    hash_called = false;
 
-	add_element(cache,item,STR);
-	bool update_hash = hash_called;
-	hash_called = false;
+    add_element(cache,item,STR);
+    bool update_hash = hash_called;
+    hash_called = false;
 
-	delete_element(cache,item);
-	bool delete_hash = hash_called;
-	hash_called = false;
+    delete_element(cache,item);
+    bool delete_hash = hash_called;
+    hash_called = false;
 
-	destroy_cache(cache);
-	return add_hash && get_hash && update_hash && delete_hash;
-}
-
-// Tests keys cache_set on two different keys that contain a null termination in
-// the middle: "a\0b" and "a\0c". We expect cache_set to overwrite the first val
-// with the second val because both keys 'look the same' (ie "a\0").
-bool get_with_null_term_strs_test(){
-    cache_t cache = create_cache_wrapper(100,NULL);
-    key_type key1 = "a\0b";
-    key_type key2 = "a\0c";
-    uint64_t val1 = 10;
-    uint64_t val2 = 11;
-    cache_set(cache,key1,&val1,sizeof(val1));
-    cache_set(cache,key2,&val2,sizeof(val2));
-    uint32_t size = -1;
-    val_type outval = cache_get_wrapper(cache,key1,&size);
-    bool worked = (*(uint64_t * )(outval) == val2);
     destroy_cache(cache);
-    return worked;
+    return add_hash && get_hash && update_hash && delete_hash;
 }
 
 // Tests cache_set on an array containing two large values. If vals
@@ -173,18 +136,7 @@ bool large_val_copied_correctly(){
     return worked;
 }
 
-// Tests to see if something that is set and then deleted returns NULL
-// when cache_get is called.
-bool delete_not_in(){
-    cache_t cache = create_cache_wrapper(max_str_len+1,NULL);
-    const uint64_t item = 10;
-    add_element(cache,item,STR);
-    delete_element(cache,item);
-    bool worked = !element_exists(cache,item);
 
-    destroy_cache(cache);
-    return worked;
-}
 bool add_single_item_over_memmax(){
     //adds a small item and then a single item over maxmem and sees if it is not in the cache.
     uint64_t max_mem = 10;
@@ -201,4 +153,79 @@ bool add_single_item_over_memmax(){
 
     destroy_cache(cache);
     return cache_big_val == NULL;
+}
+
+// Tests if space used is what we expect after reassigning a val
+bool get_size_after_reassign_test(){
+    cache_t c = create_cache_wrapper(1000,NULL);
+    char * k = "key";
+    int v1 = 10;
+    int size1,size2;
+    cache_set(c,k,&v1,(sizeof(int)));
+    void * out = cache_get_wrapper(c,k,&size1);
+
+    char *v2 = "stringval";
+    cache_set(c,k,v2,strlen(v2)+1);
+    out = cache_get_wrapper(c,k,&size2);
+    if(size1 == size2){
+        return false;
+    }
+    return true;
+}
+
+bool get_val_after_reassign_test(){
+    cache_t c = create_cache_wrapper(1000,NULL);
+    char * k = "key";
+    char *v1 = "stringval1";
+    int size1,size2;
+    cache_set(c,k,v1,strlen(v1)+1);
+    void * out1 = cache_get_wrapper(c,k,&size1);
+    printf("%s\n",out1);
+    printf("%p\n",out1);
+    char *v2 = "stringval2";
+    cache_set(c,k,v2,strlen(v2)+1);
+    void * out2 = cache_get_wrapper(c,k,&size2);
+    printf("11%s\n",out1);
+    printf("%p\n",out2);
+    if(strcmp(out1,out2)==0 ||
+        strcmp(out1,v1)!=0 ||
+        strcmp(out2,v2)!=0){
+        printf("%s\n",out1);
+        printf("%s\n",out2);
+        printf("%s\n",v1);
+        printf("%s\n",v2);
+        return false;
+    }
+    return true;
+}
+
+// Tests keys cache_set on two different keys that contain a null termination in
+// the middle: "a\0b" and "a\0c". We expect cache_set to overwrite the first val
+// with the second val because both keys 'look the same' (ie "a\0").
+bool get_with_null_term_strs_test(){
+    cache_t cache = create_cache_wrapper(100,NULL);
+    key_type key1 = "a\0b";
+    key_type key2 = "a\0c";
+    uint64_t val1 = 10;
+    uint64_t val2 = 11;
+    cache_set(cache,key1,&val1,sizeof(val1));
+    cache_set(cache,key2,&val2,sizeof(val2));
+    uint32_t size = -1;
+    val_type outval = cache_get_wrapper(cache,key1,&size);
+    bool worked = (*(uint64_t * )(outval) == val2);
+    destroy_cache(cache);
+    return worked;
+}
+
+// Tests to see if something that is set and then deleted returns NULL
+// when cache_get is called.
+bool delete_not_in(){
+    cache_t cache = create_cache_wrapper(max_str_len+1,NULL);
+    const uint64_t item = 10;
+    add_element(cache,item,STR);
+    delete_element(cache,item);
+    bool worked = !element_exists(cache,item);
+
+    destroy_cache(cache);
+    return worked;
 }
