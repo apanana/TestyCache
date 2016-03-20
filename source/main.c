@@ -26,26 +26,31 @@ int main(int argn,char ** argv){
 	gen_vals();
 
 	switch (test_num) {
+	// 0 - 3: naive tests (ie check for crashes)
+	// If anything fails these, it will likely fail the remaining tests.
 	case 0:
 		RunTest(create_test);
 		break;
 	case 1:
-		RunTest(space_test);
+		RunTest(add_test);
 		break;
 	case 2:
-		RunTest(get_with_null_term_strs_test);
+		RunTest(delete_test);
 		break;
 	case 3:
-		RunTest(large_val_copied_correctly);
+		RunTest(space_test);
 		break;
 	case 4:
-		RunTest(delete_not_in);
+		RunTest(destroy_test);
 		break;
+	// 5: checks is custom hash function is called
+	// on add, update, get, delete.
 	case 5:
-		RunTest(get_size_test);
-		break;
-	case 6:
 		RunTest(custom_hash_is_called);
+		break;
+	//
+	case 6:
+		RunTest(delete_not_in);
 		break;
 	case 7:
 		RunTest(get_size_after_reassign_test);
@@ -68,11 +73,17 @@ int main(int argn,char ** argv){
 	case 13:
 		RunTest(lru_delete_test);
 		break;
-    case 14:
-        RunTest(add_test);
-        break;
-    case 15:
-        RunTest(add_single_item_over_memmax);
+	case 14:
+		RunTest(get_with_null_term_strs_test);
+		break;
+	case 15:
+		RunTest(large_val_copied_correctly);
+		break;
+	case 16:
+		RunTest(get_size_test);
+		break;
+	case 17:
+		RunTest(add_single_item_over_memmax);
         break;
 	default:
 		printf("test not implemented\n");

@@ -4,10 +4,21 @@
 #define failed_code 0x92
 typedef bool (*test_fn_ty)();
 
+// Naive tests: (ie make sure we don't crash)
 bool create_test();
+bool add_test();
+bool get_size_test();
+bool delete_test();
+bool space_test();
+bool destroy_test();
+
 
 //Undefined tests? May or may not be testable
+<<<<<<< Updated upstream
 bool add_test();
+=======
+
+>>>>>>> Stashed changes
 //bool add_key_int_test(); redundant
 // bool add_key_str_test();
 // bool add_val_int_test();
@@ -27,7 +38,7 @@ bool add_test();
 bool add_single_item_over_memmax();
 
 // ? smth for different key types
-bool get_size_test(); // naive - already done
+
 bool get_size_after_reassign_test(); // naive - already done
 // bool get_val_int_test();
 // bool get_val_str_test();
@@ -39,6 +50,7 @@ bool get_size_after_reassign_test(); // naive - already done
 //bool get_nonelement_size_test();// not defined in API
 
 // ? deleting on different key types
+
 //bool delete_int_test(); redundant
 // bool delete_str_test();
 //bool delete_bool_test(); redundant
@@ -48,7 +60,7 @@ bool get_size_after_reassign_test(); // naive - already done
 // bool delete_empty_reuse_test(); //can the cache be reused after being emptied?
 
 
-bool space_test(); //naive - already done
+
 // bool space_str_test(); //(others are actually redundant here) //for int/str/bool/array
 // bool space_evict_test();
 //bool space_resize_test(); impossible

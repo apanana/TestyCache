@@ -1,6 +1,8 @@
 #include "test.h"
 
-// Naive create_cache test
+// Naive create_cache test - makes sure we don't crash
+// and that we don't end up with a NULL pointer when
+// creating a cache.
 bool create_test(){
     cache_t c = create_cache_wrapper(1000,NULL);
     if (c==NULL){
@@ -8,6 +10,7 @@ bool create_test(){
     }
     return true;
 }
+<<<<<<< Updated upstream
 bool add_test(){
     //Adds many items of differnet sizes (some of which with identical keys), all of which below maxmem. Returns true if it does not crash
     const uint64_t num_adds = 20;
@@ -17,16 +20,64 @@ bool add_test(){
     return true;
 }
 // Naive cache_get test
+=======
+
+// Naive cache_set test - makes sure we don't crash
+// when trying to set a new element.
+bool add_test(){
+	cache_t c = create_cache_wrapper(1000,NULL);
+	key_type k= "key";
+	int v = 12345; 
+	cache_set(c,k,&v,sizeof(int));
+	return true;
+}
+
+// Naive cache_get test.
+>>>>>>> Stashed changes
 bool get_size_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
-	char * k = "key";
-	int v = 10;
-	int size;
+	key_type k= "key";
+	int v = 12345;
 	cache_set(c,k,&v,(sizeof(int)));
+	int size;
 	void * out = cache_get_wrapper(c,k,&size);
     bool worked = size == sizeof(int);
     destroy_cache(c);
     return worked;
+}
+
+// Naive cache_delete test - makes sure we don't crash
+// when trying to delete.
+bool delete_test(){
+	cache_t c = create_cache_wrapper(1000,NULL);
+	key_type k= "key";
+	int v = 12345;
+	cache_set(c,k,&v,(sizeof(int)));
+	cache_delete(c,k);
+	return true;
+}
+
+// Naive cache_space_used test - 
+bool space_test(){
+	cache_t c = create_cache_wrapper(10000,NULL);
+	char k[1000];
+	int v = 12345;
+	int size;
+	for(int i=0;i<100;++i){
+		strcat(k,"i");
+		cache_set(c,k,&v,sizeof(int));
+		size = cache_space_used(c);
+		if (size!=((i+1)*sizeof(int))){
+			return false;
+		}
+	}
+	return true;
+}
+
+bool destroy_test(){
+	cache_t c = create_cache_wrapper(10000,NULL);
+	destroy_cache(c);
+	return true;
 }
 
 // Tests if space used is what we expect after reassigning a val
@@ -47,25 +98,6 @@ bool get_size_after_reassign_test(){
 	return true;
 }
 
-// Naive cache_space_used test
-bool space_test(){
-	cache_t c = create_cache_wrapper(10000,NULL);
-	char * k;
-	int v;
-	int size;
-	k = "hi";
-	char ks[1000];
-	v = 12345;
-	for(int i=0;i<100;++i){
-		strcat(ks,"hi");
-		cache_set(c,ks,&v,sizeof(int));
-		size = cache_space_used(c);
-		if (size!=((i+1)*sizeof(int))){
-			return false;
-		}
-	}
-	return true;
-}
 
 bool hash_called = false;
 uint64_t custom_hash(key_type key){
