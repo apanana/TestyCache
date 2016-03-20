@@ -29,13 +29,12 @@ execnames = [
 
 class TestRes:
     def __init__(self,exec_name,testnum):
-        pobj = subprocess.Popen([exec_name,str(testnum)],stdout=subprocess.PIPE)
+        pobj = subprocess.Popen([exec_name,str(testnum)],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         output, err = pobj.communicate()
         retval = int(pobj.returncode)
         output = output.decode("utf-8")
         self.testname = output if verbose_level > 0 else ("????????????" if "\n" not in output else output[:output.index("\n")])
         self.retval = retval
-        print("%r"%retval)
 
 class Sumary:
     def __init__(self,exec_name):
