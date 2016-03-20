@@ -1,5 +1,5 @@
-#include "cachewrapper.h"
 #include "test.h"
+#include "cachewrapper.h"
 #include "test_helper.c"
 #include "lrutests.c"
 

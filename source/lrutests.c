@@ -3,11 +3,14 @@
 bool evictions_occur(){
     //adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
     cache_t cache = create_cache_wrapper(10*sizeof(int_ty),NULL);
-
+    printf("HIHIHIHIHIHIHIIHI00000000\n");
     const uint64_t num_elmts_add = 10000;
     add_elements(cache,0,num_elmts_add,INT);
+    printf("HIHIHIHIHIHIHIIHI111111\n");
     bool passed = elements_exist(cache,0,num_elmts_add);
+    printf("HIHIHIHIHIHIHIIHI2222222222\n");
     destroy_cache(cache);
+    printf("HIHIHIHIHIHIHIIHI33333333333333\n");
     return passed;
 }
 bool maxmem_not_excceeded(){
