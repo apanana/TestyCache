@@ -33,7 +33,8 @@ class TestRes:
         output, err = pobj.communicate()
         retval = int(pobj.returncode)
         output = output.decode("utf-8")
-        self.testname = output if verbose_level > 0 else ("????????????" if "\n" not in output else output[:output.index("\n")])
+        error = err.decode("utf-8")
+        self.testname = output + error if verbose_level > 0 else ("????????????" if "\n" not in output else output[:output.index("\n")])
         self.retval = retval
 
 class Sumary:
