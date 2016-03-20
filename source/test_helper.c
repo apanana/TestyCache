@@ -12,7 +12,7 @@ char rand_char(){
 	return rand()%26+64;//random upper case letters
 }
 char * gen_rand_str(){
-	size_t str_size = rand() % max_str_len + 1;
+	size_t str_size = rand() % (max_str_len - 1) + 1;
 	char * newstr = calloc(str_size,sizeof(char));
 	for(size_t cn = 0; cn < str_size-1; ++cn){
 		newstr[cn] = rand_char();
@@ -96,11 +96,24 @@ void delete_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt){
 }
 uint32_t space_of_element(cache_t cache,uint64_t elmt,val_entry_type ent_ty){
 	uint64_t curkey = to_key_int(elmt);
+	uint32_t null_size = 0;
+	val_type null_val = cache_get_wrapper(cache,&curkey,&null_size);
+	return null_val == NULL ? 0 : val_size(elmt,ent_ty);
+}
+uint64_t space_of_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,val_entry_type ent_ty){
+	uint64_t sum = 0;
+	for(size_t i = start_elmt; i < end_elmt; ++i){
+		sum += space_of_element(cache,i,ent_ty);
+	}
+	return sum;
+}
+uint32_t reported_space_of_element(cache_t cache,uint64_t elmt,val_entry_type ent_ty){
+	uint64_t curkey = to_key_int(elmt);
 	uint32_t out_size = 0;
 	val_type null_val = cache_get_wrapper(cache,&curkey,&out_size);
 	return null_val == NULL ? 0 : out_size;
 }
-uint64_t space_of_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,val_entry_type ent_ty){
+uint64_t reported_space_of_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,val_entry_type ent_ty){
 	uint64_t sum = 0;
 	for(size_t i = start_elmt; i < end_elmt; ++i){
 		sum += space_of_element(cache,i,ent_ty);
