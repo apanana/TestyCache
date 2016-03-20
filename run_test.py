@@ -3,6 +3,7 @@ command line syntax
 run_test.py all                         run all tests on all executables
 run_test.py all <testint>               run specific test on all executables
 run_test.py <execname> <testint>        run specific test on specific executabl
+run_test.py <execname>                  run all tests on specific executable
 '''
 import subprocess
 import sys
