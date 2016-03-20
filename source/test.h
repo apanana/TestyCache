@@ -58,14 +58,6 @@ bool space_clear_test();//what is this?
 
 bool custom_hash_is_called();//needs a global variable to work
 
-//lru tests
-
-bool evictions_occur();
-bool maxmem_not_excceeded();
-bool elements_not_evicted_early();
-bool var_len_evictions();
-bool basic_lru_test();
-bool lru_delete_test();
 
 //more advanced tests to get crashes out of the more secure caches
 

@@ -1,3 +1,5 @@
+#include "lrutests.h"
+
 bool evictions_occur(){
     //adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
     const uint64_t max_elmts = 10;
