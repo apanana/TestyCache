@@ -47,7 +47,7 @@ void * val_ptr(size_t loc, val_entry_type ent_ty){
 	return ent_ty == INT ? &ivals[loc] : (ent_ty == STR ? svals[loc] : NULL);
 }
 uint32_t val_size(size_t loc, val_entry_type ent_ty){
-	return ent_ty == INT ? sizeof(int_ty) : (ent_ty == STR ? strlen(svals[loc]) : 0);
+	return ent_ty == INT ? sizeof(int_ty) : (ent_ty == STR ? strlen(svals[loc])+1 : 0);
 }
 uint64_t to_key_int(uint64_t num){
 	return num & 0x00ffffffffffffff;
@@ -124,12 +124,22 @@ bool element_exists(cache_t cache,uint64_t elmt){
 	uint64_t curkey = to_key_int(elmt);
 	uint32_t null_size = 0;
 	val_type val = cache_get_wrapper(cache,&curkey,&null_size);
+	bool exists = val != NULL;
 	return val != NULL;
 }
 bool elements_exist(cache_t cache,uint64_t start_elmt,uint64_t end_elmt){
+	// Only returns true when all elements exist
 	bool res = true;
 	for(uint64_t i = start_elmt; i < end_elmt; ++i){
 		res = res && element_exists(cache,i);
 	}
 	return res;
 }
+bool elements_dont_exist(cache_t cache,uint64_t start_elmt,uint64_t end_elmt){
+	// Only returns true if all elements do not exist
+	for(uint64_t i = start_elmt; i < end_elmt; ++i){
+		if (element_exists(cache,i)) return false;
+	}
+	return true;
+}
+

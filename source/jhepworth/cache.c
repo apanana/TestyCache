@@ -70,7 +70,7 @@ cache_t create_cache(uint64_t maxmem)
   cache_t cache = malloc(sizeof(cache_obj));
   cache->cache = malloc(sizeof(cache_real_obj));
   cache_real_obj *ret = cache->cache;
-  ret->hasher = &hash;
+  ret->hasher = (ret->hasher == NULL) ? &hash : ret->hasher;
   ret->size = maxmem;
   ret->num_buckets = 512;
   ret->buckets = calloc(512,sizeof(linked_list_t));
