@@ -17,9 +17,9 @@ bool maxmem_not_excceeded(){
 
     add_elements(cache,0,max_emts+1,INT);
     bool exceeded = space_of_elements(cache,0,max_emts+1,INT) > max_mem;
-    delete_elements(cache,0,max_emts);
+    delete_elements(cache,0,max_emts+1);
     add_elements(cache,max_emts*2,max_emts*3,INT);
-    exceeded = exceeded || space_of_elements(cache,0,max_emts*3,INT) > max_mem;
+    exceeded = exceeded || space_of_elements(cache,max_emts*2,max_emts*3,INT) > max_mem;
 
     destroy_cache(cache);
     return exceeded;
@@ -33,7 +33,7 @@ bool elements_not_evicted_early(){
     add_elements(cache,0,max_add_emts/2,INT);
     delete_elements(cache,0,max_add_emts/4);
     add_elements(cache,max_add_emts/4, max_add_emts/4 + max_add_emts,INT);
-    bool passed = elements_exist(cache,0,max_add_emts);
+    bool passed = elements_exist(cache,max_add_emts/4,max_add_emts/4 + max_add_emts);
     destroy_cache(cache);
     return passed;
 }
