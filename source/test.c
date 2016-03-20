@@ -155,6 +155,60 @@ bool add_single_item_over_memmax(){
     return cache_big_val == NULL;
 }
 
+// there might be some kind of bug here because tests that i expect to pass
+// are not passing...
+bool add_over_memmax_eviction(){
+    // adds small items to cache and then adds an item larger than maxmem
+    // and sees if items have been evicted. (expect them to not be).
+    uint64_t max_mem = 10;
+    char rand_key[] = "random_key";
+    char big_val[] = "string of length > max_mem asdfasdfasdfasdfasdfasdfasdf";
+
+    cache_t c = create_cache_wrapper(max_mem*sizeof(uint16_t),NULL);
+    add_elements(c,0,3,INT);
+    cache_set(c,rand_key,big_val,strlen(big_val)+1);
+
+    if (elements_exist(c,0,3)){
+        return false;
+    }
+    destroy_cache(c);
+    return true;
+}
+
+bool add_resize_buckets_or_maxmem(){
+    // adds small items up to half of maxmem then attemps to add
+    // an item that would be too large for the cache (unless maxmem changed
+    // after the resize). If new item appears, then maxmem was changed 
+    // in resize (which is a bug - maxmem should be constant).
+    uint64_t max_mem = 10;
+    char rand_key[] = "random_key";
+    char big_val[] = "string of length > max_mem";
+
+    cache_t c = create_cache_wrapper(max_mem*sizeof(uint16_t),NULL);
+    add_elements(c,0,5,INT);
+
+    int space1 = cache_space_used(c);
+
+    cache_set(c,rand_key,big_val,strlen(big_val)+1);
+    uint32_t null_size = 0;
+    val_type cache_big_val = cache_get_wrapper(c,rand_key,&null_size);
+    
+    int space2 = cache_space_used(c);
+
+    if (space1 != space2 ||
+        cache_big_val != NULL){
+        printf("%d\n",space1);
+        printf("%d\n",space2);
+        printf("%s\n",cache_big_val);
+        printf("%p\n",cache_big_val);
+        fflush(stdout);
+        return false;
+    }
+    destroy_cache(c);
+    return true;
+}
+
+
 // Tests if space used is what we expect after reassigning a val
 bool get_size_after_reassign_test(){
     cache_t c = create_cache_wrapper(1000,NULL);
@@ -173,6 +227,11 @@ bool get_size_after_reassign_test(){
     return true;
 }
 
+// exposes some problems with the val that cache_get returns.
+// if we don't copy out the value to something totally new,
+// we end up reassigning the same pointer over and over.
+// so updating it raises an error because we also update
+// old outs.
 bool get_val_after_reassign_test(){
     cache_t c = create_cache_wrapper(1000,NULL);
     char * k = "key";
@@ -184,6 +243,8 @@ bool get_val_after_reassign_test(){
     printf("%p\n",out1);
     char *v2 = "stringval2";
     cache_set(c,k,v2,strlen(v2)+1);
+    printf("%s\n",out1);
+    printf("%p\n",out1);
     void * out2 = cache_get_wrapper(c,k,&size2);
     printf("11%s\n",out1);
     printf("%p\n",out2);
@@ -229,3 +290,29 @@ bool delete_not_in(){
     destroy_cache(cache);
     return worked;
 }
+
+// no bugs exposed :( - also not in header
+bool delete_affect_get_out(){
+    cache_t c = create_cache_wrapper(1000,NULL);
+    char * k = "key";
+    char *v1 = "stringval1";
+    int size1,size2;
+    cache_set(c,k,v1,strlen(v1)+1);
+    void * out1 = cache_get_wrapper(c,k,&size1);
+    printf("%s\n",out1);
+    printf("%p\n",out1);
+    cache_delete(c,k);
+    void * out2 = cache_get_wrapper(c,k,&size1);
+    printf("%s\n",out1);
+    printf("%p\n",out2);
+    // printf("%s\n",out1);
+    // printf("%p\n",out1);
+    if (out1 == NULL) return false;
+    return true;
+}
+
+
+
+
+
+

@@ -96,10 +96,13 @@ int main(int argn,char ** argv){
     	RunTest(get_val_after_reassign_test);
     	break;
     case 20:
+    	RunTest(delete_affect_get_out);
     	break;
     case 21:
+    	RunTest(add_over_memmax_eviction);
     	break;
     case 22:
+    	RunTest(add_resize_buckets_or_maxmem)
     	break;
 	default:
 		printf("test not implemented\n");
