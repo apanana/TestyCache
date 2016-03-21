@@ -117,9 +117,10 @@ int main(int argn,char ** argv){
    		RunTest(update_reordering); // an LRU test
    		break;
    	case 27:
-   		// RunTest(get_nonexist);
+   		// RunTest(get_nonexist); // exposes no bugs
    		break;
    	case 28:
+   		RunTest(evict_on_failed_reset_old_val);
    		break;
    	case 29:
    		break;

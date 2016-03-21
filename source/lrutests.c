@@ -25,6 +25,7 @@ bool basic_lru_test(){
     destroy_cache(cache);
     return worked;
 }
+
 bool lru_delete_test(){
     //adds A then B then C then gets A then deletes B adds D and expects C to be evicted
     const size_t max_mem = 2*sizeof(int_ty)+1;
@@ -109,6 +110,48 @@ bool evict_on_reset_old_val(){
         destroy_cache(c);
         return false;
     }
+    destroy_cache(c);
+    return true;
+}
+
+bool evict_on_failed_reset_old_val(){
+    // tests whether or not updating an existing value would cause evictions
+    // if the new value exceeds maxmem anyway. 
+    // we'll treat evictions as errors, though this is a little ambiguous
+    // so we'll make meniton of that in the writeup
+    cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
+    key_type k1 = "key1";
+    int v1 = 1;
+    key_type k2 = "key2";
+    int v2 = 2;
+    cache_set(c,k1,&v1,sizeof(int));
+    cache_set(c,k2,&v2,sizeof(int));
+
+    // This should fail to reassign the value of key2, since the new
+    // value is too large for the cache. We want to make sure that
+    // none of the old values were evicted.
+    val_type v3 = "value too large for cache!";
+    cache_set(c,k2,v3,strlen(v3)+1);
+
+    // This should not be null
+    int size1,size2;
+    val_type out1 = cache_get_wrapper(c,k1,&size1);
+    if(out1==NULL){
+        destroy_cache(c);
+        return false;
+    }
+    printf("We will pass!1\n");
+    val_type out2 = cache_get_wrapper(c,k2,&size1);
+    if(out2==NULL){
+        destroy_cache(c);
+        return false;
+    }
+    printf("We will pass!2\n");
+    if(*(int*)out2!=v2){
+        destroy_cache(c);
+        return false;
+    }
+    printf("We will pass!3\n");
     destroy_cache(c);
     return true;
 }
