@@ -13,7 +13,7 @@ Additional options:
 import subprocess
 import sys
 
-num_of_tests = 27
+num_of_tests = 32
 
 verbose_level = 0
 

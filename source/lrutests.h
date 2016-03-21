@@ -1,6 +1,12 @@
 // adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
 bool evictions_occur();
 
+// adds A then B then gets A then adds C and expects B to be evicted
+bool basic_lru_test();
+
+// adds A then B then C then gets A then deletes B adds D and expects C to be evicted
+bool lru_delete_test();
+
 // tests whether updating elements properly reorders the LRU
 bool update_reordering();
 
@@ -21,8 +27,9 @@ bool elements_not_evicted_early();
 // basic lru_test for variable length strings
 bool var_len_evictions();
 
-// adds A then B then gets A then adds C and expects B to be evicted
-bool basic_lru_test();
 
-// adds A then B then C then gets A then deletes B adds D and expects C to be evicted
-bool lru_delete_test();
+
+/*
+need to rewrite new tests according to our testing module
+l . o . l.
+*/

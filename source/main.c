@@ -114,8 +114,18 @@ int main(int argn,char ** argv){
    		RunTest(evict_on_reset_old_val);  // an LRU test
    		break;
    	case 26:
-   		// RunTest(get_nonexist);
    		RunTest(update_reordering); // an LRU test
+   		break;
+   	case 27:
+   		// RunTest(get_nonexist);
+   		break;
+   	case 28:
+   		break;
+   	case 29:
+   		break;
+   	case 30:
+   		break;
+	case 31:
    		break;
 	default:
 		printf("test not implemented\n");

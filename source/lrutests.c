@@ -12,6 +12,33 @@ bool evictions_occur(){
     return evicted && not_evicted;
 }
 
+bool basic_lru_test(){
+    //adds A then B then gets A then adds C and expects B to be evicted
+    const size_t max_mem = 2*sizeof(int_ty)+1;
+    cache_t cache = create_cache_wrapper(max_mem,NULL);
+    add_element(cache,0,INT);
+    add_element(cache,1,INT);
+    //gets the element
+    element_exists(cache,0);
+    add_element(cache,2,INT);
+    bool worked = !element_exists(cache,1);
+    destroy_cache(cache);
+    return worked;
+}
+bool lru_delete_test(){
+    //adds A then B then C then gets A then deletes B adds D and expects C to be evicted
+    const size_t max_mem = 2*sizeof(int_ty)+1;
+    cache_t cache = create_cache_wrapper(max_mem,NULL);
+    add_element(cache,0,INT);
+    add_element(cache,1,INT);
+    //gets the element
+    element_exists(cache,0);
+    add_element(cache,2,INT);
+    bool worked = !element_exists(cache,1);
+    destroy_cache(cache);
+    return worked;
+}
+
 bool update_reordering(){
     // tests whether updating elements properly reorders the LRU
         // need to make this val big enough so we don't run into problems
@@ -159,32 +186,6 @@ bool var_len_evictions(){
     //gets the element
     element_exists(cache,0);
     add_element(cache,2,STR);
-    bool worked = !element_exists(cache,1);
-    destroy_cache(cache);
-    return worked;
-}
-bool basic_lru_test(){
-    //adds A then B then gets A then adds C and expects B to be evicted
-    const size_t max_mem = 2*sizeof(int_ty)+1;
-    cache_t cache = create_cache_wrapper(max_mem,NULL);
-    add_element(cache,0,INT);
-    add_element(cache,1,INT);
-    //gets the element
-    element_exists(cache,0);
-    add_element(cache,2,INT);
-    bool worked = !element_exists(cache,1);
-    destroy_cache(cache);
-    return worked;
-}
-bool lru_delete_test(){
-    //adds A then B then C then gets A then deletes B adds D and expects C to be evicted
-    const size_t max_mem = 2*sizeof(int_ty)+1;
-    cache_t cache = create_cache_wrapper(max_mem,NULL);
-    add_element(cache,0,INT);
-    add_element(cache,1,INT);
-    //gets the element
-    element_exists(cache,0);
-    add_element(cache,2,INT);
     bool worked = !element_exists(cache,1);
     destroy_cache(cache);
     return worked;

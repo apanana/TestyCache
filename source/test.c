@@ -222,16 +222,16 @@ bool add_resize_buckets_or_maxmem(){
 //     return true;
 // }
 
-// tests whether or not we crash on trying to get an element that doesnt
-// exist in our cache.
-bool get_nonexist(){
-    cache_t c = create_cache_wrapper(1000,NULL);
-    key_type k = "nonexist";
-    int size;
-    val_type out = cache_get_wrapper(c,k,&size);
-    if(out != NULL) return false;
-    return true;
-}
+// // tests whether or not we crash on trying to get an element that doesnt
+// // exist in our cache.
+// bool get_nonexist(){
+//     cache_t c = create_cache_wrapper(1000,NULL);
+//     key_type k = "nonexist";
+//     int size;
+//     val_type out = cache_get_wrapper(c,k,&size);
+//     if(out != NULL) return false;
+//     return true;
+// }
 
 // Tests if space used is what we expect after reassigning a val
 bool get_size_after_reassign_test(){
