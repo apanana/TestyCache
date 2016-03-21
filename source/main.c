@@ -59,10 +59,10 @@ int main(int argn,char ** argv){
 		RunTest(evictions_occur);
 		break;
 	case 9:
-		RunTest(maxmem_not_excceeded);
+		RunTest(maxmem_not_excceeded); //only pass or crash
 		break;
 	case 10:
-		RunTest(elements_not_evicted_early);
+		RunTest(elements_not_evicted_early); //only pass or crash
 		break;
 	case 11:
 		RunTest(var_len_evictions);
@@ -75,21 +75,21 @@ int main(int argn,char ** argv){
 		break;
 	// 14 - 15: cache_set tests
 	case 14:
-		RunTest(large_val_copied_correctly);
+		RunTest(large_val_copied_correctly); //passes all but jhepworth (crash)
 		break;
 	case 15:
 		RunTest(add_single_item_over_memmax);
 		break;
 	// 16 - 17: cache_get tests:
 	case 16:
-		RunTest(get_with_null_term_strs_test);
+		RunTest(get_with_null_term_strs_test); //passes all but jhepworth (crash)
 		break;
 	case 17:
 		RunTest(get_size_after_reassign_test);
         break;
     // 18: cache_delete test:
     case 18:
-    	RunTest(delete_not_in);
+    	RunTest(delete_not_in); //passes all but jhepworth (crash)
     	break;
     // yet to be placed...
     case 19:
@@ -99,7 +99,7 @@ int main(int argn,char ** argv){
     	// RunTest(delete_affect_get_out); // exposes no bugs :(
     	break;
     case 21:
-    	RunTest(add_over_memmax_eviction); // might be broken?
+    	RunTest(add_over_memmax_eviction); // might be broken? only pass or crash
     	break;
     case 22:
     	RunTest(add_resize_buckets_or_maxmem);
@@ -114,13 +114,13 @@ int main(int argn,char ** argv){
    		RunTest(evict_on_reset_old_val);  // an LRU test
    		break;
    	case 26:
-   		RunTest(update_reordering); // an LRU test
+   		RunTest(update_reordering); // an LRU test - infinite loop on aledger
    		break;
    	case 27:
    		// RunTest(get_nonexist); // exposes no bugs
    		break;
    	case 28:
-   		RunTest(evict_on_failed_reset_old_val);
+   		RunTest(evict_on_failed_reset_old_val); // an lru testinfinite loop on aledger
    		break;
    	case 29:
    		break;
