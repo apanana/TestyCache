@@ -34,15 +34,24 @@ class TestRes:
     def __init__(self,exec_name,testnum):
         pobj = subprocess.Popen([exec_name,str(testnum)],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         try:
-            output, err = pobj.communicate(timeout=2.0)
+            out, err = pobj.communicate(timeout=2.0)
         except subprocess.TimeoutExpired:
             pobj.kill()
-            output, err = pobj.communicate()
+            out, err = pobj.communicate()
             retval = TIMOUT_VAL
         else:
             retval = int(pobj.returncode)
-        output = output.decode("utf-8")
-        error = err.decode("utf-8")
+        while True:
+            #weird hack for fixing UnicodeDecodeError on linux
+            try:
+                output = out.decode("utf-8")
+                error = err.decode("utf-8")
+            except UnicodeDecodeError:
+                out = out[:len(out)-1]
+                err = err[:len(err)-1]
+            else:
+                break
+                
         self.testname = output + err if verbose_level > 0 else ("????????????" if "\n" not in output else output[:output.index("\n")])
         self.retval = retval
 
