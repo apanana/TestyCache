@@ -184,7 +184,7 @@ bool evict_on_failed_reset_old_val(){
 
 bool get_reordering(){
     // Adds A then B, the gets A (and expects LRU to be reordered). Adds C,
-    // which causes one element to be evicted, and expects the B (not A)
+    // which causes one element to be evicted, and expects that B (not A)
     // was evicted.
     cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
     key_type k1 = "key1";

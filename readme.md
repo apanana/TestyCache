@@ -106,6 +106,14 @@ unfortunately you have to scroll right now, so I might flip this table...
 
 ### Issue summaries
 #### Akosik
+* `get_val_after_reassign_test`: Whether or not we count this as a bug is ambiguous. If we expect the cache to copy out vals when `cache_get()` is called, then this is a bug. If we expect `cache_get()` to return a pointer, then this is not a bug. (This cache fails our test as it is now since it returns a pointer but we expect the value to be copied out.)
+* `evictions_occur`: ????? THIS TEST IS WEIRD ???????
+* `basic_lru_test`:
+* `lru_delete_test`:
+* `update_reordering`:
+* `evict_on_reset_old_val`:
+* `get_reordering`:
+* `var_len_evictions`:
 
 #### Aledger
 A main source of problems with this cache was that many cases were handled with exits that would crash the test instead doing nothing or returning NULL for example. Also did not follow the API for `cache_set()` by not allowing the user to pass their own hash function.
@@ -115,29 +123,58 @@ A main source of problems with this cache was that many cases were handled with 
 * `add_same_starting_char`: ???? SHOULD BE A PASS ?????
 * `add_over_memmax_eviction`: trace back this error to `crash_on_memoverload`
 * `add_resize_buckets_or_maxmem`: trace back this error to `crash_on_memoverload`
+* `update_reordering`: we get into an infinite while-loop starting on line 136 of `cache.h`
+* `evict_on_reset_old_val`:
+* `evict_on_failed_reset_old_val`: same infinite while-loop starting on line 136 of `cache.h`
+
 
 #### Apan
 `cache_get()` doesn't follow the API in this cache, so buffer size is never properly returned. 
 * `get_size_test`: `cache_get()` doesn't follow the API.
+* `get_val_after_reassign_test`: Whether or not we count this as a bug is ambiguous. If we expect the cache to copy out vals when `cache_get()` is called, then this is a bug. If we expect `cache_get()` to return a pointer, then this is not a bug. (This cache fails our test as it is now since it returns a pointer but we expect the value to be copied out.)
+* `basic_lru_test`:
+* `lru_delete_test`:
+* `evict_on_reset_old_val`:
+* `get_reordering`:
+* `var_len_evictions`:
 
 #### Bblack
+* `get_val_after_reassign_test`: Whether or not we count this as a bug is ambiguous. If we expect the cache to copy out vals when `cache_get()` is called, then this is a bug. If we expect `cache_get()` to return a pointer, then this is not a bug. (This cache fails our test as it is now since it returns a pointer but we expect the value to be copied out.)
+* `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
 
 #### Jcosel
 We have one bug that can't be tested but it actually revealed to us by the cache's print statements. If you initialize it with a maxmem less than 64, it resizes automatically to 64. This is hard to test because of another bug that causes maxmem to double itself when exceeded.
+* `cache_space_preserved`:
 * `add_single_item_over_memmax`: maxmem doubles itself when exceeded so we end up adding an item that we wouldn't have been able to if maxmem was constant.
 * `add_over_memmax_eviction`: we get a false positive (incorrect pass) here because of this maxmem resize bug!
 * `add_resize_buckets_or_maxmem`: can be traced back to our maxmem-resize bug.
+* `get_null_empty`: ????? really weird because this passes when the cache is empty.????? 
+* `evictions_occur`: ????? THIS TEST IS WEIRD ???????
+* `basic_lru_test`:
+* `lru_delete_test`:
+* `update_reordering`: 
+* `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
+* `get_reordering`:
+* `maxmem_not_excceeded`:
+* `elements_not_evicted_early`:
+* `var_len_evictions`:
 
 #### Jhepworth
-* `get_size_test`:
-* `get_val_test`:
-* `space_test`:
-* `custom_hash_is_called`:
-* `cache_space_preserved`:
-* `large_val_copied_correctly`:
-* `add_same_starting_char`:
-* `add_over_memmax_eviction`:
-* `get_null_empty`: really weird because this passes when the cache is empty.
+This cache compiles after we patch the section mentioned in the moodle forum, but continues to crash on mac. You need to be on polytopia to run tests on this cache.
+* `get_size_test`: Fail
+* `get_val_test`: Crashed
+* `space_test`: Fail
+* `custom_hash_is_called`: Fail
+* `large_val_copied_correctly`: Fail
+* `add_same_starting_char`: Fail
+* `add_over_memmax_eviction`: Fail
+* `get_val_after_reassign_test`: Crashes
+* `get_with_null_term_strs_test`: Crashes
+* `delete_affect_get_out`:
+* `evictions_occur`: ????? THIS TEST IS WEIRD ???????
+* `update_reordering`: 
+* `evict_on_reset_old_val`:
+* `evict_on_failed_reset_old_val`:
 
 #### Zzhong
 * `custom_hash_is_called`: ???? SHOULD BE A PASS ?????
@@ -147,6 +184,12 @@ We have one bug that can't be tested but it actually revealed to us by the cache
 * `add_over_memmax_eviction`: we can trace this error back to `add_single_item_over_memmax` since we're apparently able to exceed maxmem, so we expect this cache to fail this test
 * `add_resize_buckets_or_maxmem`: trace back to `add_single_item_over_memmax`
 * `get_size_after_reassign_test`: in `cache.c` the if-statement in line 40 for the update case doesn't update the size of the item in the hash table, only rewrites the value.
-
+* `delete_not_in`:
+* `evictions_occur`: ????? THIS TEST IS WEIRD ???????
+* `update_reordering`: 
+* `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
+* `get_reordering`:
+* `maxmem_not_excceeded`:
+* `elements_not_evicted_early`:
 
 
