@@ -1,7 +1,7 @@
 ### Files:
 
 | Filename | Description |
-| -- | -- |
+| --- | --- |
 | Makefile | Standard makefile for make to build the tests |
 | run_test.py | Run system for the tests (described in Run System section) |
 
