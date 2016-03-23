@@ -9,6 +9,7 @@ run_test.py <execname>                  run all tests on specific executable
 Additional options:
 -v          output stderr after crashes
 -vv         output stdout and stderr always
+-t          output markdown table (only work on all option)
 '''
 import subprocess
 import sys
@@ -16,6 +17,7 @@ import sys
 num_of_tests = 32
 
 verbose_level = 0
+output_table = False
 
 execnames = [
 "./tests/create_akosik",
@@ -91,7 +93,7 @@ class Sumary:
         resstr += "timed out: " + str(timeout) + "\n"
         return resstr
 
-    def get_passed_line(self):
+    def get_passed_list(self):
         #resstr = self.exec_name + " :\n"
         line = [self.exec_name]
         for t in self.tests:
@@ -103,7 +105,7 @@ class Sumary:
                 line.append("TIME")
             else:
                 line.append("CRASH")
-        return ", ".join(line)
+        return line
 
     def get_func_names(self):
         fnames = [""]
@@ -128,14 +130,37 @@ def run_on_all(testnum):
     for en in execnames:
         run_one(en,testnum)
 
-def run_all_execs():
+def pipe_list(words):
+    return " | " + " | ".join(words) + " | "
+
+def print_table():
+    for en in execnames:
+        sumar = Sumary(en)
+        for tn in range(num_of_tests):
+            sumar += TestRes(en,tn)
+            
+        if en is execnames[0]:
+            fn_names = sumar.get_func_names()
+            print(pipe_list(fn_names))
+            print(pipe_list(["---"]*len(fn_names)))
+
+        print(pipe_list(sumar.get_passed_list()))
+
+def print_csv():
     for en in execnames:
         sumar = Sumary(en)
         for tn in range(num_of_tests):
             sumar += TestRes(en,tn)
         if en is execnames[0]:
             print(", ".join(sumar.get_func_names()))
-        print(sumar.get_passed_line())
+        print(", ".join(sumar.get_passed_list()))
+
+def run_all_execs():
+    if output_table:
+        print_table()
+    else:
+        print_csv()
+
 
 if "-vv" in sys.argv:
     verbose_level = 2
@@ -143,6 +168,9 @@ if "-vv" in sys.argv:
 elif "-v" in sys.argv:
     verbose_level = 1
     sys.argv.remove("-v")
+if "-t" in sys.argv:
+    output_table = True
+    sys.argv.remove("-t")
 
 if len(sys.argv) == 1:
     run_all_execs()

@@ -1,3 +1,5 @@
+# System and Setup
+
 ### Files:
 
 | Filename | Description |
@@ -28,20 +30,35 @@ If the test passes, it returns 0. If it fails, it returns a certain number. If i
 
 More complete documentation of the details is in the "run_test.py" file.
 
-## Random Issues
+# Random Issues
 
 ### Compiler bug???
 
-We get inconsistent results on a macbook using the clang compiler "Apple LLVM version 7.0.2 (clang-700.1.81)". I believe this is Clang 3.6. Specifically, "get_size_test" returned true when running apan's cache on O2 and false when compiling with O0.
+We get inconsistent results on a macbook using the clang compiler "Apple LLVM version 7.0.2 (clang-700.1.81)". We believe this is Clang 3.6. Specifically, "get_size_test" returned true when running apan's cache on O2 and false when compiling with O0.
 
 There seem to be other bugs and inconsistencies between -O2 and -O0 when compiling with clang as well.
 
-Using gcc 4.8, I got that get_size_after_reassign_test passes on O0 and fails on O2 on apan's cache.
+Using gcc 4.8, it appears that get_size_after_reassign_test passes on O0 and fails on O2 on apan's cache.
 
 To reproduce, change the makefile to compile for the specific compiler, and add O2 and see the differences between that and O0.
 
 ### Python bug???
 
-On the polytopia machines, I got inconsistent "UnicodeDecodeError" errors when decoding the standard output from the process. I looked at the output, and it looked like the Popen.communicate() method was returning output that the process never actually printed. On windows and OSX, this method works fine, and I believe it is correct usage of the module.
+On the polytopia machines, we got inconsistent "UnicodeDecodeError" errors when decoding the standard output from the process. we looked at the output, and it looked like the Popen.communicate() method was returning output that the process never actually printed. On windows and OSX, this method works fine, and we believe it is correct usage of the module.
 
 To reproduce this, uncomment the print statement in TestRes.__init__ in run_test.py and run the python file several times (sometimes it works fine) until you start seeing nonsense printed out.
+
+
+# Table
+
+### Descriptions
+
+ |  | create_test | destroy_test | add_test | crash_on_memoverload | get_size_test | get_val_test | delete_test | space_test | custom_hash_is_called | cache_space_preserved | add_single_item_over_memmax | large_val_copied_correctly | add_same_starting_char | add_over_memmax_eviction | add_resize_buckets_or_maxmem | get_null_empty | get_nonexist | get_size_after_reassign_test | get_val_after_reassign_test | get_with_null_term_strs_test | delete_not_in | delete_affect_get_out | evictions_occur | basic_lru_test | lru_delete_test | update_reordering | evict_on_reset_old_val | evict_on_failed_reset_old_val | get_reordering | maxmem_not_excceeded | elements_not_evicted_early | var_len_evictions | 
+ | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+ | ./tests/create_akosik | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | FAIL | PASS | FAIL | PASS | PASS | FAIL |
+ | ./tests/create_aledger | PASS | PASS | PASS | CRASH | PASS | PASS | PASS | PASS | FAIL | PASS | CRASH | PASS | CRASH | CRASH | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | TIME | FAIL | TIME | PASS | PASS | PASS | PASS |
+ | ./tests/create_apan | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | FAIL | PASS | FAIL | PASS | PASS | FAIL |
+ | ./tests/create_bblack | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS |
+ | ./tests/create_jcosel | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | PASS | FAIL | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | FAIL |
+ | ./tests/create_jhepworth | PASS | PASS | PASS | PASS | FAIL | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | PASS | PASS | CRASH | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS |
+ | ./tests/create_zzhong | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | CRASH | FAIL | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS | PASS | CRASH | PASS | CRASH | PASS | PASS | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | PASS |

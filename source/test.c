@@ -149,8 +149,7 @@ bool get_nonexist(){
 }
 
 // Tests if space used is what we expect after reassigning a val
-bool
-.30.(){
+bool get_size_after_reassign_test(){
     cache_t c = create_cache_wrapper(1000,NULL);
     char * k = "key";
     int v1 = 10;
