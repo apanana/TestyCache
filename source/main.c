@@ -1,6 +1,7 @@
 #include "cachewrapper.c"
 #include "test_helper.c"
 #include "test.c"
+#include "basic_test.c"
 #include "lrutests.c"
 
 
@@ -26,8 +27,7 @@ int main(int argn,char ** argv){
 	gen_vals();
 
 	switch (test_num) {
-	// 0 - 6: naive tests (ie check for crashes)
-	// If anything fails these, it will likely fail the remaining tests.
+	// 0 - 8: naive and basic crash tests
 	case 0:
 		RunTest(create_test);
 		break;
@@ -38,99 +38,98 @@ int main(int argn,char ** argv){
 		RunTest(add_test);
 		break;
 	case 3:
-		RunTest(get_size_test);
-		break;
-	case 4:
-		RunTest(get_val_test);
-		break;
-	case 5:
-		RunTest(delete_test);
-		break;
-	case 6:
-		RunTest(space_test);
-		break;
-	// 7: checks is custom hash function is called
-	// on add, update, get, delete.
-	case 7:
-		RunTest(custom_hash_is_called);
-		break;
-	// 8 - 13: LRU tests
-	case 8:
-		RunTest(evictions_occur);
-		break;
-	case 9:
-		RunTest(maxmem_not_excceeded); //only pass or crash
-		break;
-	case 10:
-		RunTest(elements_not_evicted_early); //only pass or crash
-		break;
-	case 11:
-		RunTest(var_len_evictions);
-		break;
-	case 12:
-		RunTest(basic_lru_test);
-		break;
-	case 13:
-		RunTest(lru_delete_test);
-		break;
-	// 14 - 15: cache_set tests
-	case 14:
-		RunTest(large_val_copied_correctly); //passes all but jhepworth (crash)
-		break;
-	case 15:
-		RunTest(add_single_item_over_memmax);
-		break;
-	// 16 - 17: cache_get tests:
-	case 16:
-		RunTest(get_with_null_term_strs_test); //passes all but jhepworth (crash)
-		break;
-	case 17:
-		RunTest(get_size_after_reassign_test);
-        break;
-    // 18: cache_delete test:
-    case 18:
-    	RunTest(delete_not_in); //passes all but jhepworth (crash)
-    	break;
-    // yet to be placed...
-    case 19:
-    	RunTest(get_val_after_reassign_test);
-    	break;
-    case 20:
-    	RunTest(delete_affect_get_out); // exposes no bugs :(
-    	break;
-    case 21:
-    	RunTest(add_over_memmax_eviction); // might be broken? only pass or crash
-    	break;
-    case 22:
-    	RunTest(add_resize_buckets_or_maxmem);
-    	break;
-   	case 23:
-   		RunTest(get_null_empty) //exposes no bugs
-   		break;
-   	case 24:
-   		RunTest(get_reordering);  // an LRU test
-   		break;
-   	case 25:
-   		RunTest(evict_on_reset_old_val);  // an LRU test
-   		break;
-   	case 26:
-   		RunTest(update_reordering); // an LRU test - infinite loop on aledger
-   		break;
-   	case 27:
-   		RunTest(get_nonexist); // exposes no bugs
-   		break;
-   	case 28:
-   		RunTest(evict_on_failed_reset_old_val); // an lru testinfinite loop on aledger
-   		break;
-   	case 29:
-   		RunTest(add_same_starting_char);
-   		break;
-   	case 30:
-   		RunTest(create_init_correct_mem);
-   		break;
-	case 31:
 		RunTest(crash_on_memoverload);
    		break;
+	case 4:
+		RunTest(get_size_test);
+		break;
+	case 5:
+		RunTest(get_val_test);
+		break;
+	case 6:
+		RunTest(delete_test);
+		break;
+	case 7:
+		RunTest(space_test);
+		break;
+	case 8:
+		RunTest(custom_hash_is_called);
+		break;
+	// 9: create_cache test
+   	case 9:
+   		RunTest(create_init_correct_mem);
+   		break;	
+   	// 10 - 14: cache_set test
+	case 10:
+		RunTest(add_single_item_over_memmax);
+		break;
+	case 11:
+		RunTest(large_val_copied_correctly); // jhepworth (crash)
+		break;
+   	case 12:
+   		RunTest(add_same_starting_char);
+   		break;
+    case 13:
+    	RunTest(add_over_memmax_eviction); // only pass or crash
+    	break;
+    case 14:
+    	RunTest(add_resize_buckets_or_maxmem);
+    	break;
+	// 15 - 19: cache_get tests:
+   	case 15:
+   		RunTest(get_null_empty) //exposes no bugs
+   		break;
+   	case 16:
+   		RunTest(get_nonexist); // exposes no bugs
+   		break;
+ 	case 17:
+		RunTest(get_size_after_reassign_test);
+        break;
+    case 18:
+    	RunTest(get_val_after_reassign_test);
+    	break;          		
+	case 19:
+		RunTest(get_with_null_term_strs_test); //jhepworth (crash)
+		break;
+
+    // 20 - 21: cache_delete test:
+    case 20:
+    	RunTest(delete_not_in); //jhepworth (crash)
+    	break;
+    case 21:
+    	RunTest(delete_affect_get_out); // exposes no bugs
+    	break;
+    // 22 - 31: LRU tests
+	case 22:
+		RunTest(evictions_occur);
+		break;
+	case 23:
+		RunTest(basic_lru_test);
+		break;
+	case 24:
+		RunTest(lru_delete_test);
+		break;
+   	case 25:
+   		RunTest(update_reordering); //infinite loop on aledger
+   		break;
+   	case 26:
+   		RunTest(evict_on_reset_old_val);
+   		break;
+   	case 27:
+   		RunTest(evict_on_failed_reset_old_val); //infinite loop on aledger
+   		break;
+   	case 28:
+   		RunTest(get_reordering);
+   		break;
+	case 29:
+		RunTest(maxmem_not_excceeded); //only pass or crash
+		break;
+	case 30:
+		RunTest(elements_not_evicted_early); //only pass or crash
+		break;
+	case 31:
+		RunTest(var_len_evictions);
+		break;
 	default:
 		printf("test not implemented\n");
 		return -1;
