@@ -53,6 +53,40 @@ To reproduce this, uncomment the print statement in TestRes.__init__ in run_test
 
 ### Descriptions
 
+Name | Description
+--- | ----
+create_test | Naive create_cache test - makes sure we don't crash and that we don't end up with a NULL pointer when creating a cache.
+destroy_test | Naive destroy_cache test - make sure we aren't crashing when we destroy our cache
+add_test | Adds many items of differnet sizes (some of which with identical keys) all of which below maxmem. Returns true if it does not crash.
+crash_on_memoverload | if fail to return true, we crashed on overloading crashes aledger because of assert on val too large. could be called a bug if we count these crashes (ie. not handling these cases) as bugs.
+get_size_test | Naive cache_get test - tests to see if we correctly update size
+get_val_test | Naive cache_get test - tests to see if we return correct val
+delete_test | Naive cache_delete test - makes sure we don't crash when trying to delete.
+space_test | Naive cache_space_used test - if the space of things added (everything well below maxmem) is what cache_space_used returns
+custom_hash_is_called | Checks if the custom hash function specified is called on add, get, update, and delete
+cache_space_preserved |
+add_single_item_over_memmax |
+large_val_copied_correctly |
+add_same_starting_char |
+add_over_memmax_eviction |
+add_resize_buckets_or_maxmem |
+get_null_empty |
+get_nonexist |
+get_size_after_reassign_test |
+get_val_after_reassign_test |
+get_with_null_term_strs_test |
+delete_not_in |
+delete_affect_get_out |
+evictions_occur |
+basic_lru_test |
+lru_delete_test |
+update_reordering |
+evict_on_reset_old_val |
+evict_on_failed_reset_old_val |
+get_reordering |
+maxmem_not_excceeded |
+elements_not_evicted_early |
+var_len_evictions |
 
  | xx | create_test | destroy_test | add_test | crash_on_memoverload | get_size_test | get_val_test | delete_test | space_test | custom_hash_is_called | cache_space_preserved | add_single_item_over_memmax | large_val_copied_correctly | add_same_starting_char | add_over_memmax_eviction | add_resize_buckets_or_maxmem | get_null_empty | get_nonexist | get_size_after_reassign_test | get_val_after_reassign_test | get_with_null_term_strs_test | delete_not_in | delete_affect_get_out | evictions_occur | basic_lru_test | lru_delete_test | update_reordering | evict_on_reset_old_val | evict_on_failed_reset_old_val | get_reordering | maxmem_not_excceeded | elements_not_evicted_early | var_len_evictions |
  | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
