@@ -13,6 +13,8 @@
 * Included stdint.h in apan/lru.h, akosik/lru.h
 * Changed function name from an undefined function to "make_item_array" in bblack/lru_replacement.h (line 137)
 * Changed key_t and val_t to key_type and val_type in all of akosik's and jhepworth's code
+* Patched jhepworth's code in line 73 of cache.c with: 
+	ret->hasher = (ret->hasher == NULL) ? &hash : ret->hasher;
 
 ### Build system
 
@@ -89,8 +91,7 @@ elements_not_evicted_early | adds some elements, deletes some, and replaces some
 var_len_evictions | basic lru_test for variable length strings
 
 ### Test output
-
-Here is a markdown table of all of the outputs of the tests. Github is screwy, so this doesn't render on the readme, but use any other markdown viewer and this should work fine.
+unfortunately you have to scroll right now, so I might flip this table...
 
  groupd name | create_test | destroy_test | add_test | crash_on_memoverload | get_size_test | get_val_test | delete_test | space_test | custom_hash_is_called | cache_space_preserved | add_single_item_over_memmax | large_val_copied_correctly | add_same_starting_char | add_over_memmax_eviction | add_resize_buckets_or_maxmem | get_null_empty | get_nonexist | get_size_after_reassign_test | get_val_after_reassign_test | get_with_null_term_strs_test | delete_not_in | delete_affect_get_out | evictions_occur | basic_lru_test | lru_delete_test | update_reordering | evict_on_reset_old_val | evict_on_failed_reset_old_val | get_reordering | maxmem_not_excceeded | elements_not_evicted_early | var_len_evictions 
  --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- 
@@ -101,3 +102,51 @@ Here is a markdown table of all of the outputs of the tests. Github is screwy, s
   jcosel | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | PASS | FAIL | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | FAIL 
   jhepworth | PASS | PASS | PASS | PASS | FAIL | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | PASS | PASS | CRASH | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS 
   zzhong | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | CRASH | FAIL | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS | PASS | CRASH | PASS | CRASH | PASS | PASS | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | PASS 
+
+
+### Issue summaries
+#### Akosik
+
+#### Aledger
+A main source of problems with this cache was that many cases were handled with exits that would crash the test instead doing nothing or returning NULL for example. Also did not follow the API for `cache_set()` by not allowing the user to pass their own hash function.
+* `crash_on_memoverload`: asserts and exits when trying to add something greater than maxmem (it says crash in the table but we count this as a fail).
+* `custom_hash_is_called`: Cache_set doesn't follow the API since it doesn't allow to user to pass their own hash function to the cache.
+* `add_single_item_over_memmax`: we can trace back this error to `crash_on_memoverload` since this cache will crash on any inputs that exceed maxmem, we know this test will crash.
+* `add_same_starting_char`:
+* `add_over_memmax_eviction`:
+* `add_resize_buckets_or_maxmem`:
+
+#### Apan
+`cache_get()` doesn't follow the API in this cache, so buffer size is never properly returned. 
+* `get_size_test`: `cache_get()` doesn't follow the API.
+
+#### Bblack
+
+#### Jcosel
+We have one bug that can't be tested but it actually revealed to us by the cache's print statements. If you initialize it with a maxmem less than 64, it resizes automatically to 64. This is hard to test because of another bug that causes maxmem to double itself when exceeded.
+* `add_single_item_over_memmax`: maxmem doubles itself when exceeded so we end up adding an item that we wouldn't have been able to if maxmem was constant.
+* `add_over_memmax_eviction`: we get a false positive (incorrect pass) here because of this maxmem resize bug!
+* `add_resize_buckets_or_maxmem`:
+
+#### Jhepworth
+* `get_size_test`:
+* `get_val_test`:
+* `space_test`:
+* `custom_hash_is_called`:
+* `cache_space_preserved`:
+* `large_val_copied_correctly`:
+* `add_same_starting_char`:
+* `add_over_memmax_eviction`:
+* `get_null_empty`: really weird because this passes when the cache is empty.
+
+#### Zzhong
+* `custom_hash_is_called`:
+* `cache_space_preserved`:
+* `add_single_item_over_memmax`: doesn't check whether or not the new element will exceed maxmem, so we actually end up adding it to the cache.
+* `add_same_starting_char`: this cache doesn't treat keys as strings, so keys with the same starting char collide will collide.
+* `add_over_memmax_eviction`:
+* `add_resize_buckets_or_maxmem`:
+* `get_size_after_reassign_test`:
+
+
+
