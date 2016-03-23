@@ -101,7 +101,7 @@ bool update_reordering(){
     if (out1 == NULL ) return false;
     val_type out2 = cache_get_wrapper(c,k2,&size2);
     if (out2 != NULL) return false;
-        // need to place ifs on sepearate lines there is an issue 
+        // need to place ifs on sepearate lines there is an issue
         // with all cache_gets sharing the same pointer
     printf("hihihihihihihi2222222222\n");
     fflush(stdout);
@@ -113,9 +113,9 @@ bool update_reordering(){
 bool evict_on_reset_old_val(){
     // tests whether or not updating an existing value would cause evictions
     // if adding something of the same size would overload the cache
-    // so here, adding in v3 would overload the cache if it was under a 
+    // so here, adding in v3 would overload the cache if it was under a
     // different key, but since it actually overwrites v1 we would like
-    // the cache to not evict v2 since we aim to minimize the amount of 
+    // the cache to not evict v2 since we aim to minimize the amount of
     // data we lose from our cache.
     cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
     key_type k1 = "key1";
@@ -145,7 +145,7 @@ bool evict_on_reset_old_val(){
 
 bool evict_on_failed_reset_old_val(){
     // tests whether or not updating an existing value would cause evictions
-    // if the new value exceeds maxmem anyway. 
+    // if the new value exceeds maxmem anyway.
     // we'll treat evictions as errors, though this is a little ambiguous
     // so we'll make meniton of that in the writeup
     cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
@@ -190,7 +190,7 @@ bool get_reordering(){
     // (we expect that it brings the accessed element to the front)
     // here we add two elements, get the oldest one, then add a third
     // element that will cause one of the first two to be evicted.
-    // we expect the second element to be evicted since calling 
+    // we expect the second element to be evicted since calling
     // cache_get should make the first element the most recently accessed
     cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
     key_type k1 = "key1";
@@ -213,12 +213,8 @@ bool get_reordering(){
     // This should be null
     val_type out2 = cache_get_wrapper(c,k2,&size);
 
-    if(out2==NULL){
-        destroy_cache(c);
-        return false;
-    }
     destroy_cache(c);
-    return true;
+    return out2 == NULL;
 }
 
 bool maxmem_not_excceeded(){

@@ -34,7 +34,7 @@ class TestRes:
     def __init__(self,exec_name,testnum):
         pobj = subprocess.Popen([exec_name,str(testnum)],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         try:
-            output, err = pobj.communicate(timeout=0.5)
+            output, err = pobj.communicate(timeout=2.0)
         except subprocess.TimeoutExpired:
             pobj.kill()
             output, err = pobj.communicate()

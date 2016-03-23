@@ -117,22 +117,13 @@ bool add_resize_buckets_or_maxmem(){
 
     int space2 = cache_space_used(c);
 
-    if (space1 != space2 ||
-        cache_big_val != NULL){
-        printf("%d\n",space1);
-        printf("%d\n",space2);
-        printf("%s\n",cache_big_val);
-        printf("%p\n",cache_big_val);
-        fflush(stdout);
-        return false;
-    }
     destroy_cache(c);
-    return true;
+    return cache_big_val == NULL;
 }
 
 // no bugs exposed :( - also not in header
 bool get_null_empty(){
-    uint64_t max_mem = 1000;
+    uint64_t max_mem = 100;
     printf("HIHIIH\n");
     fflush(stdout);
     cache_t c = create_cache_wrapper(max_mem*sizeof(uint16_t)+1,NULL);
@@ -258,4 +249,3 @@ bool delete_affect_get_out(){
     if (out1 == NULL) return false;
     return true;
 }
-
