@@ -1,5 +1,5 @@
 CC = gcc#x86_64-w64-mingw32-gcc
-CFLAGS  = -D NDEBUG -O2 -g -w -std=c99
+CFLAGS  = -D NDEBUG -g -w -std=c99
 
 AKOSIK = source/akosik/
 ALEDGER = source/aledger/

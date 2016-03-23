@@ -31,6 +31,19 @@ bool add_test(){
     return true;
 }
 
+bool crash_on_memoverload(){
+    // if fail to return true, we crashed on overloading
+    // crashes aledger because of assert on val too large. could be
+    // called a bug if we count these crashes (ie. not handling
+    // these cases) as bugs.
+    cache_t c = create_cache_wrapper(65,NULL); //set over 64 for jcosel
+    key_type k = "key";
+    val_type v = "string too long! string too long! string too long! \
+    string too long! string too long! string too long! string too long!";
+    cache_set(c,k,v,strlen(v)+1);
+    return true;
+}
+
 // Naive cache_get test - tests to see if we correctly update size
 bool get_size_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
@@ -41,7 +54,8 @@ bool get_size_test(){
 	void * out = cache_get_wrapper(c,k,&size);
     destroy_cache(c);
     if (size != sizeof(int)){
-        printf("wrong size\n"); // need this or compiler does smth strange
+        // printf("wrong size\n"); 
+        // need this or compiler does smth strange on -O2
         return false;
     }
     return true;
@@ -87,6 +101,7 @@ uint64_t custom_hash(key_type key){
     hash_called = true;
     return 0;
 }
+
 bool custom_hash_is_called(){
     //checks if the custom hash function specified is called on add, get, update, and delete
     const uint64_t item = 5;
@@ -113,19 +128,6 @@ bool custom_hash_is_called(){
     return add_hash && get_hash && update_hash && delete_hash;
 }
 
-bool crash_on_memoverload(){
-    // if fail to return true, we crashed on overloading
-    // crashes aledger because of assert on val too large. could be
-    // called a bug if we count these crashes (ie. not handling
-    // these cases) as bugs.
-    cache_t c = create_cache_wrapper(65,NULL); //set over 64 for jcosel
-    key_type k = "key";
-    val_type v = "string too long! string too long! string too long! \
-    string too long! string too long! string too long! string too long!";
-    cache_set(c,k,v,strlen(v)+1);
-    return true;
-}
-
 // we have a weird error with jcosel where it doubles its maxmem cap if
 // we exceed maxmem. i dont know what kind of test i'd use to expose it though
 
@@ -134,9 +136,10 @@ bool create_init_correct_mem(){
     // able to add an element greater than the size of the cache
     // fails jcosel because of resize on caches too small
     // fails zzhong because doesn't check if new val exceeds maxmem
-    cache_t c = create_cache_wrapper(10,NULL);
+    cache_t c = create_cache_wrapper(65,NULL); //set over 64 for jcosel
     key_type k = "key";
-    val_type v = "string too long!";
+    val_type v = "string too long! string too long! string too long! \
+    string too long! string too long! string too long! string too long!";
     cache_set(c,k,v,strlen(v)+1);
     int space = cache_space_used(c);
     if (space!=0) return false;
@@ -213,9 +216,9 @@ bool add_over_memmax_eviction(){
     add_elements(c,0,3,INT);
     cache_set(c,rand_key,big_val,strlen(big_val)+1);
 
-    if (elements_dont_exist(c,0,3)){
-        return false;
-    }
+    if (elements_dont_exist(c,0,3)) return false;
+    // int size;
+    // if (cache_get_wrapper(c,rand_key,&size) != NULL) return false;
     destroy_cache(c);
     return true;
 }
