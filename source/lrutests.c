@@ -16,11 +16,13 @@ on inputting 20 elements we get:
 akosik: pass
 jcosel: crash
 zzhong: crash
+
+alec's breaks on element 36. works up until 35. looool
 */
 bool evictions_occur(){
     //adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
     const uint64_t max_elmts = 10;
-    const uint64_t num_elmts_add = 100;
+    const uint64_t num_elmts_add = 36;
     printf("hihihi\n");
     fflush(stdout);
     cache_t cache = create_cache_wrapper(max_elmts*sizeof(int_ty),NULL);
