@@ -112,9 +112,9 @@ A main source of problems with this cache was that many cases were handled with 
 * `crash_on_memoverload`: asserts and exits when trying to add something greater than maxmem (it says crash in the table but we count this as a fail).
 * `custom_hash_is_called`: Cache_set doesn't follow the API since it doesn't allow to user to pass their own hash function to the cache.
 * `add_single_item_over_memmax`: we can trace back this error to `crash_on_memoverload` since this cache will crash on any inputs that exceed maxmem, we know this test will crash.
-* `add_same_starting_char`:
-* `add_over_memmax_eviction`:
-* `add_resize_buckets_or_maxmem`:
+* `add_same_starting_char`: ???? SHOULD BE A PASS ?????
+* `add_over_memmax_eviction`: trace back this error to `crash_on_memoverload`
+* `add_resize_buckets_or_maxmem`: trace back this error to `crash_on_memoverload`
 
 #### Apan
 `cache_get()` doesn't follow the API in this cache, so buffer size is never properly returned. 
@@ -126,7 +126,7 @@ A main source of problems with this cache was that many cases were handled with 
 We have one bug that can't be tested but it actually revealed to us by the cache's print statements. If you initialize it with a maxmem less than 64, it resizes automatically to 64. This is hard to test because of another bug that causes maxmem to double itself when exceeded.
 * `add_single_item_over_memmax`: maxmem doubles itself when exceeded so we end up adding an item that we wouldn't have been able to if maxmem was constant.
 * `add_over_memmax_eviction`: we get a false positive (incorrect pass) here because of this maxmem resize bug!
-* `add_resize_buckets_or_maxmem`:
+* `add_resize_buckets_or_maxmem`: can be traced back to our maxmem-resize bug.
 
 #### Jhepworth
 * `get_size_test`:
@@ -140,13 +140,13 @@ We have one bug that can't be tested but it actually revealed to us by the cache
 * `get_null_empty`: really weird because this passes when the cache is empty.
 
 #### Zzhong
-* `custom_hash_is_called`:
-* `cache_space_preserved`:
+* `custom_hash_is_called`: ???? SHOULD BE A PASS ?????
+* `cache_space_preserved`: Line 46 in cache.c is causing a segmentation fault. Why it does this is a mystery because both the values of cache_space_used(cache) and cache->maxmem can be accessed before the if statement, but apparently not inside of it.
 * `add_single_item_over_memmax`: doesn't check whether or not the new element will exceed maxmem, so we actually end up adding it to the cache.
 * `add_same_starting_char`: this cache doesn't treat keys as strings, so keys with the same starting char collide will collide.
-* `add_over_memmax_eviction`:
-* `add_resize_buckets_or_maxmem`:
-* `get_size_after_reassign_test`:
+* `add_over_memmax_eviction`: we can trace this error back to `add_single_item_over_memmax` since we're apparently able to exceed maxmem, so we expect this cache to fail this test
+* `add_resize_buckets_or_maxmem`: trace back to `add_single_item_over_memmax`
+* `get_size_after_reassign_test`: in `cache.c` the if-statement in line 40 for the update case doesn't update the size of the item in the hash table, only rewrites the value.
 
 
 

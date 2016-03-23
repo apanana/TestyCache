@@ -5,9 +5,17 @@ bool cache_space_preserved(){
     // items of items in the cache is the size of all of the non-NULL elements
     const uint64_t maxmem = 200;
     cache_t c = create_cache_wrapper(maxmem,NULL);
+    printf("hihihi\n");
+    fflush(stdout);
     add_elements(c,0,5,STR);
+    printf("hihihi\n");
+    fflush(stdout);
     delete_element(c,4);
+        printf("hihihi\n");
+    fflush(stdout);
     add_elements(c,0,2,INT);
+        printf("hihihi\n");
+    fflush(stdout);
     bool worked = cache_space_used(c) == space_of_elements(c,0,2,INT) + space_of_elements(c,2,5,STR);
     destroy_cache(c);
     return worked;
@@ -160,6 +168,9 @@ bool get_size_after_reassign_test(){
     cache_set(c,k,v2,strlen(v2)+1);
     out = cache_get_wrapper(c,k,&size2);
     if(size1 == size2){
+        printf("%s\n",out);
+        printf("%d\n",size1);
+        printf("%d\n",size2);
         return false;
     }
     return true;
