@@ -55,10 +55,10 @@ int main(int argn,char ** argv){
 	case 8:
 		RunTest(custom_hash_is_called);
 		break;
-	// 9: create_cache test
-   	case 9:
-   		RunTest(create_init_correct_mem);
-   		break;	
+    // 9 more advanced cache_space_used test
+	case 9:
+		RunTest(cache_space_preserved);
+		break;
    	// 10 - 14: cache_set test
 	case 10:
 		RunTest(add_single_item_over_memmax);
@@ -87,7 +87,7 @@ int main(int argn,char ** argv){
         break;
     case 18:
     	RunTest(get_val_after_reassign_test);
-    	break;          		
+    	break;
 	case 19:
 		RunTest(get_with_null_term_strs_test); //jhepworth (crash)
 		break;

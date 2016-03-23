@@ -1,23 +1,20 @@
 #include "test.h"
 
+bool cache_space_preserved(){
+    // adds, deletes, updates, and maybe evicts and sees if the total size of
+    // items of items in the cache is the size of all of the non-NULL elements
+    const uint64_t maxmem = 200;
+    cache_t c = create_cache_wrapper(maxmem,NULL);
+    add_elements(c,0,5,STR);
+    delete_element(c,4);
+    add_elements(c,0,2,INT);
+    bool worked = cache_space_used(c) == space_of_elements(c,0,2,INT) + space_of_elements(c,2,5,STR);
+    destroy_cache(c);
+    return worked;
+}
 
 // we have a weird error with jcosel where it doubles its maxmem cap if
 // we exceed maxmem. i dont know what kind of test i'd use to expose it though
-
-bool create_init_correct_mem(){
-    // cache space used should still be 0 because we shouldnt be
-    // able to add an element greater than the size of the cache
-    // fails jcosel because of resize on caches too small
-    // fails zzhong because doesn't check if new val exceeds maxmem
-    cache_t c = create_cache_wrapper(65,NULL); //set over 64 for jcosel
-    key_type k = "key";
-    val_type v = "string too long! string too long! string too long! \
-    string too long! string too long! string too long! string too long!";
-    cache_set(c,k,v,strlen(v)+1);
-    int space = cache_space_used(c);
-    if (space!=0) return false;
-    return true;
-}
 
 bool add_single_item_over_memmax(){
     //adds a single item over maxmem and sees if it is not in the cache.
@@ -152,7 +149,8 @@ bool get_nonexist(){
 }
 
 // Tests if space used is what we expect after reassigning a val
-bool get_size_after_reassign_test(){
+bool
+.30.(){
     cache_t c = create_cache_wrapper(1000,NULL);
     char * k = "key";
     int v1 = 10;

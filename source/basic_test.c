@@ -91,8 +91,7 @@ bool space_test(){
     add_elements(c,0,100,INT);
     int size = cache_space_used(c);
     destroy_cache(c);
-    if (size!=100*(sizeof(int_ty))) return false;
-	return true;
+    return (size==100*(sizeof(int_ty)));
 }
 
 bool hash_called = false;

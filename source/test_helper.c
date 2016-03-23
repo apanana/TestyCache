@@ -123,16 +123,16 @@ uint64_t space_of_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,v
 	}
 	return sum;
 }
-uint32_t reported_space_of_element(cache_t cache,uint64_t elmt,val_entry_type ent_ty){
+uint32_t reported_space_of_element(cache_t cache,uint64_t elmt){
 	uint64_t curkey = to_key_int(elmt);
 	uint32_t out_size = 0;
 	val_type null_val = cache_get_wrapper(cache,&curkey,&out_size);
 	return null_val == NULL ? 0 : out_size;
 }
-uint64_t reported_space_of_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt,val_entry_type ent_ty){
+uint64_t reported_space_of_elements(cache_t cache,uint64_t start_elmt,uint64_t end_elmt){
 	uint64_t sum = 0;
 	for(size_t i = start_elmt; i < end_elmt; ++i){
-		sum += space_of_element(cache,i,ent_ty);
+		sum += reported_space_of_element(cache,i);
 	}
 	return sum;
 }
