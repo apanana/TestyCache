@@ -89,14 +89,14 @@ bool delete_test(){
 	return true;
 }
 
-// Naive cache_space_used test -
+// Naive cache_space_used test - if the space of things added
+//(everything well below maxmem) is what cache_space_used returns
 bool space_test(){
 	cache_t c = create_cache_wrapper(10000,NULL);
     add_elements(c,0,100,INT);
     int size = cache_space_used(c);
     destroy_cache(c);
-    if (size!=100*(sizeof(int_ty))) return false;
-	return true;
+    return (size==100*(sizeof(int_ty)));
 }
 
 bool hash_called = false;
