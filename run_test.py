@@ -124,7 +124,7 @@ def run_all_execs():
         for tn in range(num_of_tests):
             sumar += TestRes(en,tn)
         if en is execnames[0]:
-            print(", ".join(sumar.get_func_names())
+            print(", ".join(sumar.get_func_names()))
         print(sumar.get_passed_line())
 
 if "-vv" in sys.argv:
