@@ -126,16 +126,20 @@ bool crash_on_memoverload(){
     return true;
 }
 
+// we have a weird error with jcosel where it doubles its maxmem cap if
+// we exceed maxmem. i dont know what kind of test i'd use to expose it though
+
 bool create_init_correct_mem(){
+    // cache space used should still be 0 because we shouldnt be
+    // able to add an element greater than the size of the cache
     // fails jcosel because of resize on caches too small
     // fails zzhong because doesn't check if new val exceeds maxmem
     cache_t c = create_cache_wrapper(10,NULL);
     key_type k = "key";
     val_type v = "string too long!";
     cache_set(c,k,v,strlen(v)+1);
-    int size;
-    val_type out = cache_get_wrapper(c,k,&size);
-    if (out!=NULL) return false;
+    int space = cache_space_used(c);
+    if (space!=0) return false;
     return true;
 }
 

@@ -1,9 +1,26 @@
 #include "lrutests.h"
 
+
+/* There's something really fishy going on here:
+When we only input 10 elements we get
+Akosik: pass
+Jcosel: pass
+zzhong: fail
+
+on inputting 11 elements we get:
+Akosik: pass
+jcosel: fail
+zzhong: crash
+
+on inputting 20 elements we get:
+akosik: pass
+jcosel: crash
+zzhong: crash
+*/
 bool evictions_occur(){
     //adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
     const uint64_t max_elmts = 10;
-    const uint64_t num_elmts_add = 100000;
+    const uint64_t num_elmts_add = 100;
     printf("hihihi\n");
     fflush(stdout);
     cache_t cache = create_cache_wrapper(max_elmts*sizeof(int_ty),NULL);
