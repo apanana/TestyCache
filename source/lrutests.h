@@ -11,7 +11,10 @@ bool lru_delete_test();
 bool update_reordering();
 
 // tests whether we do unnecessary evictions when updating an existing val
-bool evict_on_reset_old_val();
+// this one is tricky because the "expected behavior" isn't clearly defined
+// in our spec. this tests for a specific behavior (ie not evicting unecessarily)
+// but we'll also make a note of this in the writeup!
+bool evict_on_failed_reset_old_val();
 
 // makes sure that cache_get properly reorders the LRU
 bool get_reordering();
@@ -28,8 +31,3 @@ bool elements_not_evicted_early();
 bool var_len_evictions();
 
 
-
-/*
-need to rewrite new tests according to our testing module
-l . o . l.
-*/
