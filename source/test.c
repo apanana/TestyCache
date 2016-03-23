@@ -233,7 +233,9 @@ bool delete_not_in(){
     return worked;
 }
 
-// no bugs exposed :( - also not in header
+// A bug was raised with the outputs of get being affected
+// by updates. This tests whether we have the same problem on
+// the outputs of cache_get after deletes.
 bool delete_affect_get_out(){
     cache_t c = create_cache_wrapper(1000,NULL);
     char * k = "key";
@@ -241,14 +243,8 @@ bool delete_affect_get_out(){
     int size1,size2;
     cache_set(c,k,v1,strlen(v1)+1);
     void * out1 = cache_get_wrapper(c,k,&size1);
-    printf("%s\n",out1);
-    printf("%p\n",out1);
     cache_delete(c,k);
     void * out2 = cache_get_wrapper(c,k,&size1);
-    printf("%s\n",out1);
-    printf("%p\n",out2);
-    // printf("%s\n",out1);
-    // printf("%p\n",out1);
     if (out1 == NULL) return false;
     return true;
 }
