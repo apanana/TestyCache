@@ -86,13 +86,13 @@ class Sumary:
         line = [self.exec_name]
         for t in self.tests:
             if(t.retval == PASSED_VAL):
-                line.append("P")
+                line.append("PASS")
             elif t.retval == FAILED_VAL:
-                line.append("F")
+                line.append("FAIL")
             elif t.retval == TIMOUT_VAL:
-                line.append("T")
+                line.append("TIME")
             else:
-                line.append("C")
+                line.append("CRASH")
         return ", ".join(line)
 
     def get_func_names(self):
