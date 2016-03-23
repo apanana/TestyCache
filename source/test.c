@@ -257,31 +257,31 @@ bool add_resize_buckets_or_maxmem(){
 }
 
 // no bugs exposed :( - also not in header
-// bool get_null_empty(){
-//     uint64_t max_mem = 1000;
-//     printf("HIHIIH\n");
-//     fflush(stdout);
-//     cache_t c = create_cache_wrapper(max_mem*sizeof(uint16_t)+1,NULL);
-//     printf("HIHIIH\n");
-//     fflush(stdout);
-//     add_elements(c,0,max_mem,INT);
-//     char * k = "key";
-//     int size1;
-//     void * out = cache_get_wrapper(c,k,&size1);
-//     if (out != NULL) return false;
-//     return true;
-// }
+bool get_null_empty(){
+    uint64_t max_mem = 1000;
+    printf("HIHIIH\n");
+    fflush(stdout);
+    cache_t c = create_cache_wrapper(max_mem*sizeof(uint16_t)+1,NULL);
+    printf("HIHIIH\n");
+    fflush(stdout);
+    add_elements(c,0,max_mem,INT);
+    char * k = "key";
+    int size1;
+    void * out = cache_get_wrapper(c,k,&size1);
+    if (out != NULL) return false;
+    return true;
+}
 
-// // tests whether or not we crash on trying to get an element that doesnt
-// // exist in our cache.
-// bool get_nonexist(){
-//     cache_t c = create_cache_wrapper(1000,NULL);
-//     key_type k = "nonexist";
-//     int size;
-//     val_type out = cache_get_wrapper(c,k,&size);
-//     if(out != NULL) return false;
-//     return true;
-// }
+// tests whether or not we crash on trying to get an element that doesnt
+// exist in our cache.
+bool get_nonexist(){
+    cache_t c = create_cache_wrapper(1000,NULL);
+    key_type k = "nonexist";
+    int size;
+    val_type out = cache_get_wrapper(c,k,&size);
+    if(out != NULL) return false;
+    return true;
+}
 
 // Tests if space used is what we expect after reassigning a val
 bool get_size_after_reassign_test(){
@@ -366,28 +366,22 @@ bool delete_not_in(){
 }
 
 // no bugs exposed :( - also not in header
-// bool delete_affect_get_out(){
-//     cache_t c = create_cache_wrapper(1000,NULL);
-//     char * k = "key";
-//     char *v1 = "stringval1";
-//     int size1,size2;
-//     cache_set(c,k,v1,strlen(v1)+1);
-//     void * out1 = cache_get_wrapper(c,k,&size1);
-//     printf("%s\n",out1);
-//     printf("%p\n",out1);
-//     cache_delete(c,k);
-//     void * out2 = cache_get_wrapper(c,k,&size1);
-//     printf("%s\n",out1);
-//     printf("%p\n",out2);
-//     // printf("%s\n",out1);
-//     // printf("%p\n",out1);
-//     if (out1 == NULL) return false;
-//     return true;
-// }
-
-/*
-
-
-*/
-
+bool delete_affect_get_out(){
+    cache_t c = create_cache_wrapper(1000,NULL);
+    char * k = "key";
+    char *v1 = "stringval1";
+    int size1,size2;
+    cache_set(c,k,v1,strlen(v1)+1);
+    void * out1 = cache_get_wrapper(c,k,&size1);
+    printf("%s\n",out1);
+    printf("%p\n",out1);
+    cache_delete(c,k);
+    void * out2 = cache_get_wrapper(c,k,&size1);
+    printf("%s\n",out1);
+    printf("%p\n",out2);
+    // printf("%s\n",out1);
+    // printf("%p\n",out1);
+    if (out1 == NULL) return false;
+    return true;
+}
 

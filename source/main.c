@@ -96,7 +96,7 @@ int main(int argn,char ** argv){
     	RunTest(get_val_after_reassign_test);
     	break;
     case 20:
-    	// RunTest(delete_affect_get_out); // exposes no bugs :(
+    	RunTest(delete_affect_get_out); // exposes no bugs :(
     	break;
     case 21:
     	RunTest(add_over_memmax_eviction); // might be broken? only pass or crash
@@ -105,7 +105,7 @@ int main(int argn,char ** argv){
     	RunTest(add_resize_buckets_or_maxmem);
     	break;
    	case 23:
-   		// RunTest(get_null_empty) //exposes no bugs
+   		RunTest(get_null_empty) //exposes no bugs
    		break;
    	case 24:
    		RunTest(get_reordering);  // an LRU test
@@ -117,7 +117,7 @@ int main(int argn,char ** argv){
    		RunTest(update_reordering); // an LRU test - infinite loop on aledger
    		break;
    	case 27:
-   		// RunTest(get_nonexist); // exposes no bugs
+   		RunTest(get_nonexist); // exposes no bugs
    		break;
    	case 28:
    		RunTest(evict_on_failed_reset_old_val); // an lru testinfinite loop on aledger
