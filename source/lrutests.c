@@ -70,7 +70,8 @@ bool lru_delete_test(){
 }
 
 bool update_reordering(){
-    // tests whether updating elements properly reorders the LRU
+    // Adds A and B, then updates A, and adds a large val C, expecting
+    // that B will be evicted and A will be held.
         // need to make this val big enough so we don't run into problems
         // with ambiguity regarding whether we evict >maxmem or ≥ maxmem.
     cache_t c = create_cache_wrapper(4*sizeof(int),NULL);
@@ -111,12 +112,9 @@ bool update_reordering(){
 }
 
 bool evict_on_reset_old_val(){
-    // tests whether or not updating an existing value would cause evictions
-    // if adding something of the same size would overload the cache
-    // so here, adding in v3 would overload the cache if it was under a
-    // different key, but since it actually overwrites v1 we would like
-    // the cache to not evict v2 since we aim to minimize the amount of
-    // data we lose from our cache.
+    // Adds A and B, then updates B with a value that would overload
+    // the cache if it was added but not if it replaced B. We expect B to be
+    // replaced and A to not be evicted.
     cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
     key_type k1 = "key1";
     int v1 = 1;
@@ -144,10 +142,9 @@ bool evict_on_reset_old_val(){
 }
 
 bool evict_on_failed_reset_old_val(){
-    // tests whether or not updating an existing value would cause evictions
-    // if the new value exceeds maxmem anyway.
-    // we'll treat evictions as errors, though this is a little ambiguous
-    // so we'll make meniton of that in the writeup
+    // Adds A and B, then updates B with a value that is larger than the entire
+    // maxmem. We expect both A and B to not be evicted, but this is ambiguous in 
+    // the spec, so we will make more mention of this later in the writeup
     cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
     key_type k1 = "key1";
     int v1 = 1;
@@ -186,12 +183,9 @@ bool evict_on_failed_reset_old_val(){
 }
 
 bool get_reordering(){
-    // tests whether or not cache_get properly reorders the LRU line
-    // (we expect that it brings the accessed element to the front)
-    // here we add two elements, get the oldest one, then add a third
-    // element that will cause one of the first two to be evicted.
-    // we expect the second element to be evicted since calling
-    // cache_get should make the first element the most recently accessed
+    // Adds A then B, the gets A (and expects LRU to be reordered). Adds C,
+    // which causes one element to be evicted, and expects the B (not A)
+    // was evicted.
     cache_t c = create_cache_wrapper(3*sizeof(int),NULL);
     key_type k1 = "key1";
     int v1 = 1;

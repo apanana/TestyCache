@@ -64,29 +64,29 @@ get_val_test | Naive cache_get test - tests to see if we return correct val
 delete_test | Naive cache_delete test - makes sure we don't crash when trying to delete.
 space_test | Naive cache_space_used test - if the space of things added (everything well below maxmem) is what cache_space_used returns
 custom_hash_is_called | Checks if the custom hash function specified is called on add, get, update, and delete
-cache_space_preserved |
-add_single_item_over_memmax |
-large_val_copied_correctly |
-add_same_starting_char |
-add_over_memmax_eviction |
-add_resize_buckets_or_maxmem |
-get_null_empty |
-get_nonexist |
-get_size_after_reassign_test |
-get_val_after_reassign_test |
-get_with_null_term_strs_test |
-delete_not_in |
-delete_affect_get_out |
-evictions_occur |
-basic_lru_test |
-lru_delete_test |
-update_reordering |
-evict_on_reset_old_val |
-evict_on_failed_reset_old_val |
-get_reordering |
-maxmem_not_excceeded |
-elements_not_evicted_early |
-var_len_evictions |
+cache_space_preserved | adds, deletes, updates, and maybe evicts and sees if the total size of items of items in the cache is the size of all of the non-NULL elements
+add_single_item_over_memmax | adds a single item over maxmem and sees if it is not in the cache.
+large_val_copied_correctly |Tests cache_set on an array containing two large values. If vals were treated as strings, this would fail.
+add_same_starting_char | adds vals under different keys that start with the same character. if the cache doesn't copy keys by string then this will fail.
+add_over_memmax_eviction | adds small items to cache and then adds an item larger than maxmem and sees if items have been evicted. (expect them to not be).
+add_resize_buckets_or_maxmem | adds small items up to half of maxmem then attemps to add an item that would be too large for the cache (unless maxmem changed after the resize). If new item appears, then maxmem was changed in resize (which is a bug - maxmem should be constant).
+get_null_empty | adds things to our cache and then attempts to get one that doesn't exist
+get_nonexist | attempts to get an elements that doesn't exist in an empty cache
+get_size_after_reassign_test | Tests if space from cache_get remains the same after reassigning a val
+get_val_after_reassign_test | Tests if the val from cache_get remains the same after reassigning a val
+get_with_null_term_strs_test | Tests keys cache_set on two different keys that contain a null termination in the middle: "a\0b" and "a\0c". We expect cache_set to overwrite the first val with the second val because both keys 'look the same' (ie "a\0").
+delete_not_in | Tests to see if something that is set and then deleted returns NULL when cache_get is called.
+delete_affect_get_out | A bug was raised with the outputed vals of cache_get being affected by updates. This tests whether we have the same problem on the outputs of cache_get after deletes.
+evictions_occur | adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
+basic_lru_test | adds A then B then gets A then adds C and expects B to be evicted
+lru_delete_test | adds A then B then C then gets A then deletes B adds D and expects C to be evicted
+update_reordering | Adds A and B, then updates A, and adds a large val C, expecting that B will be evicted and A will be held.
+evict_on_reset_old_val | Adds A and B, then updates B with a value that would overload the cache if it was added but not if it replaced B. We expect B to be replaced and A to not be evicted.
+evict_on_failed_reset_old_val | Adds A and B, then updates B with a value that is larger than the entire maxmem. We expect both A and B to not be evicted, but this is ambiguous in the spec, so we will make more mention of this later in the writeup
+get_reordering | Adds A then B, the gets A (and expects LRU to be reordered). Adds C, which causes one element to be evicted, and expects the B (not A) was evicted.
+maxmem_not_excceeded | adds too many elements, checks if the size of values with non-null keys is > maxmem, deletes some, adds more, overwrites some, checks again
+elements_not_evicted_early | adds some elements, deletes some, and replaces some, and then checks if all the elements are still in the cache
+var_len_evictions | basic lru_test for variable length strings
 
 ### Test output
 

@@ -29,9 +29,10 @@ bool add_single_item_over_memmax(){
     return cache_big_val == NULL;
 }
 
-// Tests cache_set on an array containing two large values. If vals
-// were treated as strings, this would fail.
+
 bool large_val_copied_correctly(){
+    // Tests cache_set on an array containing two large values. If vals
+    // were treated as strings, this would fail.
     cache_t cache = create_cache_wrapper(1000,NULL);
     key_type key = "normal key";
     uint64_t val[] = {0xff00ff00ff00ffff,0xcc00cc00fe00ddcc};
@@ -51,6 +52,8 @@ bool large_val_copied_correctly(){
 }
 
 bool add_same_starting_char(){
+    // adds vals under different keys that start with the same character. 
+    // if the cache doesn't copy keys by string then this will fail.
     cache_t c = create_cache_wrapper(10000,NULL);
     char k[1000];
     int v = 12345;
@@ -120,16 +123,12 @@ bool add_resize_buckets_or_maxmem(){
     return cache_big_val == NULL;
 }
 
-// no bugs exposed :( - also not in header
 bool get_null_empty(){
+    // adds things to our cache and then attempts to get one that
+    // doesn't exist
     uint64_t max_mem = 100;
-    printf("HIHIIH\n");
-    fflush(stdout);
     cache_t c = create_cache_wrapper(max_mem*sizeof(int_ty)+1,NULL);
-    printf("HIHIIH\n");
-    fflush(stdout);
     add_elements(c,0,max_mem,INT);
-    printf("HIHIIH\n");
     char * k = "key";
     int size1;
     void * out = cache_get_wrapper(c,k,&size1);
@@ -137,9 +136,8 @@ bool get_null_empty(){
     return true;
 }
 
-// tests whether or not we crash on trying to get an element that doesnt
-// exist in our cache.
 bool get_nonexist(){
+    // attempts to get an elements that doesn't exist in an empty cache
     cache_t c = create_cache_wrapper(1000,NULL);
     key_type k = "nonexist";
     int size;
@@ -148,8 +146,9 @@ bool get_nonexist(){
     return true;
 }
 
-// Tests if space used is what we expect after reassigning a val
+
 bool get_size_after_reassign_test(){
+    // Tests if space from cache_get remains the same after reassigning a val
     cache_t c = create_cache_wrapper(1000,NULL);
     char * k = "key";
     int v1 = 10;
@@ -172,6 +171,7 @@ bool get_size_after_reassign_test(){
 // so updating it raises an error because we also update
 // old outs.
 bool get_val_after_reassign_test(){
+    // Tests if the val from cache_get remains the same after reassigning a val
     cache_t c = create_cache_wrapper(1000,NULL);
     char * k = "key";
     char *v1 = "stringval1";
@@ -199,10 +199,11 @@ bool get_val_after_reassign_test(){
     return true;
 }
 
-// Tests keys cache_set on two different keys that contain a null termination in
-// the middle: "a\0b" and "a\0c". We expect cache_set to overwrite the first val
-// with the second val because both keys 'look the same' (ie "a\0").
+
 bool get_with_null_term_strs_test(){
+    // Tests keys cache_set on two different keys that contain a null termination in
+    // the middle: "a\0b" and "a\0c". We expect cache_set to overwrite the first val
+    // with the second val because both keys 'look the same' (ie "a\0").
     cache_t cache = create_cache_wrapper(100,NULL);
     key_type key1 = "a\0b";
     key_type key2 = "a\0c";
@@ -217,9 +218,9 @@ bool get_with_null_term_strs_test(){
     return worked;
 }
 
-// Tests to see if something that is set and then deleted returns NULL
-// when cache_get is called.
 bool delete_not_in(){
+    // Tests to see if something that is set and then deleted returns NULL
+    // when cache_get is called.
     cache_t cache = create_cache_wrapper(max_str_len+1,NULL);
     const uint64_t item = 10;
     add_element(cache,item,STR);
@@ -230,10 +231,10 @@ bool delete_not_in(){
     return worked;
 }
 
-// A bug was raised with the outputs of get being affected
-// by updates. This tests whether we have the same problem on
-// the outputs of cache_get after deletes.
 bool delete_affect_get_out(){
+    // A bug was raised with the outputed vals of cache_get being affected 
+    // by updates. This tests whether we have the same problem on the outputs 
+    // of cache_get after deletes.
     cache_t c = create_cache_wrapper(1000,NULL);
     char * k = "key";
     char *v1 = "stringval1";
