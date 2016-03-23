@@ -123,10 +123,13 @@ int main(int argn,char ** argv){
    		RunTest(evict_on_failed_reset_old_val); // an lru testinfinite loop on aledger
    		break;
    	case 29:
+   		RunTest(add_same_starting_char);
    		break;
    	case 30:
+   		RunTest(create_init_correct_mem);
    		break;
 	case 31:
+		RunTest(crash_on_memoverload);
    		break;
 	default:
 		printf("test not implemented\n");

@@ -10,15 +10,19 @@ bool create_test(){
     }
     return true;
 }
+
+//Naive destroy_cache test - make sure we aren't crashing
+// when we destroy our cache
 bool destroy_test(){
-	cache_t c = create_cache_wrapper(10000,NULL);
+	cache_t c = create_cache_wrapper(1000,NULL);
 	destroy_cache(c);
 	return true;
 }
 
 // Naive cache_get test
 bool add_test(){
-    //Adds many items of differnet sizes (some of which with identical keys), all of which below maxmem. Returns true if it does not crash
+    // Adds many items of differnet sizes (some of which with identical keys), 
+    // all of which below maxmem. Returns true if it does not crash
     const uint64_t num_adds = 20;
     cache_t c = create_cache_wrapper(num_adds*max_str_len,NULL);
     add_elements(c,0,num_adds,INT);
@@ -27,7 +31,7 @@ bool add_test(){
     return true;
 }
 
-// Naive cache_get test.
+// Naive cache_get test - tests to see if we correctly update size
 bool get_size_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
 	key_type k= "key";
@@ -35,11 +39,15 @@ bool get_size_test(){
 	cache_set(c,k,&v,(sizeof(int)));
 	int size;
 	void * out = cache_get_wrapper(c,k,&size);
-    bool worked = size == sizeof(int);
     destroy_cache(c);
-    return worked;
+    if (size != sizeof(int)){
+        printf("wrong size\n"); // need this or compiler does smth strange
+        return false;
+    }
+    return true;
 }
 
+// Naive cache_get test - tests to see if we return correct val
 bool get_val_test(){
 	cache_t c = create_cache_wrapper(1000,NULL);
 	key_type k= "key";
@@ -67,19 +75,10 @@ bool delete_test(){
 // Naive cache_space_used test - 
 bool space_test(){
 	cache_t c = create_cache_wrapper(10000,NULL);
-	char k[1000];
-	int v = 12345;
-	int size;
-	for(int i=0;i<100;++i){
-		strcat(k,"i");
-		cache_set(c,k,&v,sizeof(int));
-		size = cache_space_used(c);
-		if (size!=((i+1)*sizeof(int))){
-			destroy_cache(c);
-			return false;
-		}
-	}
-	destroy_cache(c);
+    add_elements(c,0,100,INT);
+    int size = cache_space_used(c);
+    destroy_cache(c);
+    if (size!=100*(sizeof(int_ty))) return false;
 	return true;
 }
 
@@ -114,6 +113,32 @@ bool custom_hash_is_called(){
     return add_hash && get_hash && update_hash && delete_hash;
 }
 
+bool crash_on_memoverload(){
+    // if fail to return true, we crashed on overloading
+    // crashes aledger because of assert on val too large. could be
+    // called a bug if we count these crashes (ie. not handling
+    // these cases) as bugs.
+    cache_t c = create_cache_wrapper(65,NULL); //set over 64 for jcosel
+    key_type k = "key";
+    val_type v = "string too long! string too long! string too long! \
+    string too long! string too long! string too long! string too long!";
+    cache_set(c,k,v,strlen(v)+1);
+    return true;
+}
+
+bool create_init_correct_mem(){
+    // fails jcosel because of resize on caches too small
+    // fails zzhong because doesn't check if new val exceeds maxmem
+    cache_t c = create_cache_wrapper(10,NULL);
+    key_type k = "key";
+    val_type v = "string too long!";
+    cache_set(c,k,v,strlen(v)+1);
+    int size;
+    val_type out = cache_get_wrapper(c,k,&size);
+    if (out!=NULL) return false;
+    return true;
+}
+
 // Tests cache_set on an array containing two large values. If vals
 // were treated as strings, this would fail.
 bool large_val_copied_correctly(){
@@ -134,6 +159,24 @@ bool large_val_copied_correctly(){
     }
     destroy_cache(cache);
     return worked;
+}
+
+bool add_same_starting_char(){
+    cache_t c = create_cache_wrapper(10000,NULL);
+    char k[1000];
+    int v = 12345;
+    int size;
+    for(int i=0;i<100;++i){
+        strcat(k,"i");
+        cache_set(c,k,&v,sizeof(int));
+        size = cache_space_used(c);
+        if (size!=((i+1)*sizeof(int))){
+            destroy_cache(c);
+            return false;
+        }
+    }
+    destroy_cache(c);
+    return true;
 }
 
 
