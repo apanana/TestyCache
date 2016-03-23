@@ -26,12 +26,21 @@ execnames = [
 "./tests/create_jhepworth",
 "./tests/create_zzhong"
 ]
+PASSED_VAL = 0
+FAILED_VAL = 0x92
+TIMOUT_VAL = 0x91
 
 class TestRes:
     def __init__(self,exec_name,testnum):
         pobj = subprocess.Popen([exec_name,str(testnum)],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        output, err = pobj.communicate()
-        retval = int(pobj.returncode)
+        try:
+            output, err = pobj.communicate(timeout=0.5)
+        except subprocess.TimeoutExpired:
+            pobj.kill()
+            output, err = pobj.communicate()
+            retval = TIMOUT_VAL
+        else:
+            retval = int(pobj.returncode)
         output = output.decode("utf-8")
         error = err.decode("utf-8")
         self.testname = output + error if verbose_level > 0 else ("????????????" if "\n" not in output else output[:output.index("\n")])
@@ -49,23 +58,49 @@ class Sumary:
     def __str__(self):
         passed = 0
         failed = 0
+        timeout = 0
         crashed = 0
         resstr = self.exec_name + " :\n"
         for t in self.tests:
             resstr += t.testname + "\n"
-            if(t.retval == 0):
+            if(t.retval == PASSED_VAL):
                 passed += 1
                 resstr += "passed\n"
-            elif t.retval == 0x92:
+            elif t.retval == FAILED_VAL:
                 failed += 1
                 resstr += "failed\n"
+            elif t.retval == TIMOUT_VAL:
+                timeout += 1
+                resstr += "timed out\n"
             else:
                 crashed += 1
                 resstr += "crashed\n"
         resstr += "passed: " + str(passed) + "\n"
         resstr += "failed: " + str(failed) + "\n"
         resstr += "crashed: " + str(crashed) + "\n"
+        resstr += "timed out: " + str(timeout) + "\n"
         return resstr
+
+    def get_passed_line(self):
+        #resstr = self.exec_name + " :\n"
+        line = [self.exec_name]
+        for t in self.tests:
+            if(t.retval == PASSED_VAL):
+                line.append("P")
+            elif t.retval == FAILED_VAL:
+                line.append("F")
+            elif t.retval == TIMOUT_VAL:
+                line.append("T")
+            else:
+                line.append("C")
+        return ", ".join(line)
+
+    def get_func_names(self):
+        fnames = [""]
+        for t in self.tests:
+            fnames.append(t.testname)
+        return fnames
+
     __repr__ = __str__
 
 def run_one(execname,testnum):
@@ -85,7 +120,12 @@ def run_on_all(testnum):
 
 def run_all_execs():
     for en in execnames:
-        run_all(en)
+        sumar = Sumary(en)
+        for tn in range(num_of_tests):
+            sumar += TestRes(en,tn)
+        if en is execnames[0]:
+            print(", ".join(sumar.get_func_names())
+        print(sumar.get_passed_line())
 
 if "-vv" in sys.argv:
     verbose_level = 2

@@ -1,3 +1,11 @@
+### Files:
+
+Filename | Description
+-- | --
+Makefile | Standard makefile for make to build the tests
+run_test.py | Run system for the tests (described in Run System section)
+
+
 ### Changes to cache source code to get compiles to work
 
 * Included stdint.h in apan/lru.h, akosik/lru.h
@@ -10,6 +18,8 @@ To aid in our testing, we built a makefile that compiles all the tests against a
 
 ### Run system
 
+In order to make testing easier and faster, we made a python script that runs the test in
+
 An even more useful help to testing is the python script that runs tests on caches automatically.
 
 The idea is this: Each test is called by a unique command line option. The python script runs through the specified executable(s) and the specified test(s) and runs them and produces a summary of the results. This  allows us to see which tests are crashing/failing on which caches and should hopefully allow us to create many more reliable tests.
@@ -19,3 +29,11 @@ The idea is this: Each test is called by a unique command line option. The pytho
 * Test tiny strings with a single null terminated charachter followed by nonsense and see if it is consistent.
 * Test large strings with identical first bytes and see if they map to the same bucket
 * Many more, see test.h for a larger list.
+
+
+
+## Radom Issues
+
+### Compiler bug???
+
+We get different results on a macbook for "Apple LLVM version 7.0.2 (clang-700.1.81)" when compiling with -O2 and with -O0 on one of our tests. I believe this is Clang 3.6. Specifically, "get_size_test" returned true when running apan's test on O2

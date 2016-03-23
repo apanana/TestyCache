@@ -21,7 +21,7 @@ bool destroy_test(){
 
 // Naive cache_get test
 bool add_test(){
-    // Adds many items of differnet sizes (some of which with identical keys), 
+    // Adds many items of differnet sizes (some of which with identical keys),
     // all of which below maxmem. Returns true if it does not crash
     const uint64_t num_adds = 20;
     cache_t c = create_cache_wrapper(num_adds*max_str_len,NULL);
@@ -41,7 +41,7 @@ bool get_size_test(){
 	void * out = cache_get_wrapper(c,k,&size);
     destroy_cache(c);
     if (size != sizeof(int)){
-        printf("wrong size\n"); // need this or compiler does smth strange
+        //printf("wrong size\n"); // need this or compiler does smth strange
         return false;
     }
     return true;
@@ -72,7 +72,7 @@ bool delete_test(){
 	return true;
 }
 
-// Naive cache_space_used test - 
+// Naive cache_space_used test -
 bool space_test(){
 	cache_t c = create_cache_wrapper(10000,NULL);
     add_elements(c,0,100,INT);
@@ -223,7 +223,7 @@ bool add_over_memmax_eviction(){
 bool add_resize_buckets_or_maxmem(){
     // adds small items up to half of maxmem then attemps to add
     // an item that would be too large for the cache (unless maxmem changed
-    // after the resize). If new item appears, then maxmem was changed 
+    // after the resize). If new item appears, then maxmem was changed
     // in resize (which is a bug - maxmem should be constant).
     uint64_t max_mem = 10;
     char rand_key[] = "random_key";
@@ -237,7 +237,7 @@ bool add_resize_buckets_or_maxmem(){
     cache_set(c,rand_key,big_val,strlen(big_val)+1);
     uint32_t null_size = 0;
     val_type cache_big_val = cache_get_wrapper(c,rand_key,&null_size);
-    
+
     int space2 = cache_space_used(c);
 
     if (space1 != space2 ||
@@ -386,5 +386,3 @@ bool delete_not_in(){
 
 
 */
-
-
