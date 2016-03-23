@@ -95,7 +95,7 @@ var_len_evictions | basic lru_test for variable length strings
 ### Test output
 unfortunately you have to scroll right now, so I might flip this table...
 
- groupd name | create_test | destroy_test | add_test | crash_on_memoverload | get_size_test | get_val_test | delete_test | space_test | custom_hash_is_called | cache_space_preserved | add_single_item_over_memmax | large_val_copied_correctly | add_same_starting_char | add_over_memmax_eviction | add_resize_buckets_or_maxmem | get_null_empty | get_nonexist | get_size_after_reassign_test | get_val_after_reassign_test | get_with_null_term_strs_test | delete_not_in | delete_affect_get_out | evictions_occur | basic_lru_test | lru_delete_test | update_reordering | evict_on_reset_old_val | evict_on_failed_reset_old_val | get_reordering | maxmem_not_excceeded | elements_not_evicted_early | var_len_evictions
+ group name | create_test | destroy_test | add_test | crash_on_memoverload | get_size_test | get_val_test | delete_test | space_test | custom_hash_is_called | cache_space_preserved | add_single_item_over_memmax | large_val_copied_correctly | add_same_starting_char | add_over_memmax_eviction | add_resize_buckets_or_maxmem | get_null_empty | get_nonexist | get_size_after_reassign_test | get_val_after_reassign_test | get_with_null_term_strs_test | delete_not_in | delete_affect_get_out | evictions_occur | basic_lru_test | lru_delete_test | update_reordering | evict_on_reset_old_val | evict_on_failed_reset_old_val | get_reordering | maxmem_not_excceeded | elements_not_evicted_early | var_len_evictions
  --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
  akosik | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | FAIL | PASS | FAIL | PASS | PASS | FAIL
  aledger | PASS | PASS | PASS | CRASH | PASS | PASS | PASS | PASS | FAIL | PASS | CRASH | PASS | CRASH | CRASH | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | TIME | FAIL | TIME | PASS | PASS | PASS | PASS
@@ -113,9 +113,9 @@ unfortunately you have to scroll right now, so I might flip this table...
 * `basic_lru_test`:
 * `lru_delete_test`:
 * `update_reordering`:
-* `evict_on_reset_old_val`:
-* `get_reordering`:
-* `var_len_evictions`:
+* `evict_on_reset_old_val`: Whether or not we count this as a bug is ambiguous. This finds that the cache uneccesarily evicts elements when updating an entry with a value that would overload the cache if added under a new key. The spec doesn't say whether or not we should call this an error, but if we do not want that behavior then this is an error.
+* `get_reordering`: `cache_get()` calls the `lru_add()` from `lru.c` which does not update the lru element properly if we are getting the lru element.
+* `var_len_evictions`: trace back this error to `get_reordering`.
 
 #### Aledger
 A main source of problems with this cache was that many cases were handled with exits that would crash the test instead doing nothing or returning NULL for example. Also did not follow the API for `cache_set()` by not allowing the user to pass their own hash function.
@@ -126,7 +126,7 @@ A main source of problems with this cache was that many cases were handled with 
 * `add_over_memmax_eviction`: trace back this error to `crash_on_memoverload`
 * `add_resize_buckets_or_maxmem`: trace back this error to `crash_on_memoverload`
 * `update_reordering`: we get into an infinite while-loop starting on line 136 of `cache.h`
-* `evict_on_reset_old_val`:
+* `evict_on_reset_old_val`: Whether or not we count this as a bug is ambiguous. This finds that the cache uneccesarily evicts elements when updating an entry with a value that would overload the cache if added under a new key. The spec doesn't say whether or not we should call this an error, but if we do not want that behavior then this is an error.
 * `evict_on_failed_reset_old_val`: same infinite while-loop starting on line 136 of `cache.h`
 
 
@@ -134,11 +134,11 @@ A main source of problems with this cache was that many cases were handled with 
 `cache_get()` doesn't follow the API in this cache, so buffer size is never properly returned.
 * `get_size_test`: `cache_get()` doesn't follow the API.
 * `get_val_after_reassign_test`: Whether or not we count this as a bug is ambiguous. If we expect the cache to copy out vals when `cache_get()` is called, then this is a bug. If we expect `cache_get()` to return a pointer, then this is not a bug. (This cache fails our test as it is now since it returns a pointer but we expect the value to be copied out.)
-* `basic_lru_test`:
-* `lru_delete_test`:
-* `evict_on_reset_old_val`:
-* `get_reordering`:
-* `var_len_evictions`:
+* `basic_lru_test`: trace back this error to `get_reordering`
+* `lru_delete_test`: trace back this error to `get_reordering`
+* `evict_on_reset_old_val`: Whether or not we count this as a bug is ambiguous. This finds that the cache uneccesarily evicts elements when updating an entry with a value that would overload the cache if added under a new key. The spec doesn't say whether or not we should call this an error, but if we do not want that behavior then this is an error.
+* `get_reordering`: `cache_get()` doesn't update the LRU
+* `var_len_evictions`: trace back this error to `get_reordering`
 
 #### Bblack
 * `get_val_after_reassign_test`: Whether or not we count this as a bug is ambiguous. If we expect the cache to copy out vals when `cache_get()` is called, then this is a bug. If we expect `cache_get()` to return a pointer, then this is not a bug. (This cache fails our test as it is now since it returns a pointer but we expect the value to be copied out.)
@@ -193,3 +193,4 @@ This cache compiles after we patch the section mentioned in the moodle forum, bu
 * `get_reordering`:
 * `maxmem_not_excceeded`:
 * `elements_not_evicted_early`:
+
