@@ -12,8 +12,10 @@
 
 * Included stdint.h in apan/lru.h, akosik/lru.h
 * Changed function name from an undefined function to "make_item_array" in bblack/lru_replacement.h (line 137)
+* Changed type of cache_space_used from uint32_t to uint64_t in zzhong's cache.
+* Changed type of hash_func type and hash_default function to "uin64_t ( * )(key_type key)" in zzhong's cache.
 * Changed key_t and val_t to key_type and val_type in all of akosik's and jhepworth's code
-* Patched jhepworth's code in line 73 of cache.c with: 
+* Patched jhepworth's code in line 73 of cache.c with:
 	ret->hasher = (ret->hasher == NULL) ? &hash : ret->hasher;
 
 ### Build system
@@ -93,15 +95,15 @@ var_len_evictions | basic lru_test for variable length strings
 ### Test output
 unfortunately you have to scroll right now, so I might flip this table...
 
- groupd name | create_test | destroy_test | add_test | crash_on_memoverload | get_size_test | get_val_test | delete_test | space_test | custom_hash_is_called | cache_space_preserved | add_single_item_over_memmax | large_val_copied_correctly | add_same_starting_char | add_over_memmax_eviction | add_resize_buckets_or_maxmem | get_null_empty | get_nonexist | get_size_after_reassign_test | get_val_after_reassign_test | get_with_null_term_strs_test | delete_not_in | delete_affect_get_out | evictions_occur | basic_lru_test | lru_delete_test | update_reordering | evict_on_reset_old_val | evict_on_failed_reset_old_val | get_reordering | maxmem_not_excceeded | elements_not_evicted_early | var_len_evictions 
- --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- 
- akosik | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | FAIL | PASS | FAIL | PASS | PASS | FAIL 
- aledger | PASS | PASS | PASS | CRASH | PASS | PASS | PASS | PASS | FAIL | PASS | CRASH | PASS | CRASH | CRASH | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | TIME | FAIL | TIME | PASS | PASS | PASS | PASS 
-  apan | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | FAIL | PASS | FAIL | PASS | PASS | FAIL 
-  bblack | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS 
-  jcosel | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | PASS | FAIL | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | FAIL 
-  jhepworth | PASS | PASS | PASS | PASS | FAIL | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | PASS | PASS | CRASH | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS 
-  zzhong | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | CRASH | FAIL | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS | PASS | CRASH | PASS | CRASH | PASS | PASS | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | PASS 
+ groupd name | create_test | destroy_test | add_test | crash_on_memoverload | get_size_test | get_val_test | delete_test | space_test | custom_hash_is_called | cache_space_preserved | add_single_item_over_memmax | large_val_copied_correctly | add_same_starting_char | add_over_memmax_eviction | add_resize_buckets_or_maxmem | get_null_empty | get_nonexist | get_size_after_reassign_test | get_val_after_reassign_test | get_with_null_term_strs_test | delete_not_in | delete_affect_get_out | evictions_occur | basic_lru_test | lru_delete_test | update_reordering | evict_on_reset_old_val | evict_on_failed_reset_old_val | get_reordering | maxmem_not_excceeded | elements_not_evicted_early | var_len_evictions
+ --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+ akosik | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | FAIL | PASS | FAIL | PASS | PASS | FAIL
+ aledger | PASS | PASS | PASS | CRASH | PASS | PASS | PASS | PASS | FAIL | PASS | CRASH | PASS | CRASH | CRASH | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | TIME | FAIL | TIME | PASS | PASS | PASS | PASS
+  apan | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | FAIL | PASS | FAIL | PASS | PASS | FAIL
+  bblack | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS
+  jcosel | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | PASS | FAIL | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | FAIL
+  jhepworth | PASS | PASS | PASS | PASS | FAIL | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | PASS | PASS | CRASH | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS
+  zzhong | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | CRASH | FAIL | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS | PASS | CRASH | PASS | CRASH | PASS | PASS | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | PASS
 
 
 ### Issue summaries
@@ -129,7 +131,7 @@ A main source of problems with this cache was that many cases were handled with 
 
 
 #### Apan
-`cache_get()` doesn't follow the API in this cache, so buffer size is never properly returned. 
+`cache_get()` doesn't follow the API in this cache, so buffer size is never properly returned.
 * `get_size_test`: `cache_get()` doesn't follow the API.
 * `get_val_after_reassign_test`: Whether or not we count this as a bug is ambiguous. If we expect the cache to copy out vals when `cache_get()` is called, then this is a bug. If we expect `cache_get()` to return a pointer, then this is not a bug. (This cache fails our test as it is now since it returns a pointer but we expect the value to be copied out.)
 * `basic_lru_test`:
@@ -148,11 +150,11 @@ We have one bug that can't be tested but it actually revealed to us by the cache
 * `add_single_item_over_memmax`: maxmem doubles itself when exceeded so we end up adding an item that we wouldn't have been able to if maxmem was constant.
 * `add_over_memmax_eviction`: we get a false positive (incorrect pass) here because of this maxmem resize bug!
 * `add_resize_buckets_or_maxmem`: can be traced back to our maxmem-resize bug.
-* `get_null_empty`: ????? really weird because this passes when the cache is empty.????? 
+* `get_null_empty`: ????? really weird because this passes when the cache is empty.?????
 * `evictions_occur`: ????? THIS TEST IS WEIRD ???????
 * `basic_lru_test`:
 * `lru_delete_test`:
-* `update_reordering`: 
+* `update_reordering`:
 * `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
 * `get_reordering`:
 * `maxmem_not_excceeded`:
@@ -172,7 +174,7 @@ This cache compiles after we patch the section mentioned in the moodle forum, bu
 * `get_with_null_term_strs_test`: Crashes
 * `delete_affect_get_out`:
 * `evictions_occur`: ????? THIS TEST IS WEIRD ???????
-* `update_reordering`: 
+* `update_reordering`:
 * `evict_on_reset_old_val`:
 * `evict_on_failed_reset_old_val`:
 
@@ -186,10 +188,8 @@ This cache compiles after we patch the section mentioned in the moodle forum, bu
 * `get_size_after_reassign_test`: in `cache.c` the if-statement in line 40 for the update case doesn't update the size of the item in the hash table, only rewrites the value.
 * `delete_not_in`:
 * `evictions_occur`: ????? THIS TEST IS WEIRD ???????
-* `update_reordering`: 
+* `update_reordering`:
 * `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
 * `get_reordering`:
 * `maxmem_not_excceeded`:
 * `elements_not_evicted_early`:
-
-

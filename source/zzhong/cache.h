@@ -3,23 +3,23 @@
 #include <inttypes.h>
 #pragma
 
-//This is a header file which contains constants, structs 
+//This is a header file which contains constants, structs
 //and prototypes of all functions in cache.c, hash_table.c and LRU.c
 
 
 //1. Constants, sturcts and function signatures
 
 // HASH_INIT_BUCKET_NUM - the initial bucket numbers of my hash table
-// LOAD_FACTOR - the threshold of resizing(expanding) my hash table 
-// SCALE_FACTOR - the scale to expand my hash table 
+// LOAD_FACTOR - the threshold of resizing(expanding) my hash table
+// SCALE_FACTOR - the scale to expand my hash table
 
 #define HASH_INIT_BUCKET_NUM 5
 #define LOAD_FACTOR 0.5
 #define SCALE_FACTOR 2
 
-// node_obj - a node object which stores a pair of key and value; it is also an unit element in a double linked_list 
-// item_obj - an item object which stores a pointer to a node; it is also an unit element in a hash_table 
-// hash_table_obj - a hash table object that has a 2D array which consists of pointers to items. 
+// node_obj - a node object which stores a pair of key and value; it is also an unit element in a double linked_list
+// item_obj - an item object which stores a pointer to a node; it is also an unit element in a hash_table
+// hash_table_obj - a hash table object that has a 2D array which consists of pointers to items.
 // linked_list_obj - a double linked list object that has pointers to the front and end of the double linked_list which consists of nodes.
 // cache_obj - cache which has pointers to hash_table and linked_list
 
@@ -33,8 +33,8 @@ typedef const uint8_t * key_type;
 typedef const void * val_type;
 
 // For a given key string, return a pseudo-random integer:
-typedef uint32_t (*hash_func)(key_type key);
-// For a full cache, return the key of an element to evict 
+typedef uint64_t (*hash_func)(key_type key);
+// For a full cache, return the key of an element to evict
 typedef key_type (*evict_func)(struct cache_obj * cache);
 
 typedef struct node_obj * node_t;
@@ -61,9 +61,9 @@ struct hash_table_obj{
     uint32_t current_size;
     uint32_t buckets_num;
     double load_factor;
-    uint32_t scale_factor;    
+    uint32_t scale_factor;
     item_t * hash; // an array of pointers to buckets
-    hash_func hash_f;	
+    hash_func hash_f;
 };
 struct linked_list_obj{
 	uint32_t current_size;
@@ -88,7 +88,7 @@ cache_t create_cache(uint32_t maxmem,hash_func hash_customized, evict_func evict
 // If maxmem capacity is exceeded, sufficient values will be removed
 // from the cache to accomodate the new value.
 void cache_set(cache_t cache, key_type key, val_type val, uint32_t val_size);
-// Retrieve the value associated with key in the cache, or NULL if not found. 
+// Retrieve the value associated with key in the cache, or NULL if not found.
 // The size of the returned buffer will be assigned to *val_size.
 val_type cache_get(cache_t cahce, key_type key, uint32_t *val_size);
 
@@ -96,7 +96,7 @@ val_type cache_get(cache_t cahce, key_type key, uint32_t *val_size);
 void cache_delete(cache_t cache, key_type key);
 
 // Compute the total amount of memory used up by all cache values (not keys)
-uint32_t cache_space_used(cache_t cache);
+uint64_t cache_space_used(cache_t cache);
 
 // Destroy all resource connected to a cache object
 void destroy_cache(cache_t cache);
@@ -117,7 +117,7 @@ void hash_table_initialize(hash_table_t hash_table, hash_func hash_customized);
 //Add a new_node_ptr to current hash table
 item_t hash_table_set(hash_table_t hash_table, key_type key, val_type val, uint32_t val_size);
 //A simple default hash function
-uint32_t hash_default(key_type key);
+uint64_t hash_default(key_type key);
 
 //delete the key from the hash table
 void hash_table_delete(hash_table_t hash_table, item_t item_ptr);
@@ -166,4 +166,3 @@ uint32_t is_linked_list_empty(linked_list_t linked_list);
 
 //draw the current linked list
 void draw_linked_list(linked_list_t linked_list);
-

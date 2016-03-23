@@ -1,29 +1,8 @@
 #include <stdlib.h>
-#include <stdbool.h>
-/*
-The core concept behind this file is this:
+#include "test_helper.h"
 
-Instead of manually keeping track of keys and values of different and comparing
-them, there are simply keys and values associated with integers, so you can do
-operations on ranges of integers.
-
-You can also specify the type of the value, STR or INT. STR translates to a
-string of upper case letters of total length (including null byte) max_str_len.
-INT is a 16 bit signed integer.
-
-Keys are currently implemented as the integer value of the index you pass in.
-It is careful about the int being null terminated.
-
-One thing to look out for is that these indexes are only valid if they are less
-than num_ivals for INT and num_svals for STR
-*/
-const size_t num_ivals = 1000000;
-const size_t num_svals = 200000;
-const size_t max_str_len = 100;
-typedef int16_t int_ty;
 int_ty * ivals;
 char ** svals;
-typedef enum {INT,STR} val_entry_type;
 char rand_char(){
 	return rand()%26+64;//random upper case letters
 }

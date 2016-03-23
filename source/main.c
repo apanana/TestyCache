@@ -1,8 +1,8 @@
-#include "cachewrapper.c"
-#include "test_helper.c"
-#include "test.c"
-#include "basic_test.c"
-#include "lrutests.c"
+#include "cachewrapper.h"
+#include "test_helper.h"
+#include "test.h"
+#include "basic_test.h"
+#include "lrutests.h"
 
 
 #define RunTest(testname) {\

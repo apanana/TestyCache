@@ -1,4 +1,5 @@
 #include "test.h"
+#include "test_helper.h"
 
 bool cache_space_preserved(){
     // adds, deletes, updates, and maybe evicts and sees if the total size of
@@ -23,6 +24,22 @@ bool cache_space_preserved(){
 
 // we have a weird error with jcosel where it doubles its maxmem cap if
 // we exceed maxmem. i dont know what kind of test i'd use to expose it though
+
+bool create_init_correct_mem(){
+    // cache space used should still be 0 because we shouldnt be
+    // able to add an element greater than the size of the cache
+    // fails jcosel because of resize on caches too small
+    // fails zzhong because doesn't check if new val exceeds maxmem
+    cache_t c = create_cache_wrapper(65,NULL); //set over 64 for jcosel
+    key_type k = "key";
+    val_type v = "string too long! string too long! string too long! \
+    string too long! string too long! string too long! string too long!";
+    cache_set(c,k,v,strlen(v)+1);
+    int space = cache_space_used(c);
+    destroy_cache(c);
+    if (space!=0) return false;
+    return true;
+}
 
 bool add_single_item_over_memmax(){
     //adds a single item over maxmem and sees if it is not in the cache.
@@ -60,7 +77,7 @@ bool large_val_copied_correctly(){
 }
 
 bool add_same_starting_char(){
-    // adds vals under different keys that start with the same character. 
+    // adds vals under different keys that start with the same character.
     // if the cache doesn't copy keys by string then this will fail.
     cache_t c = create_cache_wrapper(10000,NULL);
     char k[1000];
@@ -140,6 +157,7 @@ bool get_null_empty(){
     char * k = "key";
     int size1;
     void * out = cache_get_wrapper(c,k,&size1);
+    destroy_cache(c);
     if (out != NULL) return false;
     return true;
 }
@@ -150,6 +168,7 @@ bool get_nonexist(){
     key_type k = "nonexist";
     int size;
     val_type out = cache_get_wrapper(c,k,&size);
+    destroy_cache(c);
     if(out != NULL) return false;
     return true;
 }
@@ -167,6 +186,7 @@ bool get_size_after_reassign_test(){
     char *v2 = "stringval";
     cache_set(c,k,v2,strlen(v2)+1);
     out = cache_get_wrapper(c,k,&size2);
+    destroy_cache(c);
     if(size1 == size2){
         printf("%s\n",out);
         printf("%d\n",size1);
@@ -205,8 +225,10 @@ bool get_val_after_reassign_test(){
         printf("%s\n",out2);
         printf("%s\n",v1);
         printf("%s\n",v2);
+        destroy_cache(c);
         return false;
     }
+    destroy_cache(c);
     return true;
 }
 
@@ -243,8 +265,8 @@ bool delete_not_in(){
 }
 
 bool delete_affect_get_out(){
-    // A bug was raised with the outputed vals of cache_get being affected 
-    // by updates. This tests whether we have the same problem on the outputs 
+    // A bug was raised with the outputed vals of cache_get being affected
+    // by updates. This tests whether we have the same problem on the outputs
     // of cache_get after deletes.
     cache_t c = create_cache_wrapper(1000,NULL);
     char * k = "key";
@@ -254,6 +276,11 @@ bool delete_affect_get_out(){
     void * out1 = cache_get_wrapper(c,k,&size1);
     cache_delete(c,k);
     void * out2 = cache_get_wrapper(c,k,&size1);
+    printf("%s\n",out1);
+    printf("%p\n",out2);
+    // printf("%s\n",out1);
+    // printf("%p\n",out1);
+    destroy_cache(c);
     if (out1 == NULL) return false;
     return true;
 }
