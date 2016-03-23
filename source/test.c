@@ -20,20 +20,15 @@ bool create_init_correct_mem(){
 }
 
 bool add_single_item_over_memmax(){
-    //adds a small item and then a single item over maxmem and sees if it is not in the cache.
-    uint64_t max_mem = 10;
-    char rand_key[] = "random_key";
-    char big_val[] = "string of length > max_mem";
-
-    cache_t cache = create_cache_wrapper(max_mem,NULL);
-
-    add_element(cache,1,INT);
-    cache_set(cache,rand_key,big_val,max_mem+1);
-
+    //adds a single item over maxmem and sees if it is not in the cache.
+    cache_t c = create_cache_wrapper(65,NULL); //set over 64 for jcosel
+    key_type k = "key";
+    val_type v = "string too long! string too long! string too long! \
+    string too long! string too long! string too long! string too long!";
+    cache_set(c,k,v,strlen(v)+1);
     uint32_t null_size = 0;
-    val_type cache_big_val = cache_get_wrapper(cache,rand_key,&null_size);
-
-    destroy_cache(cache);
+    val_type cache_big_val = cache_get_wrapper(c,k,&null_size);
+    destroy_cache(c);
     return cache_big_val == NULL;
 }
 
@@ -41,7 +36,6 @@ bool add_single_item_over_memmax(){
 // were treated as strings, this would fail.
 bool large_val_copied_correctly(){
     cache_t cache = create_cache_wrapper(1000,NULL);
-
     key_type key = "normal key";
     uint64_t val[] = {0xff00ff00ff00ffff,0xcc00cc00fe00ddcc};
     cache_set(cache,key,&val,sizeof(uint64_t)*2);
@@ -117,6 +111,14 @@ bool add_resize_buckets_or_maxmem(){
 
     int space2 = cache_space_used(c);
 
+    if (cache_big_val != NULL){
+        printf("%d\n",space1);
+        printf("%d\n",space2);
+        printf("%s\n",cache_big_val);
+        printf("%p\n",cache_big_val);
+        fflush(stdout);
+        return false;
+    }
     destroy_cache(c);
     return cache_big_val == NULL;
 }
@@ -126,10 +128,11 @@ bool get_null_empty(){
     uint64_t max_mem = 100;
     printf("HIHIIH\n");
     fflush(stdout);
-    cache_t c = create_cache_wrapper(max_mem*sizeof(uint16_t)+1,NULL);
+    cache_t c = create_cache_wrapper(max_mem*sizeof(int_ty)+1,NULL);
     printf("HIHIIH\n");
     fflush(stdout);
     add_elements(c,0,max_mem,INT);
+    printf("HIHIIH\n");
     char * k = "key";
     int size1;
     void * out = cache_get_wrapper(c,k,&size1);
