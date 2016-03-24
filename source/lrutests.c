@@ -22,7 +22,7 @@ zzhong: crash
 alec's breaks on element 36. works up until 35. looool
 */
 bool evictions_occur(){
-    //adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
+    // adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
     const uint64_t max_elmts = 10;
     const uint64_t num_elmts_add = 36;
     printf("hihihi\n");
@@ -160,18 +160,15 @@ bool evict_on_failed_reset_old_val(){
         destroy_cache(c);
         return false;
     }
-    printf("We will pass!1\n");
     val_type out2 = cache_get_wrapper(c,k2,&size1);
     if(out2==NULL){
         destroy_cache(c);
         return false;
     }
-    printf("We will pass!2\n");
     if(*(int*)out2!=v2){
         destroy_cache(c);
         return false;
     }
-    printf("We will pass!3\n");
     destroy_cache(c);
     return true;
 }

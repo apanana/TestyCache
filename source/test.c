@@ -6,17 +6,9 @@ bool cache_space_preserved(){
     // items of items in the cache is the size of all of the non-NULL elements
     const uint64_t maxmem = 200;
     cache_t c = create_cache_wrapper(maxmem,NULL);
-    printf("hihihi\n");
-    fflush(stdout);
     add_elements(c,0,5,STR);
-    printf("hihihi\n");
-    fflush(stdout);
     delete_element(c,4);
-        printf("hihihi\n");
-    fflush(stdout);
     add_elements(c,0,2,INT);
-        printf("hihihi\n");
-    fflush(stdout);
     bool worked = cache_space_used(c) == space_of_elements(c,0,2,INT) + space_of_elements(c,2,5,STR);
     destroy_cache(c);
     return worked;
@@ -209,15 +201,9 @@ bool get_val_after_reassign_test(){
     int size1,size2;
     cache_set(c,k,v1,strlen(v1)+1);
     void * out1 = cache_get_wrapper(c,k,&size1);
-    printf("%s\n",out1);
-    printf("%p\n",out1);
     char *v2 = "stringval2";
     cache_set(c,k,v2,strlen(v2)+1);
-    printf("%s\n",out1);
-    printf("%p\n",out1);
     void * out2 = cache_get_wrapper(c,k,&size2);
-    printf("11%s\n",out1);
-    printf("%p\n",out2);
     if(strcmp(out1,out2)==0 ||
         strcmp(out1,v1)!=0 ||
         strcmp(out2,v2)!=0){
@@ -276,10 +262,6 @@ bool delete_affect_get_out(){
     void * out1 = cache_get_wrapper(c,k,&size1);
     cache_delete(c,k);
     void * out2 = cache_get_wrapper(c,k,&size1);
-    printf("%s\n",out1);
-    printf("%p\n",out2);
-    // printf("%s\n",out1);
-    // printf("%p\n",out1);
     destroy_cache(c);
     if (out1 == NULL) return false;
     return true;
