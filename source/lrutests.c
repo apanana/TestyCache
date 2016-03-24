@@ -1,5 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "lrutests.h"
-
+#include "test_helper.h"
 
 /* There's something really fishy going on here:
 When we only input 10 elements we get

@@ -1,4 +1,5 @@
 #include "test.h"
+#include "test_helper.h"
 
 
 // we have a weird error with jcosel where it doubles its maxmem cap if
@@ -15,6 +16,7 @@ bool create_init_correct_mem(){
     string too long! string too long! string too long! string too long!";
     cache_set(c,k,v,strlen(v)+1);
     int space = cache_space_used(c);
+    destroy_cache(c);
     if (space!=0) return false;
     return true;
 }
@@ -136,6 +138,7 @@ bool get_null_empty(){
     char * k = "key";
     int size1;
     void * out = cache_get_wrapper(c,k,&size1);
+    destroy_cache(c);
     if (out != NULL) return false;
     return true;
 }
@@ -147,6 +150,7 @@ bool get_nonexist(){
     key_type k = "nonexist";
     int size;
     val_type out = cache_get_wrapper(c,k,&size);
+    destroy_cache(c);
     if(out != NULL) return false;
     return true;
 }
@@ -163,6 +167,7 @@ bool get_size_after_reassign_test(){
     char *v2 = "stringval";
     cache_set(c,k,v2,strlen(v2)+1);
     out = cache_get_wrapper(c,k,&size2);
+    destroy_cache(c);
     if(size1 == size2){
         return false;
     }
@@ -197,8 +202,10 @@ bool get_val_after_reassign_test(){
         printf("%s\n",out2);
         printf("%s\n",v1);
         printf("%s\n",v2);
+        destroy_cache(c);
         return false;
     }
+    destroy_cache(c);
     return true;
 }
 
@@ -249,6 +256,7 @@ bool delete_affect_get_out(){
     printf("%p\n",out2);
     // printf("%s\n",out1);
     // printf("%p\n",out1);
+    destroy_cache(c);
     if (out1 == NULL) return false;
     return true;
 }

@@ -1,4 +1,7 @@
+#include <stdlib.h>
+
 #include "basic_test.h"
+#include "test_helper.h"
 // Naive create_cache test - makes sure we don't crash
 // and that we don't end up with a NULL pointer when
 // creating a cache.
@@ -40,6 +43,7 @@ bool crash_on_memoverload(){
     val_type v = "string too long! string too long! string too long! \
     string too long! string too long! string too long! string too long!";
     cache_set(c,k,v,strlen(v)+1);
+    destroy_cache(c);
     return true;
 }
 
@@ -98,30 +102,29 @@ bool space_test(){
 bool hash_called = false;
 uint64_t custom_hash(key_type key){
     hash_called = true;
-    return 0;
+    return 0;//constant function is a valid hash
 }
 
 bool custom_hash_is_called(){
     //checks if the custom hash function specified is called on add, get, update, and delete
     const uint64_t item = 5;
-    hash_called = false;
     cache_t cache =  create_cache_wrapper(1000,custom_hash);
 
+    hash_called = false;
     add_element(cache,item,INT);
     bool add_hash = hash_called;
-    hash_called = false;
 
+    hash_called = false;
     element_exists(cache,item);
     bool get_hash = hash_called;
-    hash_called = false;
 
+    hash_called = false;
     add_element(cache,item,STR);
     bool update_hash = hash_called;
-    hash_called = false;
 
+    hash_called = false;
     delete_element(cache,item);
     bool delete_hash = hash_called;
-    hash_called = false;
 
     destroy_cache(cache);
     return add_hash && get_hash && update_hash && delete_hash;

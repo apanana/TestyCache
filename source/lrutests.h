@@ -1,3 +1,4 @@
+#include <stdbool.h>
 // adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
 bool evictions_occur();
 
@@ -16,11 +17,11 @@ bool evict_on_reset_old_val();
 // makes sure that cache_get properly reorders the LRU
 bool get_reordering();
 
-// adds too many elements, checks if the size of values with non-null keys is 
+// adds too many elements, checks if the size of values with non-null keys is
 // > maxmem, deletes some, adds more, overwrites some, checks again
 bool maxmem_not_excceeded();
 
-// adds some elements, deletes some, and replaces some, and then checks 
+// adds some elements, deletes some, and replaces some, and then checks
 // if all the elements are still in the cache
 bool elements_not_evicted_early();
 
