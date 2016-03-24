@@ -86,28 +86,20 @@ bool update_reordering(){
     int v3 = 3;
     // this should update the val stored under k1 and now
     // we expect (k2,v2) to be the LRU element.
-    printf("updating val\n");
-    fflush(stdout);
     cache_set(c,k1,&v3,sizeof(int));
 
     key_type k3 = "key3";
     val_type v4 = "largeval";
-    printf("largeval\n");
-    fflush(stdout);
     //we expect this to evict (k2,v2)
     cache_set(c,k3,v4,strlen(v4)+1);
 
     int size1,size2;
-    printf("hihihihihihihi\n");
-    fflush(stdout);
     val_type out1 = cache_get_wrapper(c,k1,&size1);
     if (out1 == NULL ) return false;
     val_type out2 = cache_get_wrapper(c,k2,&size2);
     if (out2 != NULL) return false;
-        // need to place ifs on sepearate lines there is an issue
-        // with all cache_gets sharing the same pointer
-    printf("hihihihihihihi2222222222\n");
-    fflush(stdout);
+    // need to place ifs on sepearate lines there is an issue
+    // with all cache_gets sharing the same pointer
     destroy_cache(c);
     return true;
 

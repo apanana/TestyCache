@@ -110,9 +110,9 @@ unfortunately you have to scroll right now, so I might flip this table...
 #### Akosik
 * `get_val_after_reassign_test`: Whether or not we count this as a bug is ambiguous. If we expect the cache to copy out vals when `cache_get()` is called, then this is a bug. If we expect `cache_get()` to return a pointer, then this is not a bug. (This cache fails our test as it is now since it returns a pointer but we expect the value to be copied out.)
 * `evictions_occur`: ????? THIS TEST IS WEIRD ???????
-* `basic_lru_test`:
-* `lru_delete_test`:
-* `update_reordering`:
+* `basic_lru_test`: trace back this error to `get_reordering`.
+* `lru_delete_test`: trace back this error to `get_reordering`.
+* `update_reordering`: trace back this error to `get_reordering`. updating an existing element still calls `lru_add()` which creates problems. 
 * `evict_on_reset_old_val`: Whether or not we count this as a bug is ambiguous. This finds that the cache uneccesarily evicts elements when updating an entry with a value that would overload the cache if added under a new key. The spec doesn't say whether or not we should call this an error, but if we do not want that behavior then this is an error.
 * `get_reordering`: `cache_get()` calls the `lru_add()` from `lru.c` which does not update the lru element properly if we are getting the lru element.
 * `var_len_evictions`: trace back this error to `get_reordering`.
@@ -145,21 +145,21 @@ A main source of problems with this cache was that many cases were handled with 
 * `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
 
 #### Jcosel
-We have one bug that can't be tested but it actually revealed to us by the cache's print statements. If you initialize it with a maxmem less than 64, it resizes automatically to 64. This is hard to test because of another bug that causes maxmem to double itself when exceeded.
-* `cache_space_preserved`:
-* `add_single_item_over_memmax`: maxmem doubles itself when exceeded so we end up adding an item that we wouldn't have been able to if maxmem was constant.
+One initial bug can't be tested but is actually revealed to us by the cache's print statements: if you initialize it with a maxmem less than 64, it resizes automatically to 64. This is hard to test because of another bug that causes maxmem to double itself when exceeded.
+* `cache_space_preserved`: trace back this error to the maxmem resize.
+* `add_single_item_over_memmax`: trace back this error to the maxmem resize.
 * `add_over_memmax_eviction`: we get a false positive (incorrect pass) here because of this maxmem resize bug!
-* `add_resize_buckets_or_maxmem`: can be traced back to our maxmem-resize bug.
-* `get_null_empty`: ????? really weird because this passes when the cache is empty.?????
+* `add_resize_buckets_or_maxmem`: trace back this error to the maxmem resize.
+* `get_null_empty`: crash ????? really weird because this passes when the cache is empty.?????
 * `evictions_occur`: ????? THIS TEST IS WEIRD ???????
-* `basic_lru_test`:
-* `lru_delete_test`:
-* `update_reordering`:
+* `basic_lru_test`: trace back this error to initial cache resize
+* `lru_delete_test`: trace back this error to initial cache resize
+* `update_reordering`: trace back this error to initial cache resize
 * `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
-* `get_reordering`:
-* `maxmem_not_excceeded`:
-* `elements_not_evicted_early`:
-* `var_len_evictions`:
+* `get_reordering`: trace back this error to initial cache resize
+* `maxmem_not_excceeded`: trace back this error to the maxmem resize
+* `elements_not_evicted_early`: trace back this error to the maxmem resize
+* `var_len_evictions`: trace back this error to the maxmem resize
 
 #### Jhepworth
 This cache compiles after we patch the section mentioned in the moodle forum, but continues to crash on mac. You need to be on polytopia to run tests on this cache.
@@ -186,11 +186,11 @@ This cache compiles after we patch the section mentioned in the moodle forum, bu
 * `add_over_memmax_eviction`: we can trace this error back to `add_single_item_over_memmax` since we're apparently able to exceed maxmem, so we expect this cache to fail this test
 * `add_resize_buckets_or_maxmem`: trace back to `add_single_item_over_memmax`
 * `get_size_after_reassign_test`: in `cache.c` the if-statement in line 40 for the update case doesn't update the size of the item in the hash table, only rewrites the value.
-* `delete_not_in`:
+* `delete_not_in`: ???? should be a pass????
 * `evictions_occur`: ????? THIS TEST IS WEIRD ???????
-* `update_reordering`:
+* `update_reordering`: trace back to `add_single_item_over_memmax`
 * `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
-* `get_reordering`:
-* `maxmem_not_excceeded`:
-* `elements_not_evicted_early`:
+* `get_reordering`: trace back to `add_single_item_over_memmax`
+* `maxmem_not_excceeded`: trace back to `add_single_item_over_memmax`
+* `elements_not_evicted_early`: trace back to `add_single_item_over_memmax`
 
