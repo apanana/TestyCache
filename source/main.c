@@ -64,23 +64,23 @@ int main(int argn,char ** argv){
 		RunTest(add_single_item_over_memmax);
 		break;
 	case 11:
-		RunTest(large_val_copied_correctly); // jhepworth (crash)
+		RunTest(large_val_copied_correctly);
 		break;
    	case 12:
    		RunTest(add_same_starting_char);
    		break;
     case 13:
-    	RunTest(add_over_memmax_eviction); // only pass or crash
+    	RunTest(add_over_memmax_eviction);
     	break;
     case 14:
     	RunTest(add_resize_buckets_or_maxmem);
     	break;
 	// 15 - 19: cache_get tests:
    	case 15:
-   		RunTest(get_null_empty) //exposes no bugs
+   		RunTest(get_null_empty)
    		break;
    	case 16:
-   		RunTest(get_nonexist); // exposes no bugs
+   		RunTest(get_nonexist);
    		break;
  	case 17:
 		RunTest(get_size_after_reassign_test);
@@ -89,15 +89,15 @@ int main(int argn,char ** argv){
     	RunTest(get_val_after_reassign_test);
     	break;
 	case 19:
-		RunTest(get_with_null_term_strs_test); //jhepworth (crash)
+		RunTest(get_with_null_term_strs_test);
 		break;
 
     // 20 - 21: cache_delete test:
     case 20:
-    	RunTest(delete_not_in); //jhepworth (crash)
+    	RunTest(delete_not_in);
     	break;
     case 21:
-    	RunTest(delete_affect_get_out); // exposes no bugs
+    	RunTest(delete_affect_get_out);
     	break;
     // 22 - 31: LRU tests
 	case 22:
@@ -110,22 +110,22 @@ int main(int argn,char ** argv){
 		RunTest(lru_delete_test);
 		break;
    	case 25:
-   		RunTest(update_reordering); //infinite loop on aledger
+   		RunTest(update_reordering);
    		break;
    	case 26:
    		RunTest(evict_on_reset_old_val);
    		break;
    	case 27:
-   		RunTest(evict_on_failed_reset_old_val); //infinite loop on aledger
+   		RunTest(evict_on_failed_reset_old_val);
    		break;
    	case 28:
    		RunTest(get_reordering);
    		break;
 	case 29:
-		RunTest(maxmem_not_excceeded); //only pass or crash
+		RunTest(maxmem_not_excceeded); 
 		break;
 	case 30:
-		RunTest(elements_not_evicted_early); //only pass or crash
+		RunTest(elements_not_evicted_early); 
 		break;
 	case 31:
 		RunTest(var_len_evictions);

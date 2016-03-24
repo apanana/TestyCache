@@ -103,7 +103,7 @@ unfortunately you have to scroll right now, so I might flip this table...
   bblack | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS
   jcosel | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | PASS | FAIL | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | FAIL
   jhepworth | PASS | PASS | PASS | PASS | FAIL | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | PASS | PASS | CRASH | CRASH | PASS | FAIL | FAIL | PASS | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS
-  zzhong | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | CRASH | FAIL | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS | PASS | CRASH | PASS | CRASH | PASS | PASS | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | PASS
+  zzhong | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | FAIL | PASS | FAIL | FAIL | FAIL | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | CRASH | PASS | PASS | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | PASS
 
 
 ### Issue summaries
@@ -150,8 +150,8 @@ One initial bug can't be tested but is actually revealed to us by the cache's pr
 * `add_single_item_over_memmax`: trace back this error to the maxmem resize.
 * `add_over_memmax_eviction`: we get a false positive (incorrect pass) here because of this maxmem resize bug!
 * `add_resize_buckets_or_maxmem`: trace back this error to the maxmem resize.
-* `get_null_empty`: crash ????? really weird because this passes when the cache is empty.?????
-* `evictions_occur`: ????? THIS TEST IS WEIRD ???????
+* `get_null_empty`: this comes from a bug in cache resizing caused by load factor overload. I think it's on line 115 where we realloc for size of a pointer to the _item struct instead of reallocing for the size of _item structs. 
+* `evictions_occur`: trace back this error to `get_null_empty`.
 * `basic_lru_test`: trace back this error to initial cache resize
 * `lru_delete_test`: trace back this error to initial cache resize
 * `update_reordering`: trace back this error to initial cache resize
@@ -162,7 +162,7 @@ One initial bug can't be tested but is actually revealed to us by the cache's pr
 * `var_len_evictions`: trace back this error to the maxmem resize
 
 #### Jhepworth
-This cache compiles after we patch the section mentioned in the moodle forum, but continues to crash on mac. You need to be on polytopia to run tests on this cache.
+So I am not going to do a traceback of errors on this cache because it seems to have a lot of weird system dependencies. Specifically, it will not run on mac without crashing nearly all of the tests. We had a weird moment where it started to suddenly work on Ben's computer, but we didn't know what change we made for it to actually start running properly.
 * `get_size_test`: Fail
 * `get_val_test`: Crashed
 * `space_test`: Fail
@@ -172,22 +172,21 @@ This cache compiles after we patch the section mentioned in the moodle forum, bu
 * `add_over_memmax_eviction`: Fail
 * `get_val_after_reassign_test`: Crashes
 * `get_with_null_term_strs_test`: Crashes
-* `delete_affect_get_out`:
-* `evictions_occur`: ????? THIS TEST IS WEIRD ???????
-* `update_reordering`:
-* `evict_on_reset_old_val`:
-* `evict_on_failed_reset_old_val`:
+* `delete_affect_get_out`: Fail
+* `evictions_occur`: Fail
+* `update_reordering`: Fail
+* `evict_on_reset_old_val`: Fail
+* `evict_on_failed_reset_old_val`: Fail
+* `elements_not_evicted_early` : Fail
 
 #### Zzhong
-* `custom_hash_is_called`: ???? SHOULD BE A PASS ?????
-* `cache_space_preserved`: Line 46 in cache.c is causing a segmentation fault. Why it does this is a mystery because both the values of cache_space_used(cache) and cache->maxmem can be accessed before the if statement, but apparently not inside of it.
+* `cache_space_preserved`: Line 46 in cache.c is causing a segmentation fault. Why it does this is a mystery because both the values of cache_space_used(cache) and cache->maxmem can be accessed before the if statement, but apparently not inside of it. Print statements show that the pointer got corrupted somewhere, but I haven't found the exact spot. 
 * `add_single_item_over_memmax`: doesn't check whether or not the new element will exceed maxmem, so we actually end up adding it to the cache.
 * `add_same_starting_char`: this cache doesn't treat keys as strings, so keys with the same starting char collide will collide.
 * `add_over_memmax_eviction`: we can trace this error back to `add_single_item_over_memmax` since we're apparently able to exceed maxmem, so we expect this cache to fail this test
 * `add_resize_buckets_or_maxmem`: trace back to `add_single_item_over_memmax`
 * `get_size_after_reassign_test`: in `cache.c` the if-statement in line 40 for the update case doesn't update the size of the item in the hash table, only rewrites the value.
-* `delete_not_in`: ???? should be a pass????
-* `evictions_occur`: ????? THIS TEST IS WEIRD ???????
+* `evictions_occur`: So, like `cache_space_preserved` this reveals another really strange segmentation fault, where the value can be accessed before the fault appears, but then suddenly when we actually use it, it seems to have magically disappeared. So this segmentation fault appears in line 108 of `cache.c` when cache_delete gets called. Printing out the pointers reveals that key_to_evict has a corrupted pointer, but I'm not entirely sure where the pointer got corrupted.
 * `update_reordering`: trace back to `add_single_item_over_memmax`
 * `evict_on_failed_reset_old_val`: Whether or not we count this as a bug is ambiguous. If we expect the cache to evict the element even though it cannot be rewritten, then this is not a bug. If we do expect the cache to evict the element anyway, then this is a bug. (Currently we call this a bug)
 * `get_reordering`: trace back to `add_single_item_over_memmax`

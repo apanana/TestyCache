@@ -3,42 +3,15 @@
 #include "lrutests.h"
 #include "test_helper.h"
 
-/* There's something really fishy going on here:
-When we only input 10 elements we get
-Akosik: pass
-Jcosel: pass
-zzhong: fail
 
-on inputting 11 elements we get:
-Akosik: pass
-jcosel: fail
-zzhong: crash
-
-on inputting 20 elements we get:
-akosik: pass
-jcosel: crash
-zzhong: crash
-
-alec's breaks on element 36. works up until 35. looool
-*/
 bool evictions_occur(){
     // adds a ton of elements to a cache with a small maxmem and sees if any elements are evicted
     const uint64_t max_elmts = 10;
     const uint64_t num_elmts_add = 36;
-    printf("hihihi\n");
-    fflush(stdout);
     cache_t cache = create_cache_wrapper(max_elmts*sizeof(int_ty),NULL);
-    printf("hihihi11111\n");
-    fflush(stdout);
     add_elements(cache,0,num_elmts_add,INT);
-    printf("hihihi222222\n");
-    fflush(stdout);
     bool evicted = elements_dont_exist(cache,0,num_elmts_add-max_elmts);
-    printf("hihihi33333\n");
-    fflush(stdout);
     bool not_evicted = elements_exist(cache,num_elmts_add-max_elmts,num_elmts_add);
-    printf("hihihi44444\n");
-    fflush(stdout);
     destroy_cache(cache);
     return evicted && not_evicted;
 }
