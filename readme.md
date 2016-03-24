@@ -98,7 +98,7 @@ unfortunately you have to scroll right now, so I might flip this table...
  group name | create_test | destroy_test | add_test | crash_on_memoverload | get_size_test | get_val_test | delete_test | space_test | custom_hash_is_called | cache_space_preserved | add_single_item_over_memmax | large_val_copied_correctly | add_same_starting_char | add_over_memmax_eviction | add_resize_buckets_or_maxmem | get_null_empty | get_nonexist | get_size_after_reassign_test | get_val_after_reassign_test | get_with_null_term_strs_test | delete_not_in | delete_affect_get_out | evictions_occur | basic_lru_test | lru_delete_test | update_reordering | evict_on_reset_old_val | evict_on_failed_reset_old_val | get_reordering | maxmem_not_excceeded | elements_not_evicted_early | var_len_evictions
  --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
  akosik | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | FAIL | PASS | FAIL | PASS | PASS | FAIL
- aledger | PASS | PASS | PASS | CRASH | PASS | PASS | PASS | PASS | FAIL | PASS | CRASH | PASS | CRASH | CRASH | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | TIME | FAIL | TIME | PASS | PASS | PASS | PASS
+ aledger | PASS | PASS | PASS | CRASH | PASS | PASS | PASS | PASS | FAIL | PASS | CRASH | PASS | PASS | CRASH | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | TIME | FAIL | TIME | PASS | PASS | PASS | PASS
   apan | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | FAIL | PASS | FAIL | PASS | PASS | FAIL
   bblack | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | PASS | PASS | PASS | PASS
   jcosel | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | PASS | FAIL | CRASH | PASS | PASS | PASS | PASS | PASS | PASS | CRASH | FAIL | FAIL | FAIL | PASS | FAIL | FAIL | CRASH | CRASH | FAIL
@@ -122,7 +122,6 @@ A main source of problems with this cache was that many cases were handled with 
 * `crash_on_memoverload`: asserts and exits when trying to add something greater than maxmem (it says crash in the table but we count this as a fail).
 * `custom_hash_is_called`: Cache_set doesn't follow the API since it doesn't allow to user to pass their own hash function to the cache.
 * `add_single_item_over_memmax`: we can trace back this error to `crash_on_memoverload` since this cache will crash on any inputs that exceed maxmem, we know this test will crash.
-* `add_same_starting_char`: ???? SHOULD BE A PASS ?????
 * `add_over_memmax_eviction`: trace back this error to `crash_on_memoverload`
 * `add_resize_buckets_or_maxmem`: trace back this error to `crash_on_memoverload`
 * `update_reordering`: we get into an infinite while-loop starting on line 136 of `cache.h`
